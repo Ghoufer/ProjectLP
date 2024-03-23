@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://0gwp60xtdpma"]
+
+[ext_resource type="PackedScene" uid="uid://b2kyqtqv3llg4" path="res://scenes/player.tscn" id="1_3qwd1"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebyfu"]
+
+[sub_resource type="Sky" id="Sky_c045x"]
+sky_material = SubResource("ProceduralSkyMaterial_ebyfu")
+
+[sub_resource type="Environment" id="Environment_ptec3"]
+background_mode = 2
+sky = SubResource("Sky_c045x")
+fog_light_energy = 0.59
+volumetric_fog_density = 0.0118
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bidyk"]
+albedo_color = Color(0.0588235, 0.0588235, 0.0588235, 1)
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ptec3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.308585, 0.951197, 0, -0.951197, 0.308585, 0, 0, 0)
+light_energy = 2.0
+
+[node name="Player" parent="." instance=ExtResource("1_3qwd1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.694058, 0, 3.11677)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+size = Vector3(10, 0.1, 10)
+material = SubResource("StandardMaterial3D_bidyk")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.26371, 0.550319, 0)
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
+transform = Transform3D(-0.0017802, 0, -0.999998, 0, 1, 0, 0.999998, 0, -0.0017802, 0, -0.00726587, -1.16723)
+polygon = PackedVector2Array(3, 0, 1, 0.7, 1, 0, 1, 0)
