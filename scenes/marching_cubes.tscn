@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cmqbxyiywh30u"]
+
+[ext_resource type="Script" path="res://scripts/terrain/CubesMarching.gd" id="1_g5x6v"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_mvlqv"]
+
+[node name="MarchingCubes" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_mvlqv")
+script = ExtResource("1_g5x6v")
+update = true

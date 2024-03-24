@@ -6,28 +6,24 @@ uniform float height_scale = 0.15;
 uniform float depth_offset = -0.75;
 uniform float edge_scale = 0.1;
 uniform float near = 1.0;
-uniform float far = 1000.0;
+uniform float far = 100.0;
 uniform float metallic : hint_range(0.0, 1.0) = 0;
 uniform float roughness : hint_range(0.0, 1.0) = 0.02;
 uniform float time_scale : hint_range(0.0, 0.2, 0.005) = 0.025;
 
 uniform vec3 albedo : source_color;
 uniform vec3 albedo_2nd: source_color;
+uniform vec3 deep_color : source_color;
 uniform vec3 edge_color: source_color;
 
 uniform sampler2D wave;
 uniform sampler2D texture_normal;
 uniform sampler2D texture_normal_2nd;
-uniform sampler2D mask_texture : hint_default_black;
 uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_linear_mipmap;
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear_mipmap;
 
-uniform sampler2D depth_map : hint_default_black;
-uniform float threshold : hint_range(0.0, 1.0);
-
 varying float height;
 varying float vertex_y;
-varying vec2 screen_uv;
 varying vec3 world_position;
 
 float edge(float depth) {
@@ -42,9 +38,6 @@ float fresnel(float amount, vec3 normal, vec3 view) {
 void vertex() {
 	// Calculate screen space position
 	vec4 screen_position = PROJECTION_MATRIX * (VIEW_MATRIX * (MODEL_MATRIX * vec4(VERTEX, 1.0)));
-	
-	// Pass screen space position to the fragment shader
-    screen_uv = screen_position.xy / screen_position.w;
 	
 	vertex_y = VERTEX.y;
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
@@ -71,7 +64,7 @@ void fragment() {
 	vec3 normal_blend = mix(texture(texture_normal, UV).rgb, texture(texture_normal_2nd, UV).rgb, 0.5);
 	
 	vec3 screen_color = textureLod(SCREEN_TEXTURE, SCREEN_UV, depth_blend_pow * 2.5).rgb;
-	vec3 depth_color = mix(albedo.rgb, albedo_2nd.rgb, depth_blend_pow);
+	vec3 depth_color = mix(albedo.rgb, deep_color.rgb, depth_blend_pow);
 	vec3 color = mix(screen_color * depth_color, depth_color * 0.25, depth_blend_pow * 0.5);
 	
 	vec3 depth_color_adj = mix(edge_color, color, step(edge_scale, z_dif));

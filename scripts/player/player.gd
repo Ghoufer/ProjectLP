@@ -15,15 +15,17 @@ var mouse_rotation : Vector3
 var player_rotation : Vector3
 var camera_rotation : Vector3
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var gravity = 12.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _input(event):
 	if event.is_action_pressed('exit'):
-		get_tree().quit()
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _unhandled_input(event):
 	mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
@@ -48,27 +50,33 @@ func update_camera(delta):
 	rotation_input = 0.0
 	tilt_input = 0.0
 
+func _process(delta):
+	update_camera(delta)
+
 func _physics_process(delta):
 	# Add the gravity.
 	#if not is_on_floor():
 		#velocity.y -= gravity * delta
 	
-	update_camera(delta)
-	
-	if Input.is_action_pressed("move_down"):
-		velocity.y = -JUMP_VELOCITY
-	elif Input.is_action_pressed("jump"):
+	if Input.is_action_pressed("jump"):
 		velocity.y = JUMP_VELOCITY
+	elif Input.is_action_pressed("move_down"):
+		velocity.y = -JUMP_VELOCITY
 	else:
 		velocity.y = 0
-
+	
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backwards")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	
 	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
+		if is_on_floor():
+			velocity.x = lerp(velocity.x, direction.x * SPEED, 0.1)
+			velocity.z = lerp(velocity.z, direction.z * SPEED, 0.1)
+		else:
+			velocity.x = lerp(direction.x * SPEED, direction.x * SPEED / 2, 0.3)
+			velocity.z = lerp(direction.z * SPEED, direction.z * SPEED / 2, 0.3)
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
