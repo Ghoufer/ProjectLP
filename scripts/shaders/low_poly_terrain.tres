@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dtq15u28bk6d5"]
+
+[ext_resource type="Shader" path="res://scripts/shaders/low_poly_terrain.gdshader" id="1_p664w"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_p664w")

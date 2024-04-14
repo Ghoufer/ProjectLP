@@ -1,6 +1,8 @@
 @tool
 extends MeshInstance3D
 
+@onready var shader := preload("res://scripts/shaders/low_poly_terrain.tres")
+
 @export var update : bool = false
 @export var width : float = 10.0
 @export var height : float = 10.0
@@ -8,12 +10,9 @@ extends MeshInstance3D
 @export var noise_amplitude : float = 5.0
 @export var height_treshold : float = 0.5
 
-var heights : Array
-var vertices : Array[Vector3]
-var triangles : Array[int]
-var surface_tool : SurfaceTool
-var min_height : float
-var max_height : float
+var heights := []
+var surface_tool := SurfaceTool.new()
+var noise := FastNoiseLite.new()
 
 const Corners : Array[Vector3] = [
 	Vector3(0, 0, 0),
@@ -301,136 +300,106 @@ const Triangles : Array[Array] = [
 ]
 
 func _ready():
-	set_heights()
 	march_cubes()
-	_set_mesh()
+	update_mesh()
 	update_shader()
 
 func _process(_delta):
 	if (update):
-		vertices = []
-		triangles = []
-		set_heights()
 		march_cubes()
-		_set_mesh()
+		update_mesh()
 		update_shader()
 		update = false
 
-func set_heights():
-	var noise = FastNoiseLite.new()
-	
+func march_cubes():
+	# Initialize arrays
 	heights = []
+	
+	# Generate noise
+	noise = FastNoiseLite.new()
 	noise.seed = randi()
+	
+	# Initialize surface tool
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
-	for x in range(int(width + 1)):
-		heights.append([])
-		for y in range(int(height + 1)):
-			heights[x].append([])
-			for z in range(int(width + 1)):
-				var current_height : float = height * noise.get_noise_3d(x * noise_resolution, y * noise_resolution, z * noise_resolution)
-				var new_height = y - current_height # Adjust cube position based on noise
-				
-				if (new_height < min_height) and new_height != null:
-					min_height = new_height
-				if (new_height > max_height) and new_height != null:
-					max_height = new_height
-					
-				heights[x][y].append(new_height)
-
-func march_cubes():
+	# Populate heights array with noise values
 	for x in range(width):
+		heights.append([])
 		for y in range(height):
+			heights[x].append([])
 			for z in range(width):
-				var cube_corners = []
-				cube_corners.resize(8)
+				var noise_value = noise.get_noise_3d(x * noise_resolution, y * noise_resolution, z * noise_resolution)
 				
-				for index in range(8):
-					var corner = Vector3(x, y, z) + Corners[index]
-					cube_corners[index] = heights[corner.x][corner.y][corner.z]
+				heights[x][y].append(noise_value * noise_amplitude)
+	
+	var vertex_count = 0
+	# March cubes
+	for x in range(width - 1):
+		for y in range(height - 1):
+			for z in range(width -1):
+				var cube_index = 0
+				var cube_positions = []
 				
-				march_cube(Vector3(x, y, z), get_configuration_index(cube_corners))
+				for i in range(8):
+					var corner = Corners[i] + Vector3(x, y, z)
+					var corner_height = heights[int(corner.x)][int(corner.y)][int(corner.z)]
+					
+					cube_positions.append(corner_height)
+					
+					if (corner_height > height_treshold): cube_index |= (1 << i)
+					
+				# Use cube_index to find the correct triangles from the table
+				var tri_table = Triangles[cube_index]
+				
+				for i in range(0, 15, 3):
+					var t0 = tri_table[i]
+					var t1 = tri_table[i + 1]
+					var t2 = tri_table[i + 2]
+					
+					if (t0 == -1): break
+					
+					# Add the triangles
+					var edge0 = Edges[t0]
+					var edge1 = Edges[t1]
+					var edge2 = Edges[t2]
+					
+					# Interpolate vertices
+					var v0 = interpolate_vertices(edge0, heights, x, y, z)
+					var v1 = interpolate_vertices(edge1, heights, x, y, z)
+					var v2 = interpolate_vertices(edge2, heights, x, y, z)
+					
+					# Add to vertices and triangles lists
+					surface_tool.add_vertex(v0)
+					surface_tool.add_vertex(v1)
+					surface_tool.add_vertex(v2)
+					
+					vertex_count += 3
+					
+					surface_tool.add_index(vertex_count - 3)
+					surface_tool.add_index(vertex_count - 2)
+					surface_tool.add_index(vertex_count - 1)
 
-func march_cube(cube_position : Vector3, config_index : int):
-	if (config_index == 0 or config_index == 255): return
-
-	for edge_index in range(12): # Use 12 edges for Marching Cubes
-		var tri_table_value = MarchingTable.Triangles[config_index][edge_index]
-
-		if (tri_table_value == -1): continue
-
-		var edge_start = cube_position + MarchingTable.Edges[tri_table_value][0]
-		var edge_end = cube_position + MarchingTable.Edges[tri_table_value][1]
-
-		var vertex = (edge_start + edge_end) / 2.0
-
-		vertices.append(vertex)
-		
-		# Ensure the index is non-negative before adding to triangles array
-		var index = len(vertices) - 1
-		if index >= 0:
-			triangles.append(index)
-
-func get_configuration_index(cube_corners):
-	var config_index = 0
+func interpolate_vertices(edge, heights, x, y, z):
+	var pos0 = Vector3(x, y, z) + edge[0]
+	var pos1 = Vector3(x, y, z) + edge[1]
 	
-	for index in range(8):
-		if (cube_corners[index] > height_treshold * noise_amplitude):
-			config_index += 2 ** index
-	return config_index
+	var height0 = heights[int(pos0.x)][int(pos0.y)][int(pos0.z)]
+	var height1 = heights[int(pos1.x)][int(pos1.y)][int(pos1.z)]
+	
+	# Linear interpolation between two points
+	var t = (height_treshold - height0) / (height1 - height0)
+	
+	return pos0.lerp(pos1, t)
 
-func find_neighbors(vertex_index):
-	var neighbors = []
+func update_mesh():
+	self.mesh = surface_tool.commit()
 	
-	# Iterate through each edge to find neighbors
-	for edge in MarchingTable.Edges:
-		# Check if the current vertex is part of this edge
-		if vertex_index in edge:
-			# Add the other vertex of this edge to the list of neighbors
-			for other_vertex_index in edge:
-				if other_vertex_index != vertex_index:
-					neighbors.append(other_vertex_index)
-	
-	return neighbors
-
-func _set_mesh():
-	var mesh = ArrayMesh.new()
-	
-	for vertex in vertices:
-		surface_tool.add_vertex(vertex)
-	
-	for triangle in triangles:
-		surface_tool.add_index(triangle)
-	
-	surface_tool.generate_normals()
-	
-	mesh = surface_tool.commit()
-	
-	self.mesh = mesh
+	if (self.mesh):
+		self.mesh.surface_set_material(0, shader)
 
 func update_shader():
-	var material : ShaderMaterial = self.get_active_material(0)
-	material.set_shader_parameter('min_height', min_height)
-	material.set_shader_parameter('max_height', max_height)
-
-#func draw_spheres():
-	#for child in get_children():
-		#child.free()
-	#
-	#for x in range(width + 1):
-		#for y in range(height + 1):
-			#for z in range(width + 1):
-				#var sphere = SphereMesh.new()
-				#var instance = MeshInstance3D.new()
-				#
-				#instance.position = Vector3(x, y, z)
-				#add_child(instance)
-				#sphere.radius = 0.1
-				#sphere.height = 0.2
-				#
-				#var material = StandardMaterial3D.new()
-				#material.albedo_color = Color(heights[x][y][z], heights[x][y][z], heights[x][y][z], 0.0)
-				#
-				#instance.mesh = sphere
-				#instance.material_override = material
+	pass
+	#var material : ShaderMaterial = self.get_active_material(0)
+	#material.set_shader_parameter('min_height', min_height)
+	#material.set_shader_parameter('max_height', max_height)
