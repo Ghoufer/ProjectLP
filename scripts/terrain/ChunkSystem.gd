@@ -3,7 +3,7 @@ extends Node3D
 
 # Chunk settings
 @export var chunk_size: int = 10
-@export var render_distance: int = 3
+@export var render_distance: int = 8
 @export var noise_seed: int = 0
 @export var noise_resolution: float = 0.5
 @export var noise_amplitude: float = 5.0
@@ -38,8 +38,8 @@ func _process(delta: float) -> void:
 
 func update_chunks_around_player() -> void:
 	# Get player position in chunk coordinates
-	var player_chunk_x = floor(player.global_transform.origin.x / chunk_size)
-	var player_chunk_z = floor(player.global_transform.origin.z / chunk_size)
+	var player_chunk_x = floor(player.global_position.x / chunk_size)
+	var player_chunk_z = floor(player.global_position.z / chunk_size)
 	
 	# Track which chunks should be active
 	var active_chunks = {}
