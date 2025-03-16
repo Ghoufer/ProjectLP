@@ -40,7 +40,6 @@ transform = Transform3D(1, 0, 0, 0, 0.0250952, 0.999685, 0, -0.999685, 0.0250952
 
 [node name="ChunkSystem" type="Node3D" parent="."]
 script = ExtResource("3_aklg6")
-render_distance = 4
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_aklg6")

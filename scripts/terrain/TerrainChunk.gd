@@ -8,13 +8,9 @@ var height: float = 10.0
 var noise_resolution: float = 0.5
 var noise_amplitude: float = 5.0
 var height_threshold: float = 0.5
-# New: Noise falloff parameters
-var noise_falloff_start: float = 50.0
-var noise_falloff_range: float = 25.0
-var sea_floor_height: float = -0.01
 
 # Chunk-specific data
-var chunk_position = Vector3(0, 0, 0)
+var chunk_position = Vector3(0, 0, 0)  # Updated: 3D position
 var noise_generator: FastNoiseLite = null
 var heights := []
 var surface_tool := SurfaceTool.new()
@@ -38,8 +34,9 @@ func generate_terrain() -> void:
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	
+	# Offset by chunk position in 3D
 	var x_offset = chunk_position.x * (width - 1)
-	var y_offset = chunk_position.y * (height - 1)
+	var y_offset = chunk_position.y * (height - 1)  # New: Y offset
 	var z_offset = chunk_position.z * (width - 1)
 	
 	for x in range(width):
@@ -48,40 +45,17 @@ func generate_terrain() -> void:
 			heights[x].append([])
 			for z in range(width):
 				var world_x = x + x_offset
-				var world_y = y + y_offset
+				var world_y = y + y_offset  # New: world Y coordinate
 				var world_z = z + z_offset
-				
-				var world_height = world_y * height
-				
-				# Calculate noise falloff factor
-				var falloff_factor = 1.0
-				var abs_height = abs(world_height)
-				
-				if abs_height > noise_falloff_start:
-					var falloff_distance = abs_height - noise_falloff_start
-					falloff_factor = clamp(1.0 - (falloff_distance / noise_falloff_range), 0.0, 1.0)
-					falloff_factor = pow(falloff_factor, 2.0)  # Square for smoother falloff
-				
-				# Get base noise value
 				var noise_value = noise_generator.get_noise_3d(
 					world_x * noise_resolution, 
-					world_y * noise_resolution,
+					world_y * noise_resolution,  # Updated: use world_y
 					world_z * noise_resolution
 				)
 				
-				# Apply falloff to noise
-				var adjusted_noise = noise_value * noise_amplitude * falloff_factor
-				
-				# Optional: Add slight height-based variation
-				var height_factor = clamp((noise_falloff_start - abs_height) / noise_falloff_start, 0.0, 1.0)
-				adjusted_noise *= (1.0 + height_factor * 0.5)  # Boost terrain near center
-				
-				# Ensure terrain does not go below sea floor height
-				if world_height < sea_floor_height:
-					adjusted_noise = sea_floor_height - world_height
-				
-				heights[x][y].append(adjusted_noise)
+				heights[x][y].append(noise_value * noise_amplitude)
 	
+	# March cubes (this part remains mostly the same)
 	for x in range(width - 1):
 		for y in range(height - 1):
 			for z in range(width - 1):
