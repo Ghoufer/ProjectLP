@@ -5,8 +5,8 @@ extends CharacterBody3D
 @export var CAMERA_CONTROLLER : Node3D
 @export var MOUSE_SENSITIVITY : float = 0.5
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
+const SPEED = 25.0
+const JUMP_VELOCITY = 20.0
 
 var mouse_input : bool = false
 var rotation_input : float

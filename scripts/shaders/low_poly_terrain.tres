@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dtq15u28bk6d5"]
 
-[ext_resource type="Shader" path="res://scripts/shaders/low_poly_terrain.gdshader" id="1_p664w"]
+[ext_resource type="Shader" uid="uid://td7s8aomo66o" path="res://scripts/shaders/low_poly_terrain.gdshader" id="1_p664w"]
 
 [resource]
 render_priority = 0
