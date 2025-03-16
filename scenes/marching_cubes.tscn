@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=4 uid="uid://cmqbxyiywh30u"]
 
-[ext_resource type="Script" uid="uid://dpsr3b3w03edm" path="res://scripts/terrain/CubesMarching.gd" id="1_g5x6v"]
+[ext_resource type="Script" uid="uid://dpsr3b3w03edm" path="res://scripts/terrain/TerrainChunk.gd" id="1_g5x6v"]
 [ext_resource type="Material" uid="uid://dtq15u28bk6d5" path="res://scripts/shaders/low_poly_terrain.tres" id="1_xc2c6"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ew77o"]
