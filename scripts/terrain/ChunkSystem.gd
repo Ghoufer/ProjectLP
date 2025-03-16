@@ -2,8 +2,8 @@
 extends Node3D
 
 # Chunk settings
-@export var chunk_size: int = 10
-@export var render_distance: int = 8
+@export var chunk_size: int = 8
+@export var render_distance: int = 4
 @export var noise_seed: int = 0
 @export var noise_resolution: float = 0.5
 @export var noise_amplitude: float = 5.0
@@ -18,7 +18,6 @@ var loaded_chunks = {}
 
 # Player reference
 @onready var player: CharacterBody3D = $"../Player"
-
 
 func _ready() -> void:
 	# Initialize noise
@@ -51,7 +50,6 @@ func update_chunks_around_player() -> void:
 			active_chunks[chunk_key] = true
 			
 			if not loaded_chunks.has(chunk_key):
-				# Chunk isn't loaded, create it
 				create_chunk(x, z)
 	
 	# Unload chunks outside render distance
@@ -62,9 +60,9 @@ func update_chunks_around_player() -> void:
 	
 	for chunk_key in chunks_to_remove:
 		unload_chunk(chunk_key)
+	
 
 func create_chunk(chunk_x: int, chunk_z: int) -> void:
-	# Create a new TerrainChunk node at runtime
 	var chunk_instance = TerrainChunk.new()
 	chunk_instance.name = "Chunk_" + str(chunk_x) + "_" + str(chunk_z)
 	
@@ -86,6 +84,7 @@ func create_chunk(chunk_x: int, chunk_z: int) -> void:
 	
 	# Generate mesh
 	chunk_instance.generate_terrain()
+	
 
 func unload_chunk(chunk_key: String) -> void:
 	if loaded_chunks.has(chunk_key):
