@@ -11,6 +11,7 @@ var height_threshold: float = 0.5
 # New: Noise falloff parameters
 var noise_falloff_start: float = 50.0
 var noise_falloff_range: float = 25.0
+var sea_floor_height: float = -0.01
 
 # Chunk-specific data
 var chunk_position = Vector3(0, 0, 0)
@@ -74,6 +75,10 @@ func generate_terrain() -> void:
 				# Optional: Add slight height-based variation
 				var height_factor = clamp((noise_falloff_start - abs_height) / noise_falloff_start, 0.0, 1.0)
 				adjusted_noise *= (1.0 + height_factor * 0.5)  # Boost terrain near center
+				
+				# Ensure terrain does not go below sea floor height
+				if world_height < sea_floor_height:
+					adjusted_noise = sea_floor_height - world_height
 				
 				heights[x][y].append(adjusted_noise)
 	

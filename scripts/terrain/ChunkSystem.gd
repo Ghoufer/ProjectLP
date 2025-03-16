@@ -12,6 +12,7 @@ extends Node3D
 # New: Noise falloff parameters
 @export var noise_falloff_start: float = 50.0  # Height where noise starts to fade
 @export var noise_falloff_range: float = 25.0  # Range over which noise fades to zero
+@export var sea_floor_height: float = -0.01
 
 # Noise generator
 var noise := FastNoiseLite.new()
@@ -77,6 +78,7 @@ func create_chunk(chunk_x: int, chunk_y: int, chunk_z: int) -> void:
 	chunk_instance.noise_resolution = noise_resolution
 	chunk_instance.noise_amplitude = noise_amplitude
 	chunk_instance.height_threshold = height_threshold
+	chunk_instance.sea_floor_height = sea_floor_height
 	# New: Pass noise falloff parameters
 	chunk_instance.noise_falloff_start = noise_falloff_start
 	chunk_instance.noise_falloff_range = noise_falloff_range
