@@ -41,8 +41,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.277126, 0)
 
 [node name="ChunkSystem" type="Node3D" parent="."]
 script = ExtResource("3_aklg6")
-noise_resolution = 0.1
-noise_amplitude = 100.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_aklg6")

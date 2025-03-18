@@ -3,7 +3,7 @@ extends Node3D
 # Chunk settings
 @export var chunk_size: int = 8
 @export var render_distance: int = 8
-@export var unload_distance: int = 16  # Increased to ensure a buffer (must be > render_distance)
+@export var unload_distance: int = 12  # Increased to ensure a buffer (must be > render_distance)
 @export var noise_seed: int = 0
 @export var noise_resolution: float = 0.5
 @export var noise_amplitude: float = 10.0
