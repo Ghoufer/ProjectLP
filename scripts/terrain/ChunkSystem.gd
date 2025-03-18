@@ -1,8 +1,8 @@
 extends Node3D
 
 # Chunk settings
-@export var chunk_size: int = 2
-@export var render_distance: int = 6
+@export var chunk_size: int = 4
+@export var render_distance: int = 8
 @export var unload_distance: int = 16  # Increased to ensure a buffer (must be > render_distance)
 @export var noise_seed: int = 0
 @export var noise_resolution: float = 0.5
@@ -135,7 +135,6 @@ func update_chunks_around_player() -> void:
 	
 	for chunk_key in chunks_to_remove:
 		unload_chunk(chunk_key)
-	
 
 func _process_chunk_queue(chunk_data, thread_idx := 0) -> void:
 	var chunk_x = chunk_data.x
@@ -149,8 +148,6 @@ func _process_chunk_queue(chunk_data, thread_idx := 0) -> void:
 	if thread_data[thread_idx] != null:
 		thread_data[thread_idx].heights = heights
 	mutex.unlock()
-	
-
 
 func generate_chunk_heights(chunk_x, chunk_y, chunk_z) -> Array:
 	var thread_noise = FastNoiseLite.new()
@@ -183,17 +180,23 @@ func _create_chunk_mesh(chunk_x, chunk_y, chunk_z, chunk_key, heights) -> void:
 		var chunk_instance = TerrainChunk.new()
 		chunk_instance.name = "Chunk_" + str(chunk_x) + "_" + str(chunk_y) + "_" + str(chunk_z)
 		chunk_instance.position = Vector3(chunk_x * chunk_size, chunk_y * chunk_size, chunk_z * chunk_size)
+		
+		# Set chunk parameters
 		chunk_instance.width = chunk_size + 1
 		chunk_instance.height = chunk_size + 1
 		chunk_instance.chunk_position = Vector3(chunk_x, chunk_y, chunk_z)
-		chunk_instance.noise_generator = noise
 		chunk_instance.noise_resolution = noise_resolution
 		chunk_instance.noise_amplitude = noise_amplitude
 		chunk_instance.height_threshold = height_threshold
 		chunk_instance.heights = heights
+		chunk_instance.noise_generator = FastNoiseLite.new()
+		chunk_instance.noise_generator.seed = noise_seed
 		
 		add_child(chunk_instance)
 		loaded_chunks[chunk_key] = chunk_instance
+		
+		# Ensure voxel states are precomputed before mesh creation
+		chunk_instance.precompute_voxel_states()
 		chunk_instance.create_mesh_from_heights()
 
 func unload_chunk(chunk_key: String) -> void:
@@ -209,24 +212,27 @@ func update_chunks() -> void:
 
 func create_chunk(chunk_x: int, chunk_y: int, chunk_z: int) -> void:
 	# For direct creation (editor preview)
-	var chunk_instance = TerrainChunk.new()
-	chunk_instance.name = "Chunk_" + str(chunk_x) + "_" + str(chunk_y) + "_" + str(chunk_z)
-	# Set chunk position
-	chunk_instance.position = Vector3(chunk_x * chunk_size, chunk_y * chunk_size, chunk_z * chunk_size)
-	
-	# Pass terrain generation parameters to the chunk
-	chunk_instance.width = chunk_size + 1
-	chunk_instance.height = chunk_size + 1
-	chunk_instance.chunk_position = Vector3(chunk_x, chunk_y, chunk_z)
-	chunk_instance.noise_generator = noise
-	chunk_instance.noise_resolution = noise_resolution
-	chunk_instance.noise_amplitude = noise_amplitude
-	chunk_instance.height_threshold = height_threshold
-	
-	add_child(chunk_instance)
-	loaded_chunks[str(chunk_x) + "," + str(chunk_y) + "," + str(chunk_z)] = chunk_instance
-	
-	chunk_instance.generate_terrain()
+	var chunk_key = str(chunk_x) + "," + str(chunk_y) + "," + str(chunk_z)
+	if not loaded_chunks.has(chunk_key):
+		var chunk_instance = TerrainChunk.new()
+		chunk_instance.name = "Chunk_" + str(chunk_x) + "_" + str(chunk_y) + "_" + str(chunk_z)
+		chunk_instance.position = Vector3(chunk_x * chunk_size, chunk_y * chunk_size, chunk_z * chunk_size)
+		
+		# Set chunk parameters
+		chunk_instance.width = chunk_size + 1
+		chunk_instance.height = chunk_size + 1
+		chunk_instance.chunk_position = Vector3(chunk_x, chunk_y, chunk_z)
+		chunk_instance.noise_resolution = noise_resolution
+		chunk_instance.noise_amplitude = noise_amplitude
+		chunk_instance.height_threshold = height_threshold
+		chunk_instance.noise_generator = FastNoiseLite.new()
+		chunk_instance.noise_generator.seed = noise_seed
+		
+		add_child(chunk_instance)
+		loaded_chunks[chunk_key] = chunk_instance
+		
+		# Generate terrain directly for editor preview
+		chunk_instance.generate_terrain()
 
 func regenerate_all_terrain() -> void:
 	for chunk_key in loaded_chunks.keys():
