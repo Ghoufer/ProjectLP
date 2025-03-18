@@ -12,6 +12,8 @@ radius = 0.3
 height = 1.2
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CAMERA_CONTROLLER")]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_sc3iu")
 CAMERA_CONTROLLER = NodePath("CameraController")
 
