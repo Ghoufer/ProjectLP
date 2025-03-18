@@ -37,6 +37,7 @@ environment = SubResource("Environment_s28tc")
 transform = Transform3D(1, 0, 0, 0, 0.0250952, 0.999685, 0, -0.999685, 0.0250952, 0, 0, 0)
 
 [node name="Player" parent="." instance=ExtResource("5_2nuuc")]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.277126, 0)
 
 [node name="ChunkSystem" type="Node3D" parent="."]
