@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bi7jadd1ycfob"]
 
 [ext_resource type="Script" uid="uid://bryil7rdc23o3" path="res://scripts/fps_counter.gd" id="1_cxeir"]
-[ext_resource type="Script" uid="uid://baakmd5mnjhyo" path="res://scripts/terrain/ChunkSystem.gd" id="3_aklg6"]
+[ext_resource type="Script" uid="uid://bfxj2aqr5386i" path="res://scripts/terrain/SurfaceNets/SurfaceNets.gd" id="3_aklg6"]
 [ext_resource type="PackedScene" uid="uid://b2kyqtqv3llg4" path="res://scenes/player.tscn" id="5_2nuuc"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dfes8"]
@@ -34,13 +34,13 @@ script = ExtResource("1_cxeir")
 environment = SubResource("Environment_s28tc")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.0250952, 0.999685, 0, -0.999685, 0.0250952, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.888617, 0.45865, 0, -0.45865, 0.888617, 0, 0, 0)
 
 [node name="Player" parent="." instance=ExtResource("5_2nuuc")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.277126, 0)
 
-[node name="ChunkSystem" type="Node3D" parent="."]
+[node name="SurfaceNets" type="MeshInstance3D" parent="."]
 script = ExtResource("3_aklg6")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
