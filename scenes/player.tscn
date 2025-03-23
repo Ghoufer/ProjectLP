@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=6 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
 [ext_resource type="Script" uid="uid://wsdb5j4mcadf" path="res://scripts/player/reticle.gd" id="2_kfe35"]
+[ext_resource type="PackedScene" uid="uid://c5bu8bdiu3dsl" path="res://assets/models/dummy.tscn" id="3_qhqgy"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_fw261"]
 radius = 0.3
@@ -14,6 +15,7 @@ height = 1.2
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CAMERA_CONTROLLER")]
 collision_layer = 2
 collision_mask = 2
+wall_min_slide_angle = 0.785398
 script = ExtResource("1_sc3iu")
 CAMERA_CONTROLLER = NodePath("CameraController")
 
@@ -42,9 +44,12 @@ grow_vertical = 2
 script = ExtResource("2_kfe35")
 
 [node name="CameraController" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.35)
+transform = Transform3D(1, 0, 0, 0, 0.98258, 0.185838, 0, -0.185838, 0.98258, 0, 2.24021, 2.74653)
 
 [node name="Camera3D" type="Camera3D" parent="CameraController"]
+
+[node name="VoxelViewer" type="VoxelViewer" parent="CameraController/Camera3D"]
+view_distance = 420
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="CameraController"]
 visible = false
@@ -52,7 +57,10 @@ update_mode = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_fw261")
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("3_qhqgy")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)

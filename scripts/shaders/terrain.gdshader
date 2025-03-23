@@ -1,6 +1,6 @@
 shader_type spatial;
 
-uniform float min_height = 0;
+uniform float min_height = -50.0;
 uniform float max_height = 1;
 
 uniform sampler2D terrain_color;
@@ -9,7 +9,12 @@ varying float vertex_y;
 
 float inverse_lerp(float minValue, float maxValue, float value) {
 	float val = (value - minValue) / (maxValue - minValue);
-	return clamp(0.01, 1.0, val);
+	return clamp(val, 0.0, 1.0);
+}
+
+void vertex() {
+	vec4 world_position = MODEL_MATRIX * vec4(VERTEX, 1.0);
+	vertex_y = world_position.y;
 }
 
 void fragment() {
@@ -17,11 +22,5 @@ void fragment() {
 	float position = inverse_lerp(min_height, max_height, height);
 
 	ALBEDO = texture(terrain_color, vec2(position, 0)).rgb;
-	
-	//This line of code creates the low poly effect (I have no ideia how it works)
-	NORMAL = -normalize(cross(dFdx(VERTEX), dFdy(VERTEX)));
-}
-
-void vertex() {
-	vertex_y = VERTEX.y;
+	NORMAL = normalize(cross(dFdy(VERTEX), dFdx(VERTEX)));
 }

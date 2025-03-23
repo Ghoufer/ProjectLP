@@ -5,8 +5,10 @@ extends CharacterBody3D
 @export var CAMERA_CONTROLLER : Node3D
 @export var MOUSE_SENSITIVITY : float = 0.5
 
-const SPEED = 50.0
-const JUMP_VELOCITY = 25.0
+const SPEED = 8.0
+const GRAVITY = 50.0
+const JUMP_VELOCITY = 10.0
+const RUN_SPEED = 8.0
 
 var mouse_input : bool = false
 var rotation_input : float
@@ -14,8 +16,6 @@ var tilt_input : float
 var mouse_rotation : Vector3
 var player_rotation : Vector3
 var camera_rotation : Vector3
-
-var gravity = 12.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -54,31 +54,39 @@ func _process(delta):
 	update_camera(delta)
 
 func _physics_process(delta):
+	var is_running = false
+	var current_speed = 0.0
+	
 	# Add the gravity.
-	#if not is_on_floor():
-		#velocity.y -= gravity * delta
+	if not is_on_floor():
+		velocity.y -= GRAVITY * delta
 	
 	if Input.is_action_pressed("jump"):
 		velocity.y = JUMP_VELOCITY
-	elif Input.is_action_pressed("move_down"):
-		velocity.y = -JUMP_VELOCITY
-	else:
-		velocity.y = 0
+	#elif Input.is_action_pressed("move_down"):
+		#velocity.y = -JUMP_VELOCITY
+	#else:
+		#velocity.y = 0
 	
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backwards")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
+	if Input.is_action_pressed('sprint'):
+		current_speed = SPEED + RUN_SPEED
+	else:
+		current_speed = SPEED
+	
 	if direction:
 		if is_on_floor():
-			velocity.x = lerp(velocity.x, direction.x * SPEED, 0.1)
-			velocity.z = lerp(velocity.z, direction.z * SPEED, 0.1)
+			velocity.x = lerp(velocity.x, direction.x * current_speed, 0.1)
+			velocity.z = lerp(velocity.z, direction.z * current_speed, 0.1)
 		else:
-			velocity.x = lerp(direction.x * SPEED, direction.x * SPEED / 2, 0.3)
-			velocity.z = lerp(direction.z * SPEED, direction.z * SPEED / 2, 0.3)
+			velocity.x = lerp(direction.x * current_speed, direction.x * current_speed / 2, 0.3)
+			velocity.z = lerp(direction.z * current_speed, direction.z * current_speed / 2, 0.3)
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
 	
 	move_and_slide()

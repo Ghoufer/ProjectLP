@@ -1,7 +1,22 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dtq15u28bk6d5"]
 
-[ext_resource type="Shader" uid="uid://td7s8aomo66o" path="res://scripts/shaders/low_poly_terrain.gdshader" id="1_p664w"]
+[ext_resource type="Shader" uid="uid://c48iuliugr4xo" path="res://scripts/shaders/terrain.gdshader" id="1_5u7xa"]
 
 [resource]
 render_priority = 0
-shader = ExtResource("1_p664w")
+shader = ExtResource("1_5u7xa")
+shader_parameter/time_speed = 1.0
+shader_parameter/surface_speed = 1.0
+shader_parameter/spin = 0.0
+shader_parameter/brightness = 0.6
+shader_parameter/color_intensity = 0.0
+shader_parameter/horizontal_frequency = 2.0
+shader_parameter/vertical_frequency = 2.0
+shader_parameter/size = 3.0
+shader_parameter/banding_bias = 0.6
+shader_parameter/wave_height = 0.5
+shader_parameter/texture_height = 0.5
+shader_parameter/color1 = Color(0.59, 0.761, 1, 1)
+shader_parameter/color2 = Color(0.274, 0.474, 0.98, 1)
+shader_parameter/color3 = Color(0.059, 0.389, 0.85, 1)
+shader_parameter/color4 = Color(0, 0.267, 1, 1)

@@ -1,5 +1,5 @@
 shader_type spatial;
 
 void fragment() {
-	NORMAL = -normalize(cross(dFdx(VERTEX), dFdy(VERTEX)));
+	NORMAL = normalize(cross(dFdy(VERTEX), dFdx(VERTEX)));
 }
