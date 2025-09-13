@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://fv7hhxt71l0q"]
+
+[ext_resource type="Shader" uid="uid://c48iuliugr4xo" path="res://scripts/shaders/terrain.gdshader" id="1_jpchb"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_jpchb")
+shader_parameter/min_height = -75.0
+shader_parameter/max_height = 75.0

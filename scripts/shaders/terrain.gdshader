@@ -17,7 +17,7 @@ void fragment() {
 	float position = inverse_lerp(min_height, max_height, height);
 
 	ALBEDO = texture(terrain_color, vec2(position, 0)).rgb;
-	
+
 	//This line of code creates the low poly effect (I have no ideia how it works)
 	NORMAL = -normalize(cross(dFdx(VERTEX), dFdy(VERTEX)));
 }
