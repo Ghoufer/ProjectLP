@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dmoocp3a36dh3"
-path="res://.godot/imported/dummy.gltf-18ed4b5df195509072d3ad6c1f351830.scn"
+uid="uid://ce5o0wqrynfr4"
+path="res://.godot/imported/MainDummy1 (1).fbx-c1927096c73675e26a88d885ffcc3495.scn"
 
 [deps]
 
-source_file="res://assets/models/dummy.gltf"
-dest_files=["res://.godot/imported/dummy.gltf-18ed4b5df195509072d3ad6c1f351830.scn"]
+source_file="res://assets/models/MainDummy1 (1).fbx"
+dest_files=["res://.godot/imported/MainDummy1 (1).fbx-c1927096c73675e26a88d885ffcc3495.scn"]
 
 [params]
 
@@ -28,10 +28,11 @@ meshes/force_disable_compression=false
 skins/use_named_skins=true
 animation/import=true
 animation/fps=30
-animation/trimming=false
+animation/trimming=true
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={}
-gltf/naming_version=1
-gltf/embedded_image_handling=1
+fbx/importer=0
+fbx/allow_geometry_helper_nodes=false
+fbx/embedded_image_handling=1
