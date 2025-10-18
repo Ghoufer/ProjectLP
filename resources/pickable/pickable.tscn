@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://cptevs6qmklst"]
+
+[ext_resource type="Script" uid="uid://blda8fn7e5pkm" path="res://scripts/resource_scripts/pickable.gd" id="1_7n1ax"]
+[ext_resource type="Script" uid="uid://c3bt3r7pe56hp" path="res://scripts/resource_scripts/interaction_area.gd" id="2_i52cm"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7n1ax"]
+radius = 1.35
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_cgn1b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7n1ax"]
+size = Vector3(0.15, 0.15, 0.15)
+
+[node name="Pickable" type="RigidBody3D"]
+collision_layer = 8
+collision_mask = 6
+mass = 0.001
+script = ExtResource("1_7n1ax")
+
+[node name="PickupArea" type="Area3D" parent="."]
+collision_layer = 8
+
+[node name="PickupAreaCol" type="CollisionShape3D" parent="PickupArea"]
+unique_name_in_owner = true
+shape = SubResource("SphereShape3D_7n1ax")
+
+[node name="InteractionArea" type="Area3D" parent="."]
+collision_layer = 16
+collision_mask = 16
+script = ExtResource("2_i52cm")
+
+[node name="InteractionAreaCol" type="CollisionShape3D" parent="InteractionArea"]
+unique_name_in_owner = true
+shape = SubResource("SphereShape3D_cgn1b")
+debug_color = Color(0.5487614, 0.4254163, 0.9484524, 0.41960785)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_7n1ax")
+debug_color = Color(0.660649, 0.5147407, 1.92523e-07, 0.41960785)
+
+[connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]
+[connection signal="collided" from="InteractionArea" to="." method="_on_interaction_area_collided"]
+[connection signal="interacted" from="InteractionArea" to="." method="_on_interaction_area_interacted"]

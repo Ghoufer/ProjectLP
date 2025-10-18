@@ -1,9 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://bi7jadd1ycfob"]
+[gd_scene load_steps=13 format=3 uid="uid://bi7jadd1ycfob"]
 
-[ext_resource type="Script" uid="uid://bryil7rdc23o3" path="res://scripts/fps_counter.gd" id="1_cxeir"]
-[ext_resource type="Texture2D" uid="uid://b15r0i7bsop0y" path="res://assets/prototyping/Prototype_black_32x32px.png" id="2_aklg6"]
-[ext_resource type="Texture2D" uid="uid://dyjqn0p71aahr" path="res://assets/prototyping/Prototype_orange_32x32px.png" id="3_e2mvv"]
-[ext_resource type="PackedScene" uid="uid://b2kyqtqv3llg4" path="res://scenes/player.tscn" id="5_2nuuc"]
+[ext_resource type="Script" uid="uid://bryil7rdc23o3" path="res://scripts/fps_counter.gd" id="1_txisq"]
+[ext_resource type="Texture2D" uid="uid://cbchave651alx" path="res://assets/prototyping/Prototype_blue_32x32px.png" id="2_x3jgk"]
+[ext_resource type="Texture2D" uid="uid://dyjqn0p71aahr" path="res://assets/prototyping/Prototype_orange_32x32px.png" id="3_acyt4"]
+[ext_resource type="PackedScene" uid="uid://b2kyqtqv3llg4" path="res://scenes/player.tscn" id="4_kxlmk"]
+[ext_resource type="PackedScene" uid="uid://cptevs6qmklst" path="res://resources/pickable/pickable.tscn" id="5_x3jgk"]
+[ext_resource type="Resource" uid="uid://cx0n2fowyu0ks" path="res://resources/item_data/normal_rock.tres" id="6_acyt4"]
+[ext_resource type="Resource" uid="uid://bp1gedcb3e0fb" path="res://resources/item_data/wooden_stick.tres" id="7_kxlmk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dfes8"]
 
@@ -15,14 +18,14 @@ background_mode = 2
 sky = SubResource("Sky_hiyn0")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e2mvv"]
-albedo_texture = ExtResource("2_aklg6")
+albedo_texture = ExtResource("2_x3jgk")
 uv1_triplanar = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_72vgf"]
-albedo_texture = ExtResource("3_e2mvv")
+albedo_texture = ExtResource("3_acyt4")
 uv1_triplanar = true
 
-[node name="TestingLevel" type="Node3D"]
+[node name="World" type="Node3D"]
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -35,7 +38,7 @@ offset_bottom = 40.0
 [node name="FpsCounter" type="Label" parent="UI/CanvasLayer"]
 offset_right = 40.0
 offset_bottom = 23.0
-script = ExtResource("1_cxeir")
+script = ExtResource("1_txisq")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_s28tc")
@@ -43,13 +46,13 @@ environment = SubResource("Environment_s28tc")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.824332, 0.219256, 0.521923, -0.49532, 0.725754, 0.47743, -0.274108, -0.65208, 0.706864, 0, 0, 0)
 shadow_enabled = true
-shadow_blur = 0.05
+shadow_blur = 0.75
 
 [node name="Ground" type="CSGBox3D" parent="."]
 layers = 2
 use_collision = true
 collision_layer = 2
-collision_mask = 5
+collision_mask = 13
 size = Vector3(100, 1, 100)
 material = SubResource("StandardMaterial3D_e2mvv")
 
@@ -58,7 +61,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6125, 1.76515, -9.78972)
 layers = 4
 use_collision = true
 collision_layer = 4
-collision_mask = 3
+collision_mask = 11
 size = Vector3(1, 2.55554, 1)
 material = SubResource("StandardMaterial3D_72vgf")
 
@@ -70,5 +73,31 @@ collision_mask = 3
 size = Vector3(1, 2.55554, 1)
 material = SubResource("StandardMaterial3D_72vgf")
 
-[node name="Player" parent="." instance=ExtResource("5_2nuuc")]
+[node name="Player" parent="." instance=ExtResource("4_kxlmk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2744, 0.663197, -6.06977)
+
+[node name="Items" type="Node3D" parent="."]
+
+[node name="Pickable" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.901801, 2.4977562, -8.106116)
+item_data = ExtResource("6_acyt4")
+
+[node name="Pickable3" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.964596, 2.4977562, -8.106116)
+item_data = ExtResource("6_acyt4")
+
+[node name="Pickable4" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.089604, 2.4977562, -8.106116)
+item_data = ExtResource("6_acyt4")
+
+[node name="Pickable5" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.617487, 3.411591, -8.106116)
+item_data = ExtResource("6_acyt4")
+
+[node name="Pickable6" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.167513, 2.4977562, -6.460973)
+item_data = ExtResource("6_acyt4")
+
+[node name="Pickable2" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.106633, 2.3337502, -8.106116)
+item_data = ExtResource("7_kxlmk")

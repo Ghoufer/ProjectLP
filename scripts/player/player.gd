@@ -19,6 +19,7 @@ var camera_rotation : Vector3
 var gravity = 24.0
 
 func _ready():
+	Global.player = self
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _input(event):
@@ -36,6 +37,7 @@ func _input(event):
 
 func _process(delta):
 	update_camera(delta)
+	
 
 func _physics_process(delta):
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backwards")

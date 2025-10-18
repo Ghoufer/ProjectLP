@@ -1,13 +1,22 @@
+@tool
 extends Node
 
-var terrain_heightmap
+# Debug panel
+var debug: Variant
 
-func _ready():
-	generate_heightmap()
+var player : CharacterBody3D
 
-func generate_heightmap():
-	var rng = RandomNumberGenerator.new()
+# Interaction variables
+var interact_text: String
+
+const item_paths : Dictionary = {
+	"normal_rock": preload("res://assets/models/items/normal_rock/normal_rock.tscn"),
+	"wooden_stick": preload("res://assets/models/items/wooden_stick/wooden_stick.tscn")
+}
+
+signal interact_text_changed(new_value)
+
+func set_new_interact_text(value: String) -> void:
+	interact_text = value
+	interact_text_changed.emit(interact_text)
 	
-	terrain_heightmap = FastNoiseLite.new()
-	terrain_heightmap.seed = rng.randi()
-	terrain_heightmap.noise_type = FastNoiseLite.TYPE_PERLIN

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://cx0n2fowyu0ks"]
+
+[ext_resource type="Script" uid="uid://b6earu220xr8r" path="res://scripts/resource_scripts/item_data.gd" id="2_gdo1u"]
+[ext_resource type="Texture2D" uid="uid://b1lv0f2apmsvr" path="res://assets/prototyping/Prototype_checkers_02_32x32px.png" id="2_uolwc"]
+
+[resource]
+script = ExtResource("2_gdo1u")
+item_name = "Pedra"
+description = "Apenas uma pedra comum"
+prompt_message = "Pegar pedra"
+stackable = true
+icon = ExtResource("2_uolwc")
+stack_size = 999
+auto_pickup = true
+item_path = "normal_rock"
+item_path = "normal_rock"
+metadata/_custom_type_script = "uid://b6earu220xr8r"

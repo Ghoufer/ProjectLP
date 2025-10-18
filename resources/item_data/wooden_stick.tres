@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://bp1gedcb3e0fb"]
+
+[ext_resource type="Texture2D" uid="uid://bgpnheim71qrk" path="res://assets/prototyping/Prototype_orange_ochre_32x32px.png" id="1_gee2o"]
+[ext_resource type="Script" uid="uid://b6earu220xr8r" path="res://scripts/resource_scripts/item_data.gd" id="1_ksfbj"]
+
+[resource]
+script = ExtResource("1_ksfbj")
+item_name = "Graveto de Madeira"
+description = "Um graveto que provavelmente caiu de uma árvore"
+prompt_message = "Pegar graveto"
+icon = ExtResource("1_gee2o")
+item_type = 1
+item_path = "wooden_stick"
+item_path = "wooden_stick"
+metadata/_custom_type_script = "uid://b6earu220xr8r"
