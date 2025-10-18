@@ -63,7 +63,7 @@ size = Vector3(1, 2.55554, 1)
 material = SubResource("StandardMaterial3D_72vgf")
 
 [node name="Obstacle2" type="CSGBox3D" parent="."]
-transform = Transform3D(-3.41542e-08, 0.781357, -0.624084, -1, -4.37114e-08, 0, -2.72796e-08, 0.624084, 0.781357, 13.075, 0.976638, -9.78972)
+transform = Transform3D(-3.4154198e-08, 0.781357, -0.624084, -0.35416046, 0.5836337, 0.73071307, 0.93518466, 0.22102588, 0.27672574, 15.023362, 0.976638, -9.78972)
 use_collision = true
 collision_layer = 4
 collision_mask = 3

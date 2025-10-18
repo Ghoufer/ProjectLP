@@ -41,11 +41,13 @@ grow_vertical = 2
 script = ExtResource("2_kfe35")
 
 [node name="CameraController" type="SpringArm3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.615, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
 collision_mask = 6
-spring_length = 1.3
+spring_length = 1.4
 
 [node name="Camera3D" type="Camera3D" parent="CameraController"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.394022)
+fov = 90.0
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="CameraController"]
 update_mode = 1
