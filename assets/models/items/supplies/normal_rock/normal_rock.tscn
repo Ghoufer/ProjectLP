@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://dns5r67khxrd8"]
+
+[ext_resource type="Texture2D" uid="uid://b1lv0f2apmsvr" path="res://assets/prototyping/Prototype_checkers_02_32x32px.png" id="1_3iv1r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6ayfh"]
+albedo_texture = ExtResource("1_3iv1r")
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_k4q73"]
+material = SubResource("StandardMaterial3D_6ayfh")
+size = Vector3(0.2, 0.2, 0.2)
+
+[node name="NormalRock" type="MeshInstance3D"]
+mesh = SubResource("BoxMesh_k4q73")

@@ -1,0 +1,129 @@
+[gd_scene load_steps=14 format=3 uid="uid://bi7jadd1ycfob"]
+
+[ext_resource type="Script" uid="uid://bryil7rdc23o3" path="res://scripts/fps_counter.gd" id="1_txisq"]
+[ext_resource type="Texture2D" uid="uid://cbchave651alx" path="res://assets/prototyping/Prototype_blue_32x32px.png" id="2_x3jgk"]
+[ext_resource type="Texture2D" uid="uid://dyjqn0p71aahr" path="res://assets/prototyping/Prototype_orange_32x32px.png" id="3_acyt4"]
+[ext_resource type="PackedScene" uid="uid://b2kyqtqv3llg4" path="res://scenes/player.tscn" id="4_kxlmk"]
+[ext_resource type="PackedScene" uid="uid://cptevs6qmklst" path="res://resources/item/item.tscn" id="5_x3jgk"]
+[ext_resource type="Resource" uid="uid://cx0n2fowyu0ks" path="res://resources/items/supplies/normal_rock.tres" id="6_acyt4"]
+[ext_resource type="Resource" uid="uid://bp1gedcb3e0fb" path="res://resources/items/supplies/wooden_stick.tres" id="7_kxlmk"]
+[ext_resource type="Resource" uid="uid://4wqbg2sjpasx" path="res://resources/items/weapons/wood_sword.tres" id="7_p5tpv"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dfes8"]
+
+[sub_resource type="Sky" id="Sky_hiyn0"]
+sky_material = SubResource("ProceduralSkyMaterial_dfes8")
+
+[sub_resource type="Environment" id="Environment_s28tc"]
+background_mode = 2
+sky = SubResource("Sky_hiyn0")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e2mvv"]
+albedo_texture = ExtResource("2_x3jgk")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_72vgf"]
+albedo_texture = ExtResource("3_acyt4")
+uv1_triplanar = true
+
+[node name="World" type="Node3D"]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CanvasLayer" type="CanvasLayer" parent="UI"]
+
+[node name="FpsCounter" type="Label" parent="UI/CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("1_txisq")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_s28tc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.824332, 0.219256, 0.521923, -0.49532, 0.725754, 0.47743, -0.274108, -0.65208, 0.706864, 0, 0, 0)
+shadow_enabled = true
+shadow_blur = 0.75
+
+[node name="Ground" type="CSGBox3D" parent="."]
+layers = 2
+use_collision = true
+collision_layer = 2
+collision_mask = 13
+size = Vector3(100, 1, 100)
+material = SubResource("StandardMaterial3D_e2mvv")
+
+[node name="Obstacle" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6125, 1.76515, -9.78972)
+layers = 4
+use_collision = true
+collision_layer = 4
+collision_mask = 11
+size = Vector3(1, 2.55554, 1)
+material = SubResource("StandardMaterial3D_72vgf")
+
+[node name="Obstacle2" type="CSGBox3D" parent="."]
+transform = Transform3D(-3.4154198e-08, 0.781357, -0.624084, -0.35416046, 0.5836337, 0.73071307, 0.93518466, 0.22102588, 0.27672574, 15.023362, 0.976638, -9.78972)
+use_collision = true
+collision_layer = 4
+collision_mask = 3
+size = Vector3(1, 2.55554, 1)
+material = SubResource("StandardMaterial3D_72vgf")
+
+[node name="Player" parent="." groups=["Player"] instance=ExtResource("4_kxlmk")]
+transform = Transform3D(0.99730814, 0, 0.07332516, 0, 1, 0, -0.07332516, 0, 0.99730814, 13.2744, 0.663197, -4.8222384)
+
+[node name="Items" type="Node3D" parent="."]
+
+[node name="Item" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.928498, 4.78031, -7.957099)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item2" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.334585, 4.78031, -7.957099)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item3" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.709915, 4.78031, -7.957099)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item4" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.806545, 4.78031, -7.957099)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item5" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.806545, 4.78031, -3.2143416)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item6" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.04665, 4.78031, -3.2143416)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item7" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.691116, 4.78031, -3.2143416)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item8" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.564101, 4.78031, -3.2143416)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item9" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.564101, 4.78031, -5.41524)
+item_data = ExtResource("7_p5tpv")
+auto_pickup = true
+
+[node name="Item10" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.064531, 4.78031, -6.786462)
+item_data = ExtResource("7_kxlmk")

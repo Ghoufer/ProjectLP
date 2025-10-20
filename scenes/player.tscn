@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=7 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
 [ext_resource type="Script" uid="uid://wsdb5j4mcadf" path="res://scripts/player/reticle.gd" id="2_kfe35"]
+[ext_resource type="Script" uid="uid://kbj15by32p1x" path="res://scripts/player/interaction_ray.gd" id="3_qhqgy"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_fw261"]
 radius = 0.3
@@ -41,13 +42,21 @@ grow_vertical = 2
 script = ExtResource("2_kfe35")
 
 [node name="CameraController" type="SpringArm3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 collision_mask = 6
 spring_length = 1.4
 
 [node name="Camera3D" type="Camera3D" parent="CameraController"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.394022)
 fov = 90.0
+
+[node name="InteractionRay" type="RayCast3D" parent="CameraController/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -1.7)
+target_position = Vector3(0, -1.45, 0)
+collision_mask = 16
+collide_with_areas = true
+collide_with_bodies = false
+script = ExtResource("3_qhqgy")
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="CameraController"]
 update_mode = 1
