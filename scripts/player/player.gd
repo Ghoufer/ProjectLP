@@ -19,7 +19,6 @@ var camera_rotation : Vector3
 var gravity = 24.0
 
 func _ready():
-	Global.player = self
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _input(event):

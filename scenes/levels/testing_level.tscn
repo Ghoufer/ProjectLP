@@ -1,12 +1,13 @@
-[gd_scene load_steps=13 format=3 uid="uid://bi7jadd1ycfob"]
+[gd_scene load_steps=14 format=3 uid="uid://bi7jadd1ycfob"]
 
 [ext_resource type="Script" uid="uid://bryil7rdc23o3" path="res://scripts/fps_counter.gd" id="1_txisq"]
 [ext_resource type="Texture2D" uid="uid://cbchave651alx" path="res://assets/prototyping/Prototype_blue_32x32px.png" id="2_x3jgk"]
 [ext_resource type="Texture2D" uid="uid://dyjqn0p71aahr" path="res://assets/prototyping/Prototype_orange_32x32px.png" id="3_acyt4"]
 [ext_resource type="PackedScene" uid="uid://b2kyqtqv3llg4" path="res://scenes/player.tscn" id="4_kxlmk"]
-[ext_resource type="PackedScene" uid="uid://cptevs6qmklst" path="res://resources/pickable/pickable.tscn" id="5_x3jgk"]
-[ext_resource type="Resource" uid="uid://cx0n2fowyu0ks" path="res://resources/item_data/normal_rock.tres" id="6_acyt4"]
-[ext_resource type="Resource" uid="uid://bp1gedcb3e0fb" path="res://resources/item_data/wooden_stick.tres" id="7_kxlmk"]
+[ext_resource type="PackedScene" uid="uid://cptevs6qmklst" path="res://resources/item/item.tscn" id="5_x3jgk"]
+[ext_resource type="Resource" uid="uid://cx0n2fowyu0ks" path="res://resources/items/supplies/normal_rock.tres" id="6_acyt4"]
+[ext_resource type="Resource" uid="uid://bp1gedcb3e0fb" path="res://resources/items/supplies/wooden_stick.tres" id="7_kxlmk"]
+[ext_resource type="Resource" uid="uid://4wqbg2sjpasx" path="res://resources/items/weapons/wood_sword.tres" id="7_p5tpv"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dfes8"]
 
@@ -73,31 +74,56 @@ collision_mask = 3
 size = Vector3(1, 2.55554, 1)
 material = SubResource("StandardMaterial3D_72vgf")
 
-[node name="Player" parent="." instance=ExtResource("4_kxlmk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.2744, 0.663197, -6.06977)
+[node name="Player" parent="." groups=["Player"] instance=ExtResource("4_kxlmk")]
+transform = Transform3D(0.99730814, 0, 0.07332516, 0, 1, 0, -0.07332516, 0, 0.99730814, 13.2744, 0.663197, -4.8222384)
 
 [node name="Items" type="Node3D" parent="."]
 
-[node name="Pickable" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.901801, 2.4977562, -8.106116)
+[node name="Item" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.928498, 4.78031, -7.957099)
 item_data = ExtResource("6_acyt4")
+auto_pickup = true
 
-[node name="Pickable3" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.964596, 2.4977562, -8.106116)
+[node name="Item2" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.334585, 4.78031, -7.957099)
 item_data = ExtResource("6_acyt4")
+auto_pickup = true
 
-[node name="Pickable4" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.089604, 2.4977562, -8.106116)
+[node name="Item3" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.709915, 4.78031, -7.957099)
 item_data = ExtResource("6_acyt4")
+auto_pickup = true
 
-[node name="Pickable5" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.617487, 3.411591, -8.106116)
+[node name="Item4" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.806545, 4.78031, -7.957099)
 item_data = ExtResource("6_acyt4")
+auto_pickup = true
 
-[node name="Pickable6" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.167513, 2.4977562, -6.460973)
+[node name="Item5" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.806545, 4.78031, -3.2143416)
 item_data = ExtResource("6_acyt4")
+auto_pickup = true
 
-[node name="Pickable2" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.106633, 2.3337502, -8.106116)
+[node name="Item6" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.04665, 4.78031, -3.2143416)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item7" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.691116, 4.78031, -3.2143416)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item8" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.564101, 4.78031, -3.2143416)
+item_data = ExtResource("6_acyt4")
+auto_pickup = true
+
+[node name="Item9" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.564101, 4.78031, -5.41524)
+item_data = ExtResource("7_p5tpv")
+auto_pickup = true
+
+[node name="Item10" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.064531, 4.78031, -6.786462)
 item_data = ExtResource("7_kxlmk")

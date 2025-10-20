@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://dyh8torfxjjxx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y71mr"]
+albedo_color = Color(0.5787864, 0.31590372, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_y71mr"]
+material = SubResource("StandardMaterial3D_y71mr")
+size = Vector3(0.025, 0.6, 0.06)
+
+[sub_resource type="BoxMesh" id="BoxMesh_klocx"]
+material = SubResource("StandardMaterial3D_y71mr")
+size = Vector3(0.025, 0.205, 0.06)
+
+[node name="WoodSword" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 0.80042803, 0.59942883, 0, -0.59942883, 0.80042803, 0, 0, 0)
+mesh = SubResource("BoxMesh_y71mr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.124938905, 0)
+mesh = SubResource("BoxMesh_klocx")

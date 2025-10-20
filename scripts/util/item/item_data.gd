@@ -4,19 +4,14 @@ class_name ItemData
 
 @export var item_name : String = ''
 @export_multiline var description : String = ''
-@export var prompt_message : String
-@export var stackable : bool = false
-@export var icon : CompressedTexture2D
-@export var stack_size : int
-@export var current_stack : int
-@export var usable : bool = false
-@export var auto_pickup : bool = false
-@export var item_type: types
-@export var effect_value = 0
+@export var max_stack : int = 999
+@export var icon : AtlasTexture = preload("res://assets/icons/item_icons.tres")
 @export var item_path : String
 
-enum types { Supply, Consumable }
-
+"""
+Create a dropdown list to reference the object pool
+that is stored in the Global script
+"""
 func _get_property_list() -> Array[Dictionary]:
 	var list: Array[Dictionary] = []
 	var paths := Global.item_paths.keys()

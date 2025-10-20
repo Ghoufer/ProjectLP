@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bvxhnsiflp1mc"]
-
-[ext_resource type="PackedScene" uid="uid://cptevs6qmklst" path="res://resources/pickable/pickable.tscn" id="1_r75oj"]
-
-[node name="Item" type="Node3D"]
-
-[node name="Pickable" parent="." instance=ExtResource("1_r75oj")]
