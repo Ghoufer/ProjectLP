@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://qugp8terlvu1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q40bt"]
+albedo_color = Color(0.6468744, 0.6412733, 0.1957263, 1)
+metallic = 1.0
+roughness = 0.49
+
+[sub_resource type="BoxMesh" id="BoxMesh_0k6c4"]
+material = SubResource("StandardMaterial3D_q40bt")
+size = Vector3(0.1, 0.1, 0.2)
+
+[node name="GoldBar" type="Node3D"]
+transform = Transform3D(0.68518084, 0.7282323, -0.014321476, -0.61349994, 0.5664096, -0.55027103, -0.39261326, 0.38582134, 0.8348635, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_0k6c4")

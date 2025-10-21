@@ -11,7 +11,7 @@ class_name Item
 @onready var outline_shader := preload('res://scripts/shaders/item_outline.tres')
 
 # Dropped item animation
-var bob_height: float = 0.01
+var bob_height: float = 0.005
 var bob_speed: float = 1.0
 var rotation_speed: float = 30.0
 var pickup_tween : Tween
@@ -44,11 +44,6 @@ func _ready() -> void:
 			interaction_area.disabled = true
 		else:
 			pickup_area.disabled = true
-	
-
-func _process(_delta: float) -> void:
-	if not Global.interact_text:
-		instance.mesh.material.next_pass = null
 	
 
 func _physics_process(delta: float) -> void:

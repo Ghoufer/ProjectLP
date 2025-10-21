@@ -58,9 +58,6 @@ collide_with_areas = true
 collide_with_bodies = false
 script = ExtResource("3_qhqgy")
 
-[node name="ReflectionProbe" type="ReflectionProbe" parent="CameraController"]
-update_mode = 1
-
 [node name="Visuals" type="Node3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Visuals"]
