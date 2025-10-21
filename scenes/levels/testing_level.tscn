@@ -68,7 +68,7 @@ size = Vector3(1, 2.55554, 1)
 material = SubResource("StandardMaterial3D_72vgf")
 
 [node name="Obstacle2" type="CSGBox3D" parent="."]
-transform = Transform3D(-3.4154198e-08, 0.781357, -0.624084, -0.35416046, 0.5836337, 0.73071307, 0.93518466, 0.22102588, 0.27672574, 15.023362, 0.976638, -9.78972)
+transform = Transform3D(0.015694616, 0.90470386, -0.42575133, 0.06566061, 0.4239521, 0.90330106, 0.9977187, -0.04213204, -0.052749693, 15.023362, 0.976638, -9.78972)
 use_collision = true
 collision_layer = 4
 collision_mask = 3
@@ -103,7 +103,6 @@ auto_pickup = true
 [node name="Item6" parent="Items" instance=ExtResource("5_x3jgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.073821, 2.6578708, -9.511001)
 item_data = ExtResource("6_acyt4")
-auto_pickup = true
 
 [node name="Item4" parent="Items" instance=ExtResource("5_x3jgk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.421889, 1.7149277, -6.155879)

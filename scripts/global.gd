@@ -5,7 +5,12 @@ extends Node
 var debug: Variant
 
 # Interaction variables
-var interact_text: String
+var interaction_ray_collided : bool = false
+signal set_interaction_ray_collided(new_value : bool)
+
+func _init() -> void:
+	connect("set_interaction_ray_collided", change_interaction_ray_collided)
+	
 
 const item_paths : Dictionary = {
 	"normal_rock": preload("res://assets/models/items/supplies/normal_rock/normal_rock.tscn"),
@@ -14,9 +19,6 @@ const item_paths : Dictionary = {
 	"gold_bar": preload("res://assets/models/items/supplies/gold_bar.tscn")
 }
 
-signal interact_text_changed(new_value)
-
-func set_new_interact_text(value: String) -> void:
-	interact_text = value
-	interact_text_changed.emit(interact_text)
+func change_interaction_ray_collided(value: bool) -> void:
+	interaction_ray_collided = value
 	

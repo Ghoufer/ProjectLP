@@ -1,7 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://cptevs6qmklst"]
+[gd_scene load_steps=8 format=3 uid="uid://cptevs6qmklst"]
 
 [ext_resource type="Script" uid="uid://blda8fn7e5pkm" path="res://scripts/util/item/item.gd" id="1_7n1ax"]
 [ext_resource type="Script" uid="uid://c3bt3r7pe56hp" path="res://scripts/util/interaction/interaction_area.gd" id="2_i52cm"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_hxve2"]
+viewport_path = NodePath("InteractionText/InteractionTextSV")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_7n1ax"]
 radius = 1.35
@@ -21,6 +24,25 @@ collision_mask = 6
 mass = 0.001
 gravity_scale = 0.0
 script = ExtResource("1_7n1ax")
+
+[node name="InteractionText" type="Sprite3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+visible = false
+billboard = 1
+no_depth_test = true
+texture = SubResource("ViewportTexture_hxve2")
+
+[node name="InteractionTextSV" type="SubViewport" parent="InteractionText"]
+unique_name_in_owner = true
+transparent_bg = true
+size = Vector2i(40, 23)
+
+[node name="InteractionTextLabel" type="Label" parent="InteractionText/InteractionTextSV"]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Item"
 
 [node name="PickupArea" type="Area3D" parent="."]
 collision_layer = 8
