@@ -10,5 +10,7 @@ uv1_triplanar = true
 material = SubResource("StandardMaterial3D_6ayfh")
 size = Vector3(0.2, 0.2, 0.2)
 
-[node name="NormalRock" type="MeshInstance3D"]
+[node name="NormalRock" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_k4q73")

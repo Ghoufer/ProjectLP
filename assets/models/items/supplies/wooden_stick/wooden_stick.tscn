@@ -11,5 +11,7 @@ albedo_texture = ExtResource("1_b3rhe")
 material = SubResource("StandardMaterial3D_6ayfh")
 size = Vector3(0.025, 0.015, 0.4)
 
-[node name="wooden_stick" type="MeshInstance3D"]
+[node name="wooden_stick" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_5osup")

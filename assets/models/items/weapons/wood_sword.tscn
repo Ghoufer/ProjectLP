@@ -11,10 +11,13 @@ size = Vector3(0.025, 0.6, 0.06)
 material = SubResource("StandardMaterial3D_y71mr")
 size = Vector3(0.025, 0.205, 0.06)
 
-[node name="WoodSword" type="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, 0.80042803, 0.59942883, 0, -0.59942883, 0.80042803, 0, 0, 0)
-mesh = SubResource("BoxMesh_y71mr")
+[node name="WoodSword" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -0.124938905, 0)
+transform = Transform3D(1.7, 0, 0, 0, -1.2722412, -1.1275648, 0, 1.1275648, -1.2722412, 0, 0.29240587, -0.056435134)
+mesh = SubResource("BoxMesh_y71mr")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D"]
+transform = Transform3D(1.0000001, 0, 0, 0, 5.9604645e-08, -1.0000001, 0, 1.0000001, 5.9604645e-08, 0, 0.157088, 0.004002571)
 mesh = SubResource("BoxMesh_klocx")
+skeleton = NodePath("../..")
