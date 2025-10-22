@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://caym2c0j8weuu"]
+
+[ext_resource type="Script" uid="uid://sauqqu5px334" path="res://scripts/util/inventory/hotbar_ui.gd" id="1_jiuns"]
+
+[node name="HotbarUI" type="CanvasLayer"]
+layer = 5
+follow_viewport_enabled = true
+script = ExtResource("1_jiuns")
+
+[node name="FullScreenWidth" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Hotbar" type="Control" parent="FullScreenWidth"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -68.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="HotbarContainer" type="HBoxContainer" parent="FullScreenWidth/Hotbar"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -270.0
+offset_top = -64.0
+offset_right = 270.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1

@@ -1,8 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=11 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
 [ext_resource type="Script" uid="uid://wsdb5j4mcadf" path="res://scripts/player/reticle.gd" id="2_kfe35"]
+[ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/util/inventory/inventory_manager.gd" id="2_p47bc"]
+[ext_resource type="Resource" uid="uid://b1eex6v0eoueb" path="res://resources/inventory/player_inventory.tres" id="3_75vfm"]
+[ext_resource type="PackedScene" uid="uid://caym2c0j8weuu" path="res://scenes/UI/hotbar_ui.tscn" id="3_lvxji"]
 [ext_resource type="Script" uid="uid://kbj15by32p1x" path="res://scripts/player/interaction_ray.gd" id="3_qhqgy"]
+[ext_resource type="PackedScene" uid="uid://dxaoa012c1jjq" path="res://scenes/UI/backpack_ui.tscn" id="4_0owmy"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_fw261"]
 radius = 0.3
@@ -41,6 +45,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_kfe35")
 
+[node name="HotbarUI" parent="UserInterface" instance=ExtResource("3_lvxji")]
+
+[node name="BackpackUI" parent="UserInterface" instance=ExtResource("4_0owmy")]
+
 [node name="CameraController" type="SpringArm3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 collision_mask = 6
@@ -72,3 +80,10 @@ mesh = SubResource("BoxMesh_g2els")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("CapsuleShape3D_ub5ys")
+
+[node name="InventoryManager" type="Node" parent="."]
+script = ExtResource("2_p47bc")
+inventory_data = ExtResource("3_75vfm")
+
+[connection signal="update_backpack_ui" from="InventoryManager" to="UserInterface/BackpackUI" method="_on_backpack_update_ui"]
+[connection signal="update_hotbar_ui" from="InventoryManager" to="UserInterface/HotbarUI" method="_on_hotbar_update_ui"]
