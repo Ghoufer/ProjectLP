@@ -12,7 +12,7 @@ radius = 1.35
 [sub_resource type="SphereShape3D" id="SphereShape3D_cgn1b"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7n1ax"]
-size = Vector3(0.15, 0.08811645, 0.15)
+size = Vector3(0.15, 0.31859437, 0.15)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hxve2"]
 radius = 0.15
@@ -28,7 +28,6 @@ script = ExtResource("1_7n1ax")
 [node name="InteractionText" type="Sprite3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-visible = false
 billboard = 1
 no_depth_test = true
 texture = SubResource("ViewportTexture_hxve2")
@@ -52,6 +51,7 @@ unique_name_in_owner = true
 shape = SubResource("SphereShape3D_7n1ax")
 
 [node name="InteractionArea" type="Area3D" parent="."]
+visible = false
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("2_i52cm")
@@ -63,7 +63,7 @@ debug_color = Color(0.5487614, 0.4254163, 0.9484524, 0.41960785)
 
 [node name="GroundCollider" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.041766822, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.030054078, 0)
 shape = SubResource("BoxShape3D_7n1ax")
 debug_color = Color(0.660649, 0.5147407, 1.92523e-07, 0.41960785)
 

@@ -31,6 +31,7 @@ var loaded_scene : PackedScene
 signal inventory_full
 
 func _ready() -> void:
+	
 	inventory_full.connect(check_inventory)
 	
 	if item and item.item_data:

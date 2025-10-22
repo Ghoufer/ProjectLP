@@ -16,7 +16,6 @@ item_name = "Graveto"
 description = "Deve ter caído de uma árvore"
 icon = SubResource("AtlasTexture_qlikb")
 item_path = "wooden_stick"
-item_path = "wooden_stick"
 metadata/_custom_type_script = "uid://b6earu220xr8r"
 
 [resource]

@@ -48,6 +48,11 @@ script = ExtResource("2_kfe35")
 [node name="HotbarUI" parent="UserInterface" instance=ExtResource("3_lvxji")]
 
 [node name="BackpackUI" parent="UserInterface" instance=ExtResource("4_0owmy")]
+visible = true
+
+[node name="InventoryManager" type="Node" parent="UserInterface"]
+script = ExtResource("2_p47bc")
+inventory_data = ExtResource("3_75vfm")
 
 [node name="CameraController" type="SpringArm3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
@@ -81,9 +86,6 @@ mesh = SubResource("BoxMesh_g2els")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("CapsuleShape3D_ub5ys")
 
-[node name="InventoryManager" type="Node" parent="."]
-script = ExtResource("2_p47bc")
-inventory_data = ExtResource("3_75vfm")
-
-[connection signal="update_backpack_ui" from="InventoryManager" to="UserInterface/BackpackUI" method="_on_backpack_update_ui"]
-[connection signal="update_hotbar_ui" from="InventoryManager" to="UserInterface/HotbarUI" method="_on_hotbar_update_ui"]
+[connection signal="toggle_inventory" from="UserInterface/InventoryManager" to="UserInterface/BackpackUI" method="_on_inventory_manager_toggle_inventory"]
+[connection signal="update_backpack_ui" from="UserInterface/InventoryManager" to="UserInterface/BackpackUI" method="_on_backpack_update_ui"]
+[connection signal="update_hotbar_ui" from="UserInterface/InventoryManager" to="UserInterface/HotbarUI" method="_on_hotbar_update_ui"]

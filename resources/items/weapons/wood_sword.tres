@@ -10,7 +10,6 @@ item_name = "Espada de madeira"
 description = "Dá pro gasto"
 max_stack = 1
 item_path = "wood_sword"
-item_path = "wood_sword"
 metadata/_custom_type_script = "uid://b6earu220xr8r"
 
 [resource]
