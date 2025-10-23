@@ -4,7 +4,6 @@ class_name Item
 @export var item : ItemStack
 @export var auto_pickup : bool = false
 
-@onready var pickup_area: CollisionShape3D = %PickupAreaCol
 @onready var interaction_area: CollisionShape3D = %InteractionAreaCol
 @onready var ground_detect: ShapeCast3D = %GroundDetect
 @onready var ground_collider: CollisionShape3D = %GroundCollider
@@ -21,7 +20,7 @@ var pickup_tween : Tween
 var animation_tween : Tween
 var rotation_tween : Tween
 var random_rotation : float = randf()
-var item_gravity : float = 9.0
+var item_gravity : float = 12.0
 var last_known_player_pos : Vector3
 
 var instance : Node
@@ -37,7 +36,6 @@ func _ready() -> void:
 			interaction_area.disabled = true
 		else:
 			self.gravity_scale = 1.0
-			pickup_area.disabled = true
 			ground_detect.enabled = false
 		
 		item = item.duplicate()
@@ -79,7 +77,7 @@ func create_drop_animation() -> void:
 
 #region -> Item pickup animation and logic
 func create_pickup_animation() -> void:
-	var tween_speed : float = 0.15
+	var tween_speed : float = 0.2
 	
 	animation_tween = null
 	last_known_player_pos = get_tree().get_first_node_in_group("Player").global_position
@@ -89,11 +87,6 @@ func create_pickup_animation() -> void:
 	pickup_tween.tween_property(self, "global_position", last_known_player_pos + Vector3(-0, 0.8, -0), tween_speed)
 	pickup_tween.tween_property(self, "scale", Vector3(0.1, 0.1, 0.1), tween_speed)
 	pickup_tween.connect("finished", Callable(self, "_on_pickup_tween_finished"))
-	
-
-func _on_pickup_area_body_entered(body: Node3D) -> void:
-	Global.emit_signal("add_new_stack", item, body)
-	create_pickup_animation()
 	
 
 func _on_pickup_tween_finished():

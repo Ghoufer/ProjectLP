@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=12 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
 [ext_resource type="Script" uid="uid://wsdb5j4mcadf" path="res://scripts/player/reticle.gd" id="2_kfe35"]
@@ -18,6 +18,9 @@ size = Vector3(0.355, 0.1, 0.135)
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ub5ys"]
 radius = 0.3
 height = 1.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0owmy"]
+radius = 1.35
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CAMERA_CONTROLLER", "VISUALS")]
 collision_mask = 6
@@ -48,7 +51,6 @@ script = ExtResource("2_kfe35")
 [node name="HotbarUI" parent="UserInterface" instance=ExtResource("3_lvxji")]
 
 [node name="BackpackUI" parent="UserInterface" instance=ExtResource("4_0owmy")]
-visible = true
 
 [node name="InventoryManager" type="Node" parent="UserInterface"]
 script = ExtResource("2_p47bc")
@@ -86,6 +88,14 @@ mesh = SubResource("BoxMesh_g2els")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("CapsuleShape3D_ub5ys")
 
+[node name="PickupArea" type="Area3D" parent="CollisionShape3D"]
+collision_mask = 8
+
+[node name="PickupAreaCol" type="CollisionShape3D" parent="CollisionShape3D/PickupArea"]
+unique_name_in_owner = true
+shape = SubResource("SphereShape3D_0owmy")
+
 [connection signal="toggle_inventory" from="UserInterface/InventoryManager" to="UserInterface/BackpackUI" method="_on_inventory_manager_toggle_inventory"]
 [connection signal="update_backpack_ui" from="UserInterface/InventoryManager" to="UserInterface/BackpackUI" method="_on_backpack_update_ui"]
 [connection signal="update_hotbar_ui" from="UserInterface/InventoryManager" to="UserInterface/HotbarUI" method="_on_hotbar_update_ui"]
+[connection signal="body_entered" from="CollisionShape3D/PickupArea" to="UserInterface/InventoryManager" method="_on_pickup_area_body_entered"]

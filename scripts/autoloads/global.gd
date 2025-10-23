@@ -19,7 +19,7 @@ func change_interaction_ray_collided(value: bool) -> void:
 	interaction_ray_collided = value
 	
 
-func respawn_item(new_stack: ItemStack, body: Node3D) -> void:
+func spawn_item(new_stack: ItemStack, body: Node3D) -> void:
 	var items_node = get_tree().get_first_node_in_group("Items")
 	if items_node:
 		var instance : Node = ITEM.instantiate()
