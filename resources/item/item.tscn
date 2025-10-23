@@ -63,5 +63,4 @@ collision_mask = 6
 debug_shape_custom_color = Color(0.8901961, 0.8901961, 0.03529412, 1)
 
 [connection signal="collided" from="InteractionArea" to="." method="_on_interaction_area_collided"]
-[connection signal="interacted" from="InteractionArea" to="." method="_on_interaction_area_interacted"]
 [connection signal="not_collided" from="InteractionArea" to="." method="_on_interaction_area_not_collided"]

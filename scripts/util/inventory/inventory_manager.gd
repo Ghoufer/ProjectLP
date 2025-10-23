@@ -46,6 +46,10 @@ func _on_pickup_area_body_exited(body: Node3D) -> void:
 	items_to_add.erase(body)
 	
 
+func _on_interaction_ray_interacted(body: Item) -> void:
+	items_to_add.push_front(body)
+	
+
 #region -> Manager functions
 func check_inventory_full() -> bool:
 	var all_slots: Array[ItemStack] = hotbar + backpack

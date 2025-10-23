@@ -76,6 +76,9 @@ func create_drop_animation() -> void:
 func create_pickup_animation() -> void:
 	var tween_speed : float = 0.15
 	
+	interaction_text.visible = false
+	interaction_area.disabled = true
+	
 	animation_tween = null
 	last_known_player_pos = get_tree().get_first_node_in_group("Player").global_position
 	
@@ -98,9 +101,4 @@ func _on_interaction_area_collided() -> void:
 func _on_interaction_area_not_collided() -> void:
 	interaction_text.visible = false
 	
-
-func _on_interaction_area_interacted() -> void:
-	interaction_text.visible = false
-	interaction_area.disabled = true
-	create_pickup_animation()
 #endregion

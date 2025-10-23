@@ -1,6 +1,14 @@
 extends RayCast3D
 
+signal interacted(body: Item)
+
 var collider
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("interact") and collider:
+		if collider is InteractionArea:
+			interacted.emit(collider.get_owner())
+	
 
 func _physics_process(_delta: float) -> void:
 	if is_colliding():
@@ -13,10 +21,11 @@ func _physics_process(_delta: float) -> void:
 			collider = get_collider()
 			
 			if collider is InteractionArea:
-				collider._on_interaction_ray_collided()
+				collider.collided.emit()
 	
 
 func sttoped_colliding(col: Object) -> void:
 	if col is InteractionArea:
+		collider = null
 		col.not_collided.emit()
 	
