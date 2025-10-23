@@ -100,7 +100,9 @@ func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, ar
 	
 	while(available_slot_index > -1):
 		leftover_quantity = try_to_add_stack(leftover_quantity, available_slot_index, array, update_signal)
-		available_slot_index = find_available_slot(array, item_path)
+		if leftover_quantity != 0: 
+			available_slot_index = find_available_slot(array, item_path)
+		else: available_slot_index = -1
 	
 	if leftover_quantity != 0:
 		stack_to_add.quantity = leftover_quantity

@@ -77,7 +77,7 @@ func create_drop_animation() -> void:
 
 #region -> Item pickup animation and logic
 func create_pickup_animation() -> void:
-	var tween_speed : float = 0.2
+	var tween_speed : float = 0.15
 	
 	animation_tween = null
 	last_known_player_pos = get_tree().get_first_node_in_group("Player").global_position
