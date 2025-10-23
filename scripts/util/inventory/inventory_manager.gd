@@ -83,6 +83,7 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 	var leftover_quantity : int = new_stack.quantity
 	
 	if new_stack.quantity > new_stack.item_data.max_stack:
+		initial_quantity = new_stack.item_data.max_stack
 		leftover_quantity = new_stack.item_data.max_stack
 		new_stack.quantity = new_stack.item_data.max_stack
 	
@@ -97,12 +98,13 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 		inventory_busy = false
 		return false
 	
+	inventory_busy = false
+	body.create_pickup_animation(get_owner().global_position)
+	
 	if leftover_quantity != 0:
 		new_stack.quantity = leftover_quantity
 		Global.spawn_item(new_stack, body)
 	
-	inventory_busy = false
-	body.create_pickup_animation(get_owner().global_position)
 	
 	return true
 
