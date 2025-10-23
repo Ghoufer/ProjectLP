@@ -22,10 +22,12 @@ func _physics_process(_delta: float) -> void:
 			
 			if collider is InteractionArea:
 				collider.collided.emit()
+	elif collider:
+		sttoped_colliding(collider)
+		collider = null
 	
 
 func sttoped_colliding(col: Object) -> void:
 	if col is InteractionArea:
-		collider = null
 		col.not_collided.emit()
 	
