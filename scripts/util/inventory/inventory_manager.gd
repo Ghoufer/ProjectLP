@@ -72,6 +72,7 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> void:
 	
 	if leftover_quantity != 0:
 		is_inventory_full = true
+		new_stack.quantity = leftover_quantity
 		respawn_item(new_stack, body)
 	
 
