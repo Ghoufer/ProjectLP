@@ -33,6 +33,11 @@ func _process(_delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_inventory"):
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		else:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		
 		is_inventory_open = !is_inventory_open
 		toggle_inventory.emit(is_inventory_open)
 	
@@ -54,7 +59,7 @@ func _on_interaction_ray_interacted(body: Item) -> void:
 func check_inventory_full() -> bool:
 	var all_slots: Array[ItemStack] = hotbar + backpack
 	
-	if find_first_empty(all_slots): return false
+	if find_first_empty(all_slots) != -1: return false
 	
 	for stack in all_slots:
 		if stack.quantity < stack.item_data.max_stack:
@@ -77,6 +82,10 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 	var initial_quantity : int = new_stack.quantity
 	var leftover_quantity : int = new_stack.quantity
 	
+	if new_stack.quantity > new_stack.item_data.max_stack:
+		leftover_quantity = new_stack.item_data.max_stack
+		new_stack.quantity = new_stack.item_data.max_stack
+	
 	leftover_quantity = try_to_add_to_inventory(leftover_quantity, new_stack, hotbar, update_hotbar_ui)
 	
 	if leftover_quantity > 0:
@@ -93,7 +102,7 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 		Global.spawn_item(new_stack, body)
 	
 	inventory_busy = false
-	body.create_pickup_animation()
+	body.create_pickup_animation(get_owner().global_position)
 	
 	return true
 

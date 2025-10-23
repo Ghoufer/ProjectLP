@@ -21,7 +21,6 @@ var animation_tween : Tween
 var rotation_tween : Tween
 var random_rotation : float = randf()
 var item_gravity : float = 12.0
-var last_known_player_pos : Vector3
 
 var instance : Node
 var loaded_scene : PackedScene
@@ -29,8 +28,7 @@ var loaded_scene : PackedScene
 func _ready() -> void:
 	if item and item.item_data:
 		interaction_text.visible = false
-		interaction_text_label.text = "[E] Pegar " + item.item_data.item_name
-		last_known_player_pos = get_tree().get_first_node_in_group("Player").global_position
+		interaction_text_label.text = "[E] Pegar " + item.item_data.item_name + " (" + str(item.quantity) + ")"
 		
 		if auto_pickup:
 			interaction_area.disabled = true
@@ -73,18 +71,17 @@ func create_drop_animation() -> void:
 #endregion
 
 #region -> Item pickup animation and logic
-func create_pickup_animation() -> void:
-	var tween_speed : float = 0.15
+func create_pickup_animation(body_position: Vector3) -> void:
+	var tween_speed : float = 0.18
 	
+	self.gravity_scale = 0.0
+	animation_tween = null
 	interaction_text.visible = false
 	interaction_area.disabled = true
 	
-	animation_tween = null
-	last_known_player_pos = get_tree().get_first_node_in_group("Player").global_position
-	
 	pickup_tween = create_tween()
 	pickup_tween.set_parallel()
-	pickup_tween.tween_property(self, "global_position", last_known_player_pos + Vector3(-0, 0.8, -0), tween_speed)
+	pickup_tween.tween_property(self, "global_position", body_position + Vector3(-0, 0.8, -0), tween_speed)
 	pickup_tween.tween_property(self, "scale", Vector3(0.1, 0.1, 0.1), tween_speed)
 	pickup_tween.connect("finished", Callable(self, "_on_pickup_tween_finished"))
 	

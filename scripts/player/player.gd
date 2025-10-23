@@ -35,10 +35,16 @@ func _input(event):
 		tilt_input = -event.relative.y * MOUSE_SENSITIVITY
 
 func _process(delta):
-	update_camera(delta)
+	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		update_camera(delta)
 	
 
 func _physics_process(delta):
+	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		update_movement(delta)
+	
+
+func update_movement(delta):
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_backwards")
 	var direction : Vector3 = Vector3.ZERO
 	
