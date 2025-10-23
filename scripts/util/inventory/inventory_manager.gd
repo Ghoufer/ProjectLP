@@ -1,9 +1,6 @@
 extends Node
 class_name InventoryManager
 
-const ITEM = preload("res://resources/item/item.tscn")
-const NORMAL_ROCK = preload("uid://cx0n2fowyu0ks")
-
 signal update_hotbar_ui(new_hotbar)
 signal update_backpack_ui(new_backpack)
 signal toggle_inventory(value)
@@ -30,19 +27,6 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_inventory"):
 		is_inventory_open = !is_inventory_open
 		toggle_inventory.emit(is_inventory_open)
-	
-
-func respawn_item(new_stack: ItemStack, body: Node3D) -> void:
-	var items_node = get_tree().get_first_node_in_group("Items")
-	if items_node:
-		var instance : Node = ITEM.instantiate()
-		var throw_strength : float = 0.009
-		var random_direction : Vector3 = Vector3(randf_range(-1.0, 1.0), body.global_position.y + 1.5, randf_range(-1.0, 1.0)).normalized()
-		instance.item = new_stack
-		instance.auto_pickup = true
-		items_node.add_child(instance)
-		instance.global_position = body.global_position + random_direction
-		instance.apply_central_impulse(random_direction * throw_strength)
 	
 
 #region -> Manager functions
@@ -73,7 +57,7 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> void:
 	if leftover_quantity != 0:
 		is_inventory_full = true
 		new_stack.quantity = leftover_quantity
-		respawn_item(new_stack, body)
+		Global.spawn_item(new_stack, body)
 	
 
 func add_to_empty_slot(available_slot_index: int, new_stack: ItemStack, array: Array[ItemStack], ui_signal: Signal) -> void:
