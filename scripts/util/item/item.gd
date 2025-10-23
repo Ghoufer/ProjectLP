@@ -27,12 +27,7 @@ var last_known_player_pos : Vector3
 var instance : Node
 var loaded_scene : PackedScene
 
-signal inventory_full
-
 func _ready() -> void:
-	
-	inventory_full.connect(check_inventory)
-	
 	if item and item.item_data:
 		interaction_text.visible = false
 		interaction_text_label.text = "[E] Pegar " + item.item_data.item_name
@@ -83,16 +78,6 @@ func create_drop_animation() -> void:
 #endregion
 
 #region -> Item pickup animation and logic
-func check_inventory(is_inventory_full: bool) -> void:
-	if not is_inventory_full:
-		create_pickup_animation()
-	
-
-func _on_pickup_area_body_entered(body: Node3D) -> void:
-	Global.emit_signal("add_new_stack", item, body)
-	create_pickup_animation()
-	
-
 func create_pickup_animation() -> void:
 	var tween_speed : float = 0.15
 	
@@ -104,6 +89,11 @@ func create_pickup_animation() -> void:
 	pickup_tween.tween_property(self, "global_position", last_known_player_pos + Vector3(-0, 0.8, -0), tween_speed)
 	pickup_tween.tween_property(self, "scale", Vector3(0.1, 0.1, 0.1), tween_speed)
 	pickup_tween.connect("finished", Callable(self, "_on_pickup_tween_finished"))
+	
+
+func _on_pickup_area_body_entered(body: Node3D) -> void:
+	Global.emit_signal("add_new_stack", item, body)
+	create_pickup_animation()
 	
 
 func _on_pickup_tween_finished():

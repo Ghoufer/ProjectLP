@@ -8,4 +8,5 @@ var stack : ItemStack:
 	set(val):
 		quantity_label.text = str(val.quantity)
 		item_sprite.texture = val.item_data.icon
-	
+		if quantity_label.text == '1': quantity_label.visible = false
+		else: quantity_label.visible = true
