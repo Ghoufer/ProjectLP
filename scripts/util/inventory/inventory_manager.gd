@@ -28,6 +28,7 @@ func _process(_delta: float) -> void:
 		if not inventory_busy and items_to_add.size() > 0:
 			inventory_busy = true
 			add_new_stack(items_to_add[0].item, items_to_add[0])
+			items_to_add.erase(items_to_add[0])
 	
 
 func _input(event: InputEvent) -> void:
@@ -87,7 +88,6 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 		Global.spawn_item(new_stack, body)
 	
 	inventory_busy = false
-	items_to_add.erase(body)
 	body.create_pickup_animation()
 	
 	return true
@@ -100,23 +100,20 @@ func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, ar
 	
 	while(available_slot_index > -1):
 		leftover_quantity = try_to_add_stack(leftover_quantity, available_slot_index, array, update_signal)
-		if leftover_quantity != 0: 
+		if leftover_quantity != 0:
 			available_slot_index = find_available_slot(array, item_path)
 		else: available_slot_index = -1
 	
 	if leftover_quantity != 0:
 		stack_to_add.quantity = leftover_quantity
 		available_slot_index = find_first_empty(array)
-		
 		if available_slot_index > -1:
 			leftover_quantity = 0
-			add_to_empty_slot(available_slot_index, stack_to_add, array, update_signal)
+			array[available_slot_index] = stack_to_add
+	
+	update_signal.emit(array)
 	
 	return leftover_quantity
-
-func add_to_empty_slot(available_slot_index: int, new_stack: ItemStack, array: Array[ItemStack], ui_signal: Signal) -> void:
-	array[available_slot_index] = new_stack
-	ui_signal.emit(array)
 
 func try_to_add_stack(leftover_quantity: int, available_slot_index: int, array: Array[ItemStack], ui_signal: Signal) -> int:
 	var max_stack : int = array[available_slot_index].item_data.max_stack
