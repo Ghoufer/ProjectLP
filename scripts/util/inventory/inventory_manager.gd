@@ -11,7 +11,7 @@ var hotbar : Array[ItemStack] = []
 var backpack : Array[ItemStack] = []
 var is_inventory_open : bool = false
 var is_inventory_full : bool = false
-var items_in_range : Array[Item] = []
+var items_to_add : Array[Item] = []
 var inventory_busy : bool = false
 
 func _ready() -> void:
@@ -25,9 +25,9 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if not is_inventory_full:
-		if not inventory_busy and items_in_range.size() > 0:
+		if not inventory_busy and items_to_add.size() > 0:
 			inventory_busy = true
-			add_new_stack(items_in_range[0].item, items_in_range[0])
+			add_new_stack(items_to_add[0].item, items_to_add[0])
 	
 
 func _input(event: InputEvent) -> void:
@@ -37,11 +37,11 @@ func _input(event: InputEvent) -> void:
 	
 
 func _on_pickup_area_body_entered(body: Node3D) -> void:
-	items_in_range.append(body)
+	items_to_add.append(body)
 	
 
 func _on_pickup_area_body_exited(body: Node3D) -> void:
-	items_in_range.erase(body)
+	items_to_add.erase(body)
 	
 
 #region -> Manager functions
@@ -73,8 +73,6 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 	
 	leftover_quantity = try_to_add_to_inventory(leftover_quantity, new_stack, hotbar, update_hotbar_ui)
 	
-	new_stack.quantity = leftover_quantity
-	
 	if leftover_quantity > 0:
 		leftover_quantity = try_to_add_to_inventory(leftover_quantity, new_stack, backpack, update_backpack_ui)
 	
@@ -89,7 +87,7 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 		Global.spawn_item(new_stack, body)
 	
 	inventory_busy = false
-	items_in_range.erase(body)
+	items_to_add.erase(body)
 	body.create_pickup_animation()
 	
 	return true
