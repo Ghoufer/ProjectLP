@@ -38,7 +38,8 @@ func _input(event: InputEvent) -> void:
 	
 
 func _on_pickup_area_body_entered(body: Node3D) -> void:
-	items_to_add.append(body)
+	if body.auto_pickup:
+		items_to_add.append(body)
 	
 
 func _on_pickup_area_body_exited(body: Node3D) -> void:

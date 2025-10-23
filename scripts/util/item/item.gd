@@ -45,13 +45,10 @@ func _ready() -> void:
 	
 		call_deferred("add_child", instance)
 	
-
+#
 func _process(_delta: float) -> void:
-	if Global.interaction_ray_collided:
+	if interaction_text.visible:
 		interaction_text_sv.size = interaction_text_label.size
-	
-	if not Global.interaction_ray_collided and interaction_text.visible:
-		interaction_text.visible = false
 	
 
 func _physics_process(delta: float) -> void:
@@ -96,6 +93,10 @@ func _on_pickup_tween_finished():
 #region -> Interaction area logic
 func _on_interaction_area_collided() -> void:
 	interaction_text.visible = true
+	
+
+func _on_interaction_area_not_collided() -> void:
+	interaction_text.visible = false
 	
 
 func _on_interaction_area_interacted() -> void:
