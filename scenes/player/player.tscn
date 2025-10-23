@@ -99,3 +99,4 @@ shape = SubResource("SphereShape3D_0owmy")
 [connection signal="update_backpack_ui" from="UserInterface/InventoryManager" to="UserInterface/BackpackUI" method="_on_backpack_update_ui"]
 [connection signal="update_hotbar_ui" from="UserInterface/InventoryManager" to="UserInterface/HotbarUI" method="_on_hotbar_update_ui"]
 [connection signal="body_entered" from="CollisionShape3D/PickupArea" to="UserInterface/InventoryManager" method="_on_pickup_area_body_entered"]
+[connection signal="body_exited" from="CollisionShape3D/PickupArea" to="UserInterface/InventoryManager" method="_on_pickup_area_body_exited"]

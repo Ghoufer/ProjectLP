@@ -10,7 +10,9 @@ signal toggle_inventory(value)
 var hotbar : Array[ItemStack] = []
 var backpack : Array[ItemStack] = []
 var is_inventory_open : bool = false
+var is_inventory_full : bool = false
 var items_in_range : Array[Item] = []
+var inventory_busy : bool = false
 
 func _ready() -> void:
 	if inventory_data:
@@ -18,6 +20,14 @@ func _ready() -> void:
 		backpack = inventory_data.backpack
 		update_hotbar_ui.emit(hotbar)
 		update_backpack_ui.emit(backpack)
+		is_inventory_full = check_inventory_full()
+	
+
+func _process(_delta: float) -> void:
+	if not is_inventory_full:
+		if not inventory_busy and items_in_range.size() > 0:
+			inventory_busy = true
+			add_new_stack(items_in_range[0].item, items_in_range[0])
 	
 
 func _input(event: InputEvent) -> void:
@@ -27,14 +37,24 @@ func _input(event: InputEvent) -> void:
 	
 
 func _on_pickup_area_body_entered(body: Node3D) -> void:
-	if body.is_in_group("Item"):
-		if not body.auto_pickup: return
-		var can_add = add_new_stack(body.item, body)
-		if can_add:
-			body.create_pickup_animation()
+	items_in_range.append(body)
+	
+
+func _on_pickup_area_body_exited(body: Node3D) -> void:
+	items_in_range.erase(body)
 	
 
 #region -> Manager functions
+func check_inventory_full() -> bool:
+	var all_slots: Array[ItemStack] = hotbar + backpack
+	
+	if find_first_empty(all_slots): return false
+	
+	for stack in all_slots:
+		if stack.quantity < stack.item_data.max_stack:
+			return false
+	return true
+
 func find_first_empty(array: Array[ItemStack]) -> int:
 	return array.find(null)
 
@@ -58,14 +78,21 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 	if leftover_quantity > 0:
 		leftover_quantity = try_to_add_to_inventory(leftover_quantity, new_stack, backpack, update_backpack_ui)
 	
-	if leftover_quantity == initial_quantity: return false
+	is_inventory_full = check_inventory_full()
+	
+	if leftover_quantity == initial_quantity:
+		inventory_busy = false
+		return false
 	
 	if leftover_quantity != 0:
 		new_stack.quantity = leftover_quantity
 		Global.spawn_item(new_stack, body)
 	
-	return true
+	inventory_busy = false
+	items_in_range.erase(body)
+	body.create_pickup_animation()
 	
+	return true
 
 func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, array: Array[ItemStack], update_signal: Signal) -> int:
 	var available_slot_index : int
