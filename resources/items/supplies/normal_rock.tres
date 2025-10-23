@@ -1,25 +1,19 @@
-[gd_resource type="Resource" script_class="ItemStack" load_steps=6 format=3 uid="uid://cx0n2fowyu0ks"]
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://cx0n2fowyu0ks"]
 
 [ext_resource type="Script" uid="uid://b6earu220xr8r" path="res://scripts/util/item/item_data.gd" id="1_vijlh"]
-[ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/util/item/item_stack.gd" id="2_gg2fg"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gg2fg"]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_36wxg"]
 load_path = "res://.godot/imported/item_icons.png-ea47edd8c331a87040ab94ff36f2f3c1.ctex"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_j7sc2"]
-atlas = SubResource("CompressedTexture2D_gg2fg")
+[sub_resource type="AtlasTexture" id="AtlasTexture_vijlh"]
+atlas = SubResource("CompressedTexture2D_36wxg")
 region = Rect2(368, 320, 16, 16)
 
-[sub_resource type="Resource" id="Resource_tgxe0"]
+[resource]
 script = ExtResource("1_vijlh")
 item_name = "Pedra"
 description = "Uma pedra comum"
-icon = SubResource("AtlasTexture_j7sc2")
+icon = SubResource("AtlasTexture_vijlh")
+item_path = "normal_rock"
 item_path = "normal_rock"
 metadata/_custom_type_script = "uid://b6earu220xr8r"
-
-[resource]
-script = ExtResource("2_gg2fg")
-item_data = SubResource("Resource_tgxe0")
-quantity = 995
-metadata/_custom_type_script = "uid://ds3i345xkpghw"
