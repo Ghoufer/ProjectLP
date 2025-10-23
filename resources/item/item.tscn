@@ -51,7 +51,6 @@ unique_name_in_owner = true
 shape = SubResource("SphereShape3D_7n1ax")
 
 [node name="InteractionArea" type="Area3D" parent="."]
-visible = false
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("2_i52cm")
@@ -73,11 +72,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
 shape = SubResource("CapsuleShape3D_hxve2")
 collision_mask = 6
 debug_shape_custom_color = Color(0.8901961, 0.8901961, 0.03529412, 1)
-
-[node name="PickupCooldown" type="Timer" parent="."]
-unique_name_in_owner = true
-wait_time = 1.5
-one_shot = true
 
 [connection signal="body_entered" from="PickupArea" to="." method="_on_pickup_area_body_entered"]
 [connection signal="collided" from="InteractionArea" to="." method="_on_interaction_area_collided"]

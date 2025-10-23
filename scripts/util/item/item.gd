@@ -12,7 +12,6 @@ class_name Item
 @onready var interaction_text: Sprite3D = %InteractionText
 @onready var interaction_text_sv: SubViewport = %InteractionTextSV
 @onready var interaction_text_label: Label = %InteractionTextLabel
-@onready var pickup_cooldown: Timer = %PickupCooldown
 
 # Dropped item animation
 var bob_height: float = 0.005
@@ -35,33 +34,26 @@ func _ready() -> void:
 	inventory_full.connect(check_inventory)
 	
 	if item and item.item_data:
-		pickup_area.disabled = true
-		pickup_cooldown.start()
 		interaction_text.visible = false
 		interaction_text_label.text = "[E] Pegar " + item.item_data.item_name
 		last_known_player_pos = get_tree().get_first_node_in_group("Player").global_position
 		
-		if not auto_pickup:
-			self.gravity_scale = 1.0
-			ground_detect.enabled = false
-		
-		item = item.duplicate()
-		loaded_scene = Global.item_paths[item.item_data.item_path]
-		instance = loaded_scene.instantiate()
-		instance.rotation.y = randf() * TAU
-	
 		if auto_pickup:
 			interaction_area.disabled = true
 		else:
+			self.gravity_scale = 1.0
 			pickup_area.disabled = true
+			ground_detect.enabled = false
 		
+		item = item.duplicate()
+		loaded_scene = ItemPool.paths[item.item_data.item_path]
+		instance = loaded_scene.instantiate()
+		instance.rotation.y = randf() * TAU
+	
 		call_deferred("add_child", instance)
 	
 
 func _process(_delta: float) -> void:
-	if pickup_cooldown.is_stopped() and pickup_area.disabled:
-		pickup_area.disabled = false
-	
 	if Global.interaction_ray_collided:
 		interaction_text_sv.size = interaction_text_label.size
 	

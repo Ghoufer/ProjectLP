@@ -13,7 +13,7 @@ that is stored in the Global script
 """
 func _get_property_list() -> Array[Dictionary]:
 	var list: Array[Dictionary] = []
-	var paths := Global.item_paths.keys()
+	var paths := ItemPool.paths.keys()
 	
 	list.append({
 		"name": "item_path",
