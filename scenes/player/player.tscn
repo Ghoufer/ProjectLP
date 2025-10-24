@@ -44,7 +44,14 @@ script = ExtResource("1_sc3iu")
 CAMERA_CONTROLLER = NodePath("CameraController")
 VISUALS = NodePath("Visuals")
 
-[node name="UserInterface" type="Control" parent="."]
+[node name="GuiLayer" type="CanvasLayer" parent="."]
+
+[node name="InventoryManager" type="Node" parent="GuiLayer"]
+script = ExtResource("2_p47bc")
+inventory_containers = Array[ExtResource("6_5gtgg")]([SubResource("Resource_qek5x"), SubResource("Resource_5gtgg")])
+
+[node name="Inventories" type="Control" parent="GuiLayer"]
+unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -53,25 +60,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="InventoryManager" type="Node" parent="UserInterface"]
-script = ExtResource("2_p47bc")
-inventory_containers = Array[ExtResource("6_5gtgg")]([SubResource("Resource_qek5x"), SubResource("Resource_5gtgg")])
-
-[node name="Inventories" type="Control" parent="UserInterface"]
-unique_name_in_owner = true
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-mouse_filter = 2
-
-[node name="SwapSlot" parent="UserInterface/Inventories" instance=ExtResource("7_5gtgg")]
+[node name="SwapSlot" parent="GuiLayer" instance=ExtResource("7_5gtgg")]
 unique_name_in_owner = true
 visible = false
-y_sort_enabled = true
-layout_mode = 0
+z_as_relative = false
 
-[node name="Reticle" type="CenterContainer" parent="UserInterface"]
-layout_mode = 1
+[node name="Reticle" type="CenterContainer" parent="GuiLayer"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -121,6 +115,6 @@ collision_mask = 8
 unique_name_in_owner = true
 shape = SubResource("SphereShape3D_0owmy")
 
-[connection signal="interacted" from="CameraController/Camera3D/InteractionRay" to="UserInterface/InventoryManager" method="_on_interaction_ray_interacted"]
-[connection signal="body_entered" from="CollisionShape3D/PickupArea" to="UserInterface/InventoryManager" method="_on_pickup_area_body_entered"]
-[connection signal="body_exited" from="CollisionShape3D/PickupArea" to="UserInterface/InventoryManager" method="_on_pickup_area_body_exited"]
+[connection signal="interacted" from="CameraController/Camera3D/InteractionRay" to="GuiLayer/InventoryManager" method="_on_interaction_ray_interacted"]
+[connection signal="body_entered" from="CollisionShape3D/PickupArea" to="GuiLayer/InventoryManager" method="_on_pickup_area_body_entered"]
+[connection signal="body_exited" from="CollisionShape3D/PickupArea" to="GuiLayer/InventoryManager" method="_on_pickup_area_body_exited"]

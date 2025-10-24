@@ -12,4 +12,4 @@ const INITIAL_MAX_SLOTS : int = 9
 
 signal toggle_ui(value: bool)
 signal add_slots(count: int, _on_slot_clicked: Callable)
-signal update_container(container: InventoryContainer, updated_slots: Array[ItemStack])
+signal update_container(container: InventoryContainer)

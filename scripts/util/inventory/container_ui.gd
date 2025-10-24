@@ -1,4 +1,4 @@
-extends CanvasLayer
+extends Control
 
 @export var ui_node : Node
 
@@ -22,4 +22,7 @@ func update_container(container : InventoryContainer) -> void:
 		for index in container.container_size:
 			if container.slots[index]:
 				ui_slots[index].stack = container.slots[index]
+			else:
+				ui_slots[index].stack = null
+	
 	

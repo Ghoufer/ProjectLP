@@ -13,6 +13,9 @@ var is_inventory_open : bool = false
 var is_inventory_full : bool = false
 var items_to_add : Array[Item] = []
 var inventory_busy : bool = false
+var swap_slot_offset : Vector2
+var swap_slot_last_container : InventoryContainer
+var swap_slot_container_index : int
 
 func _ready() -> void:
 	if inventory_containers.size() > 0:
@@ -30,11 +33,13 @@ func _ready() -> void:
 			
 			inventories.add_child.call_deferred(container_ui)
 		is_inventory_full = check_inventory_full()
+	swap_slot_offset = Vector2(0, -swap_slot.custom_minimum_size.y / 2)
 	
 
 func _process(_delta: float) -> void:
 	if swap_slot.visible:
-		swap_slot.position = get_viewport().get_mouse_position()
+		swap_slot.position = get_viewport().get_mouse_position() + swap_slot_offset
+		
 	
 	if not is_inventory_full:
 		if not inventory_busy and items_to_add.size() > 0:
@@ -48,6 +53,7 @@ func _input(event: InputEvent) -> void:
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
+			if swap_slot.stack: clear_swap_slot()
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		
 		is_inventory_open = not is_inventory_open
@@ -63,6 +69,21 @@ func _on_slot_clicked(event: InputEvent, clicked_stack: ItemStack) -> void:
 			if clicked_stack:
 				swap_slot.stack = clicked_stack
 				swap_slot.visible = true
+				find_clicked_stack(clicked_stack)
+				
+	
+
+func clear_swap_slot() -> void:
+	swap_slot.visible = false
+	if swap_slot_last_container:
+		for container in inventory_containers:
+			if container.container_name == swap_slot_last_container.container_name:
+				container.slots[swap_slot_container_index] = swap_slot.stack
+				container.update_container.emit(swap_slot_last_container)
+				break
+	
+	swap_slot.stack = null
+	swap_slot_last_container = null
 	
 
 func _on_pickup_area_body_entered(body: Node3D) -> void:
@@ -102,6 +123,17 @@ func find_available_slot(array: Array[ItemStack], item_path: String) -> int:
 			if item_path == array[index].item_data.item_path and quantity < max_stack:
 				return index
 	return -1
+
+func find_clicked_stack(stack_to_find: ItemStack) -> void:
+	for container in inventory_containers:
+		var search : int = container.slots.find(stack_to_find)
+		if search != -1:
+			swap_slot_container_index = search
+			swap_slot_last_container = container
+			container.slots[search] = null
+			container.update_container.emit.call_deferred(container)
+			break
+	
 
 func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 	var initial_quantity : int = new_stack.quantity
