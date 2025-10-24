@@ -1,9 +1,11 @@
 [gd_scene load_steps=2 format=3 uid="uid://dxaoa012c1jjq"]
 
-[ext_resource type="Script" uid="uid://c72eqasdhbf" path="res://scripts/util/inventory/backpack_ui.gd" id="1_l6gu7"]
+[ext_resource type="Script" uid="uid://ngiq5u7kg2ja" path="res://scripts/util/inventory/container_ui.gd" id="1_l6gu7"]
 
-[node name="BackpackUI" type="CanvasLayer"]
+[node name="BackpackUI" type="CanvasLayer" node_paths=PackedStringArray("ui_node")]
+visible = false
 script = ExtResource("1_l6gu7")
+ui_node = NodePath("FullScreenWidth/BackgroundPanel/HFlowContainer")
 
 [node name="FullScreenWidth" type="Control" parent="."]
 layout_mode = 3

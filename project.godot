@@ -18,7 +18,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://scripts/autoloads/global.gd"
-MarchingTable="res://scripts/terrain/MarchingTable.gd"
 ItemPool="*res://scripts/autoloads/item_pool.gd"
 
 [debug]

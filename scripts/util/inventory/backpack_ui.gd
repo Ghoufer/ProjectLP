@@ -4,25 +4,27 @@ extends Node
 
 const SLOT : PackedScene = preload("res://scenes/UI/slot.tscn")
 
-var inventory : InventoryData = InventoryData.new()
+var inventory : InventoryContainer = InventoryContainer.new()
 
 func _ready() -> void:
 	self.visible = false
 	
-	for i in inventory.BACKPACK_SIZE:
+	for i in inventory.container_size:
 		var instance : Node = SLOT.instantiate()
 		h_flow_container.add_child(instance)
 	
+	inventory.connect("container_updated", _on_container_updated)
+	
 
-func _on_backpack_update_ui(backpack: Array[ItemStack]) -> void:
+func _on_container_updated(backpack: Array[ItemStack]) -> void:
 	var slots : Array[Node] = h_flow_container.get_children()
 	
 	if backpack.size() > 0:
-		inventory.backpack = backpack
-		
-		for index in inventory.BACKPACK_SIZE:
-			if inventory.backpack[index]:
-				slots[index].stack = inventory.backpack[index]
+		inventory.slots = backpack
+		print(backpack.size())
+		for index in inventory.container_size:
+			if inventory.slots[index]:
+				slots[index].stack = inventory.slots[index]
 	
 
 func _on_inventory_manager_toggle_inventory(value: bool) -> void:

@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
 [ext_resource type="Script" uid="uid://wsdb5j4mcadf" path="res://scripts/player/reticle.gd" id="2_kfe35"]
 [ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/util/inventory/inventory_manager.gd" id="2_p47bc"]
-[ext_resource type="Resource" uid="uid://b1eex6v0eoueb" path="res://resources/inventory/player_inventory.tres" id="3_75vfm"]
-[ext_resource type="PackedScene" uid="uid://caym2c0j8weuu" path="res://scenes/UI/hotbar_ui.tscn" id="3_lvxji"]
 [ext_resource type="Script" uid="uid://kbj15by32p1x" path="res://scripts/player/interaction_ray.gd" id="3_qhqgy"]
-[ext_resource type="PackedScene" uid="uid://dxaoa012c1jjq" path="res://scenes/UI/backpack_ui.tscn" id="4_0owmy"]
+[ext_resource type="Script" uid="uid://b40pvyn6bgfgf" path="res://scripts/util/inventory/inventory_container.gd" id="6_5gtgg"]
+[ext_resource type="Resource" uid="uid://cd3f1evq5ffk4" path="res://resources/inventory/hotbar.tres" id="7_h17s1"]
+[ext_resource type="Resource" uid="uid://cc75apelce2o5" path="res://resources/inventory/backpack.tres" id="8_je7p5"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_fw261"]
 radius = 0.3
@@ -37,6 +37,16 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 
+[node name="InventoryManager" type="Node" parent="UserInterface"]
+script = ExtResource("2_p47bc")
+inventory_containers = Array[ExtResource("6_5gtgg")]([ExtResource("7_h17s1"), ExtResource("8_je7p5")])
+
+[node name="Inventories" type="Control" parent="UserInterface"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="Reticle" type="CenterContainer" parent="UserInterface"]
 layout_mode = 1
 anchors_preset = 8
@@ -47,14 +57,6 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_kfe35")
-
-[node name="HotbarUI" parent="UserInterface" instance=ExtResource("3_lvxji")]
-
-[node name="BackpackUI" parent="UserInterface" instance=ExtResource("4_0owmy")]
-
-[node name="InventoryManager" type="Node" parent="UserInterface"]
-script = ExtResource("2_p47bc")
-inventory_data = ExtResource("3_75vfm")
 
 [node name="CameraController" type="SpringArm3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
@@ -95,9 +97,6 @@ collision_mask = 8
 unique_name_in_owner = true
 shape = SubResource("SphereShape3D_0owmy")
 
-[connection signal="toggle_inventory" from="UserInterface/InventoryManager" to="UserInterface/BackpackUI" method="_on_inventory_manager_toggle_inventory"]
-[connection signal="update_backpack_ui" from="UserInterface/InventoryManager" to="UserInterface/BackpackUI" method="_on_backpack_update_ui"]
-[connection signal="update_hotbar_ui" from="UserInterface/InventoryManager" to="UserInterface/HotbarUI" method="_on_hotbar_update_ui"]
 [connection signal="interacted" from="CameraController/Camera3D/InteractionRay" to="UserInterface/InventoryManager" method="_on_interaction_ray_interacted"]
 [connection signal="body_entered" from="CollisionShape3D/PickupArea" to="UserInterface/InventoryManager" method="_on_pickup_area_body_entered"]
 [connection signal="body_exited" from="CollisionShape3D/PickupArea" to="UserInterface/InventoryManager" method="_on_pickup_area_body_exited"]

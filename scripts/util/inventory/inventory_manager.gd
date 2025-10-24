@@ -1,25 +1,33 @@
 extends Node
 class_name InventoryManager
 
+@onready var inventories: Control = %Inventories
+
+@export var inventory_containers : Array[InventoryContainer]
+
 signal update_hotbar_ui(new_hotbar)
 signal update_backpack_ui(new_backpack)
-signal toggle_inventory(value)
 
-@export var inventory_data : InventoryData
-
-var hotbar : Array[ItemStack] = []
-var backpack : Array[ItemStack] = []
 var is_inventory_open : bool = false
 var is_inventory_full : bool = false
 var items_to_add : Array[Item] = []
 var inventory_busy : bool = false
 
 func _ready() -> void:
-	if inventory_data:
-		hotbar = inventory_data.hotbar
-		backpack = inventory_data.backpack
-		update_hotbar_ui.emit(hotbar)
-		update_backpack_ui.emit(backpack)
+	if inventory_containers.size() > 0:
+		for container in inventory_containers:
+			var container_ui : Node = container.ui.instantiate()
+			
+			container.slots.resize(container.container_size)
+			
+			container.toggle_ui.connect(container_ui.toggle_ui)
+			container.update_ui.connect(container_ui.update_ui)
+			container.update_container.connect(container_ui.update_container)
+			
+			container.update_ui.emit(container.container_size)
+			container.update_container.emit.call_deferred(container)
+			
+			inventories.add_child.call_deferred(container_ui)
 		is_inventory_full = check_inventory_full()
 	
 
@@ -38,8 +46,12 @@ func _input(event: InputEvent) -> void:
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		
-		is_inventory_open = !is_inventory_open
-		toggle_inventory.emit(is_inventory_open)
+		is_inventory_open = not is_inventory_open
+		
+		for container in inventory_containers:
+			if container.can_toggle:
+				container.toggle_ui.emit(is_inventory_open)
+		
 	
 
 func _on_pickup_area_body_entered(body: Node3D) -> void:
@@ -57,8 +69,10 @@ func _on_interaction_ray_interacted(body: Item) -> void:
 
 #region -> Manager functions
 func check_inventory_full() -> bool:
-	var all_slots: Array[ItemStack] = hotbar + backpack
+	var all_slots: Array[ItemStack] = []
 	
+	for container in inventory_containers:
+		all_slots += container.slots
 	if find_first_empty(all_slots) != -1: return false
 	
 	for stack in all_slots:
@@ -87,10 +101,10 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 		leftover_quantity = new_stack.item_data.max_stack
 		new_stack.quantity = new_stack.item_data.max_stack
 	
-	leftover_quantity = try_to_add_to_inventory(leftover_quantity, new_stack, hotbar, update_hotbar_ui)
-	
-	if leftover_quantity > 0:
-		leftover_quantity = try_to_add_to_inventory(leftover_quantity, new_stack, backpack, update_backpack_ui)
+	for container in inventory_containers:
+		if leftover_quantity > 0:
+			leftover_quantity = try_to_add_to_inventory(leftover_quantity, new_stack, container.slots)
+			container.update_container.emit(container)
 	
 	is_inventory_full = check_inventory_full()
 	
@@ -108,14 +122,14 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 	
 	return true
 
-func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, array: Array[ItemStack], update_signal: Signal) -> int:
+func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, array: Array[ItemStack]) -> int:
 	var available_slot_index : int
 	var item_path : String = stack_to_add.item_data.item_path
 	
 	available_slot_index = find_available_slot(array, item_path)
 	
 	while(available_slot_index > -1):
-		leftover_quantity = try_to_add_stack(leftover_quantity, available_slot_index, array, update_signal)
+		leftover_quantity = try_to_add_stack(leftover_quantity, available_slot_index, array)
 		if leftover_quantity != 0:
 			available_slot_index = find_available_slot(array, item_path)
 		else: available_slot_index = -1
@@ -127,23 +141,19 @@ func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, ar
 			leftover_quantity = 0
 			array[available_slot_index] = stack_to_add
 	
-	update_signal.emit(array)
-	
 	return leftover_quantity
 
-func try_to_add_stack(leftover_quantity: int, available_slot_index: int, array: Array[ItemStack], ui_signal: Signal) -> int:
+func try_to_add_stack(leftover_quantity: int, available_slot_index: int, array: Array[ItemStack]) -> int:
 	var max_stack : int = array[available_slot_index].item_data.max_stack
 	var quantity_sum : int = leftover_quantity + array[available_slot_index].quantity
 	
 	if quantity_sum <= max_stack:
 		leftover_quantity = 0
 		array[available_slot_index].quantity = quantity_sum
-		ui_signal.emit(array)
 	else:
 		## Found but not enough space
 		leftover_quantity  = abs(quantity_sum - max_stack)
 		array[available_slot_index].quantity = max_stack
-		ui_signal.emit(array)
 		
 	return leftover_quantity
 #endregion

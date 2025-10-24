@@ -1,12 +1,11 @@
 [gd_scene load_steps=2 format=3 uid="uid://caym2c0j8weuu"]
 
-[ext_resource type="Script" uid="uid://ngiq5u7kg2ja" path="res://scripts/util/inventory/container_ui.gd" id="1_jiuns"]
+[ext_resource type="Script" uid="uid://sauqqu5px334" path="res://scripts/util/inventory/hotbar_ui.gd" id="1_jiuns"]
 
-[node name="HotbarUI" type="CanvasLayer" node_paths=PackedStringArray("ui_node")]
+[node name="HotbarUI" type="CanvasLayer"]
 layer = 5
 follow_viewport_enabled = true
 script = ExtResource("1_jiuns")
-ui_node = NodePath("FullScreenWidth/Hotbar/HotbarContainer")
 
 [node name="FullScreenWidth" type="Control" parent="."]
 layout_mode = 3
@@ -31,6 +30,7 @@ grow_vertical = 0
 mouse_filter = 2
 
 [node name="HotbarContainer" type="HBoxContainer" parent="FullScreenWidth/Hotbar"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
