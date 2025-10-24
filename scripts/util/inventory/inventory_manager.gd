@@ -2,6 +2,7 @@ extends Node
 class_name InventoryManager
 
 @onready var inventories: Control = %Inventories
+@onready var swap_slot: ItemSlot = %SwapSlot
 
 @export var inventory_containers : Array[InventoryContainer]
 
@@ -21,10 +22,10 @@ func _ready() -> void:
 			container.slots.resize(container.container_size)
 			
 			container.toggle_ui.connect(container_ui.toggle_ui)
-			container.update_ui.connect(container_ui.update_ui)
+			container.add_slots.connect(container_ui.add_slots)
 			container.update_container.connect(container_ui.update_container)
 			
-			container.update_ui.emit(container.container_size)
+			container.add_slots.emit(container.container_size, _on_slot_clicked)
 			container.update_container.emit.call_deferred(container)
 			
 			inventories.add_child.call_deferred(container_ui)
@@ -32,6 +33,9 @@ func _ready() -> void:
 	
 
 func _process(_delta: float) -> void:
+	if swap_slot.visible:
+		swap_slot.position = get_viewport().get_mouse_position()
+	
 	if not is_inventory_full:
 		if not inventory_busy and items_to_add.size() > 0:
 			inventory_busy = true
@@ -51,7 +55,14 @@ func _input(event: InputEvent) -> void:
 		for container in inventory_containers:
 			if container.can_toggle:
 				container.toggle_ui.emit(is_inventory_open)
-		
+	
+
+func _on_slot_clicked(event: InputEvent, clicked_stack: ItemStack) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+			if clicked_stack:
+				swap_slot.stack = clicked_stack
+				swap_slot.visible = true
 	
 
 func _on_pickup_area_body_entered(body: Node3D) -> void:

@@ -1,12 +1,28 @@
-[gd_scene load_steps=12 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=16 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
 [ext_resource type="Script" uid="uid://wsdb5j4mcadf" path="res://scripts/player/reticle.gd" id="2_kfe35"]
 [ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/util/inventory/inventory_manager.gd" id="2_p47bc"]
+[ext_resource type="PackedScene" uid="uid://caym2c0j8weuu" path="res://scenes/UI/hotbar_ui.tscn" id="3_lvxji"]
 [ext_resource type="Script" uid="uid://kbj15by32p1x" path="res://scripts/player/interaction_ray.gd" id="3_qhqgy"]
+[ext_resource type="PackedScene" uid="uid://dxaoa012c1jjq" path="res://scenes/UI/backpack_ui.tscn" id="4_0owmy"]
 [ext_resource type="Script" uid="uid://b40pvyn6bgfgf" path="res://scripts/util/inventory/inventory_container.gd" id="6_5gtgg"]
-[ext_resource type="Resource" uid="uid://cd3f1evq5ffk4" path="res://resources/inventory/hotbar.tres" id="7_h17s1"]
-[ext_resource type="Resource" uid="uid://cc75apelce2o5" path="res://resources/inventory/backpack.tres" id="8_je7p5"]
+[ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/util/item/item_stack.gd" id="6_qek5x"]
+[ext_resource type="PackedScene" uid="uid://c6bhdunw8vmbb" path="res://scenes/UI/swap_slot.tscn" id="7_5gtgg"]
+
+[sub_resource type="Resource" id="Resource_qek5x"]
+script = ExtResource("6_5gtgg")
+container_name = "hotbar"
+ui = ExtResource("3_lvxji")
+metadata/_custom_type_script = "uid://b40pvyn6bgfgf"
+
+[sub_resource type="Resource" id="Resource_5gtgg"]
+script = ExtResource("6_5gtgg")
+container_name = "backpack"
+container_size = 27
+can_toggle = true
+ui = ExtResource("4_0owmy")
+metadata/_custom_type_script = "uid://b40pvyn6bgfgf"
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_fw261"]
 radius = 0.3
@@ -35,17 +51,24 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
+mouse_filter = 2
 
 [node name="InventoryManager" type="Node" parent="UserInterface"]
 script = ExtResource("2_p47bc")
-inventory_containers = Array[ExtResource("6_5gtgg")]([ExtResource("7_h17s1"), ExtResource("8_je7p5")])
+inventory_containers = Array[ExtResource("6_5gtgg")]([SubResource("Resource_qek5x"), SubResource("Resource_5gtgg")])
 
 [node name="Inventories" type="Control" parent="UserInterface"]
 unique_name_in_owner = true
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 2
+
+[node name="SwapSlot" parent="UserInterface/Inventories" instance=ExtResource("7_5gtgg")]
+unique_name_in_owner = true
+visible = false
+y_sort_enabled = true
+layout_mode = 0
 
 [node name="Reticle" type="CenterContainer" parent="UserInterface"]
 layout_mode = 1
@@ -56,6 +79,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("2_kfe35")
 
 [node name="CameraController" type="SpringArm3D" parent="."]

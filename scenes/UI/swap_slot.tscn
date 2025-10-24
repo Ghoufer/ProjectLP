@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6bhdunw8vmbb"]
+
+[ext_resource type="Script" uid="uid://ctpjg56xd36je" path="res://scripts/util/inventory/slot.gd" id="2_867f3"]
+
+[node name="SwapSlot" type="TextureButton"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_direction = 1
+offset_right = 64.0
+offset_bottom = 64.0
+size_flags_horizontal = 4
+mouse_filter = 2
+stretch_mode = 0
+script = ExtResource("2_867f3")
+
+[node name="ItemSprite" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
+scale = Vector2(2, 2)
+
+[node name="Quantity" type="Label" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 31.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16

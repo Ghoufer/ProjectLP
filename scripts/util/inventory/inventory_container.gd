@@ -10,6 +10,6 @@ const INITIAL_MAX_SLOTS : int = 9
 @export var slots : Array[ItemStack] = []
 @export var ui : PackedScene
 
-signal update_ui(count: int)
 signal toggle_ui(value: bool)
+signal add_slots(count: int, _on_slot_clicked: Callable)
 signal update_container(container: InventoryContainer, updated_slots: Array[ItemStack])

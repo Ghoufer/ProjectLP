@@ -17,6 +17,8 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="BackgroundPanel" type="PanelContainer" parent="FullScreenWidth"]
+z_index = -1
+z_as_relative = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,5 +33,6 @@ custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+mouse_filter = 2
 alignment = 1
 last_wrap_alignment = 2
