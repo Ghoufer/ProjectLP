@@ -1,7 +1,7 @@
 extends RigidBody3D
 class_name Item
 
-@export var item : ItemStack
+@export var stack : ItemStack
 @export var auto_pickup : bool = false
 
 @onready var interaction_area: CollisionShape3D = %InteractionAreaCol
@@ -26,9 +26,9 @@ var instance : Node
 var loaded_scene : PackedScene
 
 func _ready() -> void:
-	if item and item.item_data:
+	if stack and stack.item_data:
 		interaction_text.visible = false
-		interaction_text_label.text = "[E] Pegar " + item.item_data.item_name + " (" + str(item.quantity) + ")"
+		interaction_text_label.text = "[E] Pegar " + stack.item_data.item_name + " (" + str(stack.quantity) + ")"
 		
 		if auto_pickup:
 			interaction_area.disabled = true
@@ -36,8 +36,8 @@ func _ready() -> void:
 			self.gravity_scale = 1.0
 			ground_detect.enabled = false
 		
-		item = item.duplicate()
-		loaded_scene = ItemPool.paths[item.item_data.item_path]
+		stack = stack.duplicate()
+		loaded_scene = ItemPool.paths[stack.item_data.item_path]
 		instance = loaded_scene.instantiate()
 		instance.rotation.y = randf() * TAU
 	

@@ -20,6 +20,9 @@ func update_container(container : InventoryContainer) -> void:
 	
 	if ui_slots.size() > 0:
 		for index in container.container_size:
+			ui_slots[index].slot_index = index
+			ui_slots[index].container_id = container.resource_scene_unique_id
+			
 			if container.slots[index]:
 				ui_slots[index].stack = container.slots[index]
 			else:

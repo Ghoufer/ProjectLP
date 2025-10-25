@@ -1,7 +1,7 @@
 extends Node
 class_name InventoryManager
 
-@onready var inventories: Control = %Inventories
+@onready var inventory_uis: Control = %Inventories
 @onready var swap_slot: ItemSlot = %SwapSlot
 
 @export var inventory_containers : Array[InventoryContainer]
@@ -11,10 +11,10 @@ signal update_backpack_ui(new_backpack)
 
 var is_inventory_open : bool = false
 var is_inventory_full : bool = false
-var items_to_add : Array[Item] = []
+var items_to_add : Array = []
 var inventory_busy : bool = false
 var swap_slot_offset : Vector2
-var swap_slot_last_container : InventoryContainer
+var swap_slot_last_container_id : String
 var swap_slot_container_index : int
 
 func _ready() -> void:
@@ -31,7 +31,7 @@ func _ready() -> void:
 			container.add_slots.emit(container.container_size, _on_slot_clicked)
 			container.update_container.emit.call_deferred(container)
 			
-			inventories.add_child.call_deferred(container_ui)
+			inventory_uis.add_child.call_deferred(container_ui)
 		is_inventory_full = check_inventory_full()
 	swap_slot_offset = Vector2(0, -swap_slot.custom_minimum_size.y / 2)
 	
@@ -44,8 +44,8 @@ func _process(_delta: float) -> void:
 	if not is_inventory_full:
 		if not inventory_busy and items_to_add.size() > 0:
 			inventory_busy = true
-			add_new_stack(items_to_add[0].item, items_to_add[0])
-			items_to_add.erase(items_to_add[0])
+			add_new_stack(items_to_add.front())
+			items_to_add.erase(items_to_add.front())
 	
 
 func _input(event: InputEvent) -> void:
@@ -53,7 +53,7 @@ func _input(event: InputEvent) -> void:
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
-			if swap_slot.stack: clear_swap_slot()
+			if swap_slot.stack: put_stack_back()
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		
 		is_inventory_open = not is_inventory_open
@@ -63,35 +63,18 @@ func _input(event: InputEvent) -> void:
 				container.toggle_ui.emit(is_inventory_open)
 	
 
-func _on_slot_clicked(event: InputEvent, clicked_stack: ItemStack) -> void:
+func _on_slot_clicked(event: InputEvent, slot_index: int, container_id: String, clicked_stack: ItemStack) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
-			if clicked_stack:
-				swap_slot.stack = clicked_stack
-				swap_slot.visible = true
-				find_clicked_stack(clicked_stack)
-				
+			handle_change_slot(slot_index, container_id, clicked_stack)
 	
 
-func clear_swap_slot() -> void:
-	swap_slot.visible = false
-	if swap_slot_last_container:
-		for container in inventory_containers:
-			if container.container_name == swap_slot_last_container.container_name:
-				container.slots[swap_slot_container_index] = swap_slot.stack
-				container.update_container.emit(swap_slot_last_container)
-				break
-	
-	swap_slot.stack = null
-	swap_slot_last_container = null
-	
-
-func _on_pickup_area_body_entered(body: Node3D) -> void:
+func _on_pickup_area_body_entered(body: Item) -> void:
 	if body.auto_pickup:
 		items_to_add.append(body)
 	
 
-func _on_pickup_area_body_exited(body: Node3D) -> void:
+func _on_pickup_area_body_exited(body: Item) -> void:
 	items_to_add.erase(body)
 	
 
@@ -100,6 +83,47 @@ func _on_interaction_ray_interacted(body: Item) -> void:
 	
 
 #region -> Manager functions
+func clear_swap_slot() -> void:
+	swap_slot.visible = false
+	swap_slot.stack = null
+	swap_slot_last_container_id = ''
+	swap_slot_container_index = -1
+	
+
+## Called when player closes inventory but was holding an item
+func put_stack_back() -> void:
+	items_to_add.append(swap_slot.stack)
+	clear_swap_slot()
+	
+
+func handle_change_slot(slot_index: int, container_id: String, stack_to_swap: ItemStack) -> void:
+	## This is gonna get the index of the container in inventory_containers
+	var which_container : int = inventory_containers.find_custom(
+		func find_container(container: InventoryContainer):
+			return container_id == container.resource_scene_unique_id
+	)
+	var container_to_update : InventoryContainer = inventory_containers[which_container]
+	
+	if not swap_slot.stack:
+		swap_slot.stack = stack_to_swap
+		stack_to_swap = null
+	elif not stack_to_swap and swap_slot.stack:
+		stack_to_swap = swap_slot.stack
+		clear_swap_slot()
+	else:
+		var temp : ItemStack = stack_to_swap
+		stack_to_swap = swap_slot.stack
+		swap_slot.stack = temp
+	
+	container_to_update.slots[slot_index] = stack_to_swap
+	container_to_update.update_container.emit(container_to_update)
+	
+	swap_slot_container_index = slot_index
+	swap_slot_last_container_id = container_id
+	
+	swap_slot.visible = true
+	
+
 func check_inventory_full() -> bool:
 	var all_slots: Array[ItemStack] = []
 	
@@ -124,18 +148,13 @@ func find_available_slot(array: Array[ItemStack], item_path: String) -> int:
 				return index
 	return -1
 
-func find_clicked_stack(stack_to_find: ItemStack) -> void:
-	for container in inventory_containers:
-		var search : int = container.slots.find(stack_to_find)
-		if search != -1:
-			swap_slot_container_index = search
-			swap_slot_last_container = container
-			container.slots[search] = null
-			container.update_container.emit.call_deferred(container)
-			break
+func add_new_stack(new_stack: Variant) -> bool:
+	var body : Node3D = null
 	
-
-func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
+	if new_stack is Item:
+		body = new_stack
+		new_stack = new_stack.stack
+	
 	var initial_quantity : int = new_stack.quantity
 	var leftover_quantity : int = new_stack.quantity
 	
@@ -156,14 +175,16 @@ func add_new_stack(new_stack: ItemStack, body: Node3D) -> bool:
 		return false
 	
 	inventory_busy = false
-	body.create_pickup_animation(get_owner().global_position)
 	
-	if leftover_quantity != 0:
-		new_stack.quantity = leftover_quantity
-		Global.spawn_item(new_stack, body)
-	
+	if body:
+		body.create_pickup_animation(get_owner().global_position)
+		
+		if leftover_quantity != 0:
+			new_stack.quantity = leftover_quantity
+			Global.spawn_item(new_stack, body)
 	
 	return true
+	
 
 func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, array: Array[ItemStack]) -> int:
 	var available_slot_index : int

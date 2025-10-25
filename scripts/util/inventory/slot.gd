@@ -6,6 +6,8 @@ class_name ItemSlot
 
 signal _on_slot_clicked(event: InputEvent, clicked_stack: ItemStack)
 
+var slot_index : int
+var container_id : String
 var stack : ItemStack : set = set_property
 
 func set_property(val: ItemStack) -> void:
@@ -23,5 +25,5 @@ func set_property(val: ItemStack) -> void:
 	
 
 func _on_gui_input(event: InputEvent) -> void:
-	_on_slot_clicked.emit(event, stack)
+	_on_slot_clicked.emit(event, slot_index, container_id, stack)
 	

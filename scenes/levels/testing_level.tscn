@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bi7jadd1ycfob"]
+[gd_scene load_steps=16 format=3 uid="uid://bi7jadd1ycfob"]
 
 [ext_resource type="Script" uid="uid://bryil7rdc23o3" path="res://scripts/fps_counter.gd" id="1_txisq"]
 [ext_resource type="Texture2D" uid="uid://cbchave651alx" path="res://assets/prototyping/Prototype_blue_32x32px.png" id="2_x3jgk"]
@@ -8,9 +8,6 @@
 [ext_resource type="Resource" uid="uid://4wqbg2sjpasx" path="res://resources/items/weapons/wood_sword.tres" id="6_acyt4"]
 [ext_resource type="Resource" uid="uid://cx0n2fowyu0ks" path="res://resources/items/supplies/normal_rock.tres" id="6_kxlmk"]
 [ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/util/item/item_stack.gd" id="7_kxlmk"]
-[ext_resource type="Resource" uid="uid://dbe0vqfl5nlti" path="res://resources/items/supplies/coal.tres" id="9_g8sj1"]
-[ext_resource type="Resource" uid="uid://c27hs6d8npkpr" path="res://resources/items/supplies/gold_ingot.tres" id="9_vbjt1"]
-[ext_resource type="Resource" uid="uid://bp1gedcb3e0fb" path="res://resources/items/supplies/wooden_stick.tres" id="10_sb23r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dfes8"]
 
@@ -30,45 +27,15 @@ uv1_triplanar = true
 albedo_texture = ExtResource("3_acyt4")
 uv1_triplanar = true
 
-[sub_resource type="Resource" id="Resource_g8sj1"]
-script = ExtResource("7_kxlmk")
-item_data = ExtResource("6_acyt4")
-metadata/_custom_type_script = "uid://ds3i345xkpghw"
-
-[sub_resource type="Resource" id="Resource_sb23r"]
-script = ExtResource("7_kxlmk")
-item_data = ExtResource("6_kxlmk")
-quantity = 50
-metadata/_custom_type_script = "uid://ds3i345xkpghw"
-
 [sub_resource type="Resource" id="Resource_kxlmk"]
 script = ExtResource("7_kxlmk")
-item_data = ExtResource("6_kxlmk")
-quantity = 35
-metadata/_custom_type_script = "uid://ds3i345xkpghw"
-
-[sub_resource type="Resource" id="Resource_rw13e"]
-script = ExtResource("7_kxlmk")
 item_data = ExtResource("6_acyt4")
-quantity = 35
 metadata/_custom_type_script = "uid://ds3i345xkpghw"
 
-[sub_resource type="Resource" id="Resource_osrbx"]
+[sub_resource type="Resource" id="Resource_p5tpv"]
 script = ExtResource("7_kxlmk")
-item_data = ExtResource("9_vbjt1")
-quantity = 35
-metadata/_custom_type_script = "uid://ds3i345xkpghw"
-
-[sub_resource type="Resource" id="Resource_4wh7x"]
-script = ExtResource("7_kxlmk")
-item_data = ExtResource("10_sb23r")
-quantity = 35
-metadata/_custom_type_script = "uid://ds3i345xkpghw"
-
-[sub_resource type="Resource" id="Resource_vbjt1"]
-script = ExtResource("7_kxlmk")
-item_data = ExtResource("9_g8sj1")
-quantity = 10
+item_data = ExtResource("6_kxlmk")
+quantity = 800
 metadata/_custom_type_script = "uid://ds3i345xkpghw"
 
 [node name="World" type="Node3D" groups=["World"]]
@@ -125,94 +92,11 @@ transform = Transform3D(0.99730814, 0, 0.07332516, 0, 1, 0, -0.07332516, 0, 0.99
 [node name="Items" type="Node3D" parent="." groups=["Items"]]
 
 [node name="Item" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.573917, 2.2065148, -7.8847466)
-item = SubResource("Resource_g8sj1")
-
-[node name="Item4" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.486162, 2.2065148, -7.6934433)
-item = SubResource("Resource_sb23r")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.763053, 1.3811457, -4.810417)
+stack = SubResource("Resource_kxlmk")
+auto_pickup = true
 
 [node name="Item2" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.816302, 2.206514, -6.137442)
-item = SubResource("Resource_kxlmk")
-auto_pickup = true
-
-[node name="Item5" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9832134, 2.206514, -5.957792)
-item = SubResource("Resource_kxlmk")
-auto_pickup = true
-
-[node name="Item6" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.315222, 2.2065141, -5.7432)
-item = SubResource("Resource_kxlmk")
-auto_pickup = true
-
-[node name="Item7" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.700451, 2.2065141, -4.568084)
-item = SubResource("Resource_kxlmk")
-auto_pickup = true
-
-[node name="Item8" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.983747, 2.2065141, -3.377201)
-item = SubResource("Resource_kxlmk")
-auto_pickup = true
-
-[node name="Item9" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9357195, 2.2065141, -4.7290397)
-item = SubResource("Resource_rw13e")
-auto_pickup = true
-
-[node name="Item13" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.236716, 2.2065141, -4.8882985)
-item = SubResource("Resource_rw13e")
-auto_pickup = true
-
-[node name="Item14" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.575604, 2.2065141, -4.365117)
-item = SubResource("Resource_rw13e")
-auto_pickup = true
-
-[node name="Item15" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.486248, 2.2065141, -5.299526)
-item = SubResource("Resource_rw13e")
-auto_pickup = true
-
-[node name="Item16" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.018596, 2.2065141, -5.253237)
-item = SubResource("Resource_rw13e")
-auto_pickup = true
-
-[node name="Item17" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.549367, 2.2065141, -4.422263)
-item = SubResource("Resource_rw13e")
-auto_pickup = true
-
-[node name="Item18" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.983972, 2.2065141, -4.0771513)
-item = SubResource("Resource_rw13e")
-auto_pickup = true
-
-[node name="Item19" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.080711, 2.2065141, -4.206729)
-item = SubResource("Resource_rw13e")
-auto_pickup = true
-
-[node name="Item10" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9357195, 2.2065141, -4.7290397)
-item = SubResource("Resource_osrbx")
-auto_pickup = true
-
-[node name="Item11" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.29606, 2.2065141, -4.001347)
-item = SubResource("Resource_4wh7x")
-auto_pickup = true
-
-[node name="Item12" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.173811, 2.2065141, -5.3711877)
-item = SubResource("Resource_kxlmk")
-auto_pickup = true
-
-[node name="Item3" parent="Items" instance=ExtResource("5_x3jgk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.2586775, 2.206514, -6.6968837)
-item = SubResource("Resource_vbjt1")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.763053, 1.3811457, -4.810417)
+stack = SubResource("Resource_p5tpv")
 auto_pickup = true
