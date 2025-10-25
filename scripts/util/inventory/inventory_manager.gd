@@ -10,12 +10,14 @@ signal update_hotbar_ui(new_hotbar)
 signal update_backpack_ui(new_backpack)
 
 var is_inventory_open : bool = false
-var is_inventory_full : bool = false
 var items_to_add : Array = []
 var inventory_busy : bool = false
 var swap_slot_offset : Vector2
 var swap_slot_last_container_id : String
 var swap_slot_container_index : int
+
+const WOOD_SWORD = preload("uid://4wqbg2sjpasx")
+const NORMAL_ROCK = preload("uid://cx0n2fowyu0ks")
 
 func _ready() -> void:
 	if inventory_containers.size() > 0:
@@ -32,20 +34,17 @@ func _ready() -> void:
 			container.update_container.emit.call_deferred(container)
 			
 			inventory_uis.add_child.call_deferred(container_ui)
-		is_inventory_full = check_inventory_full()
+			container.update_container.emit.call_deferred(container)
 	swap_slot_offset = Vector2(0, -swap_slot.custom_minimum_size.y / 2)
 	
 
 func _process(_delta: float) -> void:
 	if swap_slot.visible:
 		swap_slot.position = get_viewport().get_mouse_position() + swap_slot_offset
-		
 	
-	if not is_inventory_full:
-		if not inventory_busy and items_to_add.size() > 0:
-			inventory_busy = true
-			add_new_stack(items_to_add.front())
-			items_to_add.erase(items_to_add.front())
+	if not inventory_busy and items_to_add.size() > 0:
+		inventory_busy = true
+		add_new_stack(items_to_add.front())
 	
 
 func _input(event: InputEvent) -> void:
@@ -92,7 +91,7 @@ func clear_swap_slot() -> void:
 
 ## Called when player closes inventory but was holding an item
 func put_stack_back() -> void:
-	items_to_add.append(swap_slot.stack)
+	items_to_add.push_front(swap_slot.stack)
 	clear_swap_slot()
 	
 
@@ -103,6 +102,8 @@ func handle_change_slot(slot_index: int, container_id: String, stack_to_swap: It
 			return container_id == container.resource_scene_unique_id
 	)
 	var container_to_update : InventoryContainer = inventory_containers[which_container]
+	
+	inventory_busy = true
 	
 	if not swap_slot.stack:
 		swap_slot.stack = stack_to_swap
@@ -121,19 +122,22 @@ func handle_change_slot(slot_index: int, container_id: String, stack_to_swap: It
 	swap_slot_container_index = slot_index
 	swap_slot_last_container_id = container_id
 	
+	inventory_busy = false
 	swap_slot.visible = true
 	
 
-func check_inventory_full() -> bool:
+func check_inventory_full(stack_to_check: ItemStack) -> bool:
 	var all_slots: Array[ItemStack] = []
 	
 	for container in inventory_containers:
 		all_slots += container.slots
+	
 	if find_first_empty(all_slots) != -1: return false
 	
 	for stack in all_slots:
-		if stack.quantity < stack.item_data.max_stack:
-			return false
+		if stack.item_data == stack_to_check.item_data:
+			if stack.quantity < stack.item_data.max_stack:
+				return false
 	return true
 
 func find_first_empty(array: Array[ItemStack]) -> int:
@@ -148,18 +152,20 @@ func find_available_slot(array: Array[ItemStack], item_path: String) -> int:
 				return index
 	return -1
 
-func add_new_stack(new_stack: Variant) -> bool:
+func add_new_stack(new_stack: Variant) -> void:
 	var body : Node3D = null
 	
 	if new_stack is Item:
 		body = new_stack
 		new_stack = new_stack.stack
 	
-	var initial_quantity : int = new_stack.quantity
+	if check_inventory_full(new_stack):
+		inventory_busy = false
+		return
+	
 	var leftover_quantity : int = new_stack.quantity
 	
 	if new_stack.quantity > new_stack.item_data.max_stack:
-		initial_quantity = new_stack.item_data.max_stack
 		leftover_quantity = new_stack.item_data.max_stack
 		new_stack.quantity = new_stack.item_data.max_stack
 	
@@ -168,22 +174,18 @@ func add_new_stack(new_stack: Variant) -> bool:
 			leftover_quantity = try_to_add_to_inventory(leftover_quantity, new_stack, container.slots)
 			container.update_container.emit(container)
 	
-	is_inventory_full = check_inventory_full()
-	
-	if leftover_quantity == initial_quantity:
-		inventory_busy = false
-		return false
-	
 	inventory_busy = false
+	
+	items_to_add.erase(items_to_add.front())
 	
 	if body:
 		body.create_pickup_animation(get_owner().global_position)
-		
-		if leftover_quantity != 0:
-			new_stack.quantity = leftover_quantity
-			Global.spawn_item(new_stack, body)
+		return
 	
-	return true
+	if leftover_quantity != 0 and check_inventory_full(new_stack):
+		new_stack.quantity = leftover_quantity
+		Global.spawn_item(new_stack, self.get_owner())
+	
 	
 
 func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, array: Array[ItemStack]) -> int:

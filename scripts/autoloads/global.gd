@@ -11,7 +11,7 @@ func spawn_item(new_stack: ItemStack, body: Node3D) -> void:
 		var instance : Node = ITEM.instantiate()
 		var throw_strength : float = 0.01
 		var random_direction : Vector3 = Vector3(randf_range(-1.0, 1.0), body.global_position.y + 1.5, randf_range(-1.0, 1.0)).normalized()
-		instance.item = new_stack
+		instance.stack = new_stack
 		instance.auto_pickup = true
 		items_node.add_child(instance)
 		instance.global_position = body.global_position + random_direction
