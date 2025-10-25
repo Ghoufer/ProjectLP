@@ -13,8 +13,6 @@ var is_inventory_open : bool = false
 var items_to_add : Array = []
 var inventory_busy : bool = false
 var swap_slot_offset : Vector2
-var swap_slot_last_container_id : String
-var swap_slot_container_index : int
 
 const WOOD_SWORD = preload("uid://4wqbg2sjpasx")
 const NORMAL_ROCK = preload("uid://cx0n2fowyu0ks")
@@ -85,14 +83,11 @@ func _on_interaction_ray_interacted(body: Item) -> void:
 func clear_swap_slot() -> void:
 	swap_slot.visible = false
 	swap_slot.stack = null
-	swap_slot_last_container_id = ''
-	swap_slot_container_index = -1
 	
 
 ## Called when player closes inventory but was holding an item
 func put_stack_back() -> void:
 	items_to_add.push_front(swap_slot.stack)
-	clear_swap_slot()
 	
 
 func handle_change_slot(slot_index: int, container_id: String, stack_to_swap: ItemStack) -> void:
@@ -118,9 +113,6 @@ func handle_change_slot(slot_index: int, container_id: String, stack_to_swap: It
 	
 	container_to_update.slots[slot_index] = stack_to_swap
 	container_to_update.update_container.emit(container_to_update)
-	
-	swap_slot_container_index = slot_index
-	swap_slot_last_container_id = container_id
 	
 	inventory_busy = false
 	swap_slot.visible = true
@@ -159,9 +151,9 @@ func add_new_stack(new_stack: Variant) -> void:
 		body = new_stack
 		new_stack = new_stack.stack
 	
+	
 	if check_inventory_full(new_stack):
 		inventory_busy = false
-		
 		if not is_inventory_open and swap_slot.stack:
 			Global.spawn_item(new_stack, self.get_owner())
 			items_to_add.erase(items_to_add.front())
@@ -183,13 +175,30 @@ func add_new_stack(new_stack: Variant) -> void:
 	
 	inventory_busy = false
 	
-	if body:
-		if leftover_quantity != 0 and check_inventory_full(new_stack):
-			if initial_quantity != leftover_quantity:
-				body.create_fraction_pickup_animation(get_owner().global_position)
-		elif leftover_quantity == 0:
+	if leftover_quantity == 0:
+		if body:
 			body.create_pickup_animation(get_owner().global_position)
+		items_to_add.erase(items_to_add.front())
+		if not body:
+			clear_swap_slot()
+		return
+	
+	if not check_inventory_full(new_stack):
+		items_to_add.erase(items_to_add.front())
+		if not body:
+			clear_swap_slot()
+		return
+	
+	## Inventory full and leftover_quantity != 0
+	if body:
+		if initial_quantity != leftover_quantity:
+			body.create_fraction_pickup_animation(get_owner().global_position)
+	else:
+		if not is_inventory_open and swap_slot.stack:
+			Global.spawn_item(new_stack, self.get_owner())
 			items_to_add.erase(items_to_add.front())
+			clear_swap_slot()
+			return
 	
 
 func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, array: Array[ItemStack]) -> int:
