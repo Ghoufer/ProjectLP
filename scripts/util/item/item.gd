@@ -11,6 +11,7 @@ class_name Item
 @onready var interaction_text: Sprite3D = %InteractionText
 @onready var interaction_text_sv: SubViewport = %InteractionTextSV
 @onready var interaction_text_label: Label = %InteractionTextLabel
+@onready var pickup_delay_timer: Timer = %PickupDelayTimer
 
 ## Dropped item animation
 var bob_height: float = 0.005
@@ -28,6 +29,7 @@ var pickup_tween_speed : float = 0.1
 
 var item_mesh : Node
 var loaded_scene : PackedScene
+var player_dropped : Node3D
 
 func _ready() -> void:
 	if stack and stack.item_data:
@@ -47,7 +49,9 @@ func _ready() -> void:
 	
 		call_deferred("add_child", item_mesh)
 	
-#
+	if player_dropped: start_timer(player_dropped)
+	
+
 func _process(_delta: float) -> void:
 	if interaction_text.visible:
 		interaction_text_sv.size = interaction_text_label.size
@@ -61,6 +65,17 @@ func _physics_process(delta: float) -> void:
 			self.linear_velocity = Vector3.ZERO
 			create_drop_animation()
 	
+
+#region Item drop pickup delay
+func start_timer(player: Node3D) -> void:
+	if player:
+		pickup_delay_timer.start()
+		pickup_delay_timer.connect("timeout", timer_finished)
+	
+
+func timer_finished() -> void:
+	player_dropped = null
+#endregion
 
 #region -> Item drop animation
 func create_drop_animation() -> void:

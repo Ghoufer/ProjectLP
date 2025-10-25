@@ -3,6 +3,7 @@ class_name InventoryManager
 
 @onready var inventory_uis: Control = %Inventories
 @onready var swap_slot: ItemSlot = %SwapSlot
+@onready var background_panel: PanelContainer = %BackgroundPanel
 
 @export var inventory_containers : Array[InventoryContainer]
 
@@ -11,11 +12,12 @@ signal update_backpack_ui(new_backpack)
 
 var is_inventory_open : bool = false
 var items_to_add : Array = []
-var inventory_busy : bool = false
+var is_inventory_busy : bool = false
 var swap_slot_offset : Vector2
 
 const WOOD_SWORD = preload("uid://4wqbg2sjpasx")
 const NORMAL_ROCK = preload("uid://cx0n2fowyu0ks")
+const WOODEN_STICK = preload("uid://bp1gedcb3e0fb")
 
 func _ready() -> void:
 	if inventory_containers.size() > 0:
@@ -40,9 +42,12 @@ func _process(_delta: float) -> void:
 	if swap_slot.visible:
 		swap_slot.position = get_viewport().get_mouse_position() + swap_slot_offset
 	
-	if not inventory_busy and items_to_add.size() > 0:
-		inventory_busy = true
-		add_new_stack(items_to_add.front())
+	if not is_inventory_busy and items_to_add.size() > 0:
+		is_inventory_busy = true
+		if not items_to_add.front().player_dropped:
+			add_new_stack(items_to_add.front())
+		else: 
+			is_inventory_busy = false
 	
 
 func _input(event: InputEvent) -> void:
@@ -54,6 +59,7 @@ func _input(event: InputEvent) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		
 		is_inventory_open = not is_inventory_open
+		background_panel.visible = is_inventory_open
 		
 		for container in inventory_containers:
 			if container.can_toggle:
@@ -98,7 +104,7 @@ func handle_change_slot(slot_index: int, container_id: String, stack_to_swap: It
 	)
 	var container_to_update : InventoryContainer = inventory_containers[which_container]
 	
-	inventory_busy = true
+	is_inventory_busy = true
 	
 	if not swap_slot.stack:
 		swap_slot.stack = stack_to_swap
@@ -114,7 +120,7 @@ func handle_change_slot(slot_index: int, container_id: String, stack_to_swap: It
 	container_to_update.slots[slot_index] = stack_to_swap
 	container_to_update.update_container.emit(container_to_update)
 	
-	inventory_busy = false
+	is_inventory_busy = false
 	swap_slot.visible = true
 	
 
@@ -153,7 +159,7 @@ func add_new_stack(new_stack: Variant) -> void:
 	
 	
 	if check_inventory_full(new_stack):
-		inventory_busy = false
+		is_inventory_busy = false
 		if not is_inventory_open and swap_slot.stack:
 			Global.spawn_item(new_stack, self.get_owner())
 			items_to_add.erase(items_to_add.front())
@@ -173,7 +179,7 @@ func add_new_stack(new_stack: Variant) -> void:
 			leftover_quantity = try_to_add_to_inventory(leftover_quantity, new_stack, container.slots)
 			container.update_container.emit(container)
 	
-	inventory_busy = false
+	is_inventory_busy = false
 	
 	if leftover_quantity == 0:
 		if body:
@@ -183,6 +189,7 @@ func add_new_stack(new_stack: Variant) -> void:
 			clear_swap_slot()
 		return
 	
+	## leftover_quantity != 0
 	if not check_inventory_full(new_stack):
 		items_to_add.erase(items_to_add.front())
 		if not body:

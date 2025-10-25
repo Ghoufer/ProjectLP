@@ -62,5 +62,10 @@ shape = SubResource("CapsuleShape3D_hxve2")
 collision_mask = 6
 debug_shape_custom_color = Color(0.8901961, 0.8901961, 0.03529412, 1)
 
+[node name="PickupDelayTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 3.0
+one_shot = true
+
 [connection signal="collided" from="InteractionArea" to="." method="_on_interaction_area_collided"]
 [connection signal="not_collided" from="InteractionArea" to="." method="_on_interaction_area_not_collided"]

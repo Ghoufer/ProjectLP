@@ -60,6 +60,18 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="BackgroundPanel" type="PanelContainer" parent="GuiLayer/Inventories"]
+unique_name_in_owner = true
+visible = false
+z_index = -1
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="SwapSlot" parent="GuiLayer" instance=ExtResource("7_5gtgg")]
 unique_name_in_owner = true
 visible = false
@@ -115,6 +127,7 @@ collision_mask = 8
 unique_name_in_owner = true
 shape = SubResource("SphereShape3D_0owmy")
 
+[connection signal="gui_input" from="GuiLayer/Inventories/BackgroundPanel" to="GuiLayer/InventoryManager" method="_on_background_panel_gui_input"]
 [connection signal="interacted" from="CameraController/Camera3D/InteractionRay" to="GuiLayer/InventoryManager" method="_on_interaction_ray_interacted"]
 [connection signal="body_entered" from="CollisionShape3D/PickupArea" to="GuiLayer/InventoryManager" method="_on_pickup_area_body_entered"]
 [connection signal="body_exited" from="CollisionShape3D/PickupArea" to="GuiLayer/InventoryManager" method="_on_pickup_area_body_exited"]
