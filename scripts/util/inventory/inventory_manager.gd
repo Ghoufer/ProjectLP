@@ -66,6 +66,14 @@ func _input(event: InputEvent) -> void:
 				container.toggle_ui.emit(is_inventory_open)
 	
 
+func _on_background_panel_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+			if is_inventory_open and swap_slot.stack:
+				Global.spawn_item(swap_slot.stack, self.get_owner(), true)
+				clear_swap_slot()
+	
+
 func _on_slot_clicked(event: InputEvent, slot_index: int, container_id: String, clicked_stack: ItemStack) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():

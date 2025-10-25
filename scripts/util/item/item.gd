@@ -5,7 +5,6 @@ class_name Item
 @export var auto_pickup : bool = false
 
 @onready var interaction_area: CollisionShape3D = %InteractionAreaCol
-@onready var ground_detect: ShapeCast3D = %GroundDetect
 @onready var ground_collider: CollisionShape3D = %GroundCollider
 @onready var outline_shader := preload('res://scripts/shaders/item_outline.tres')
 @onready var interaction_text: Sprite3D = %InteractionText
@@ -14,10 +13,7 @@ class_name Item
 @onready var pickup_delay_timer: Timer = %PickupDelayTimer
 
 ## Dropped item animation
-var bob_height: float = 0.005
-var bob_speed: float = 1.0
 var rotation_speed: float = 30.0
-var bob_tween : Tween
 var rotation_tween : Tween
 var random_rotation : float = randf()
 var item_gravity : float = 12.0
@@ -38,16 +34,14 @@ func _ready() -> void:
 		
 		if auto_pickup:
 			interaction_area.disabled = true
-		else:
-			self.gravity_scale = 1.0
-			ground_detect.enabled = false
 		
 		stack = stack.duplicate()
+		
 		loaded_scene = ItemPool.paths[stack.item_data.item_path]
-		item_mesh = loaded_scene.instantiate()
+		item_mesh = loaded_scene.instantiate().duplicate()
 		item_mesh.rotation.y = randf() * TAU
 	
-		call_deferred("add_child", item_mesh)
+		add_child(item_mesh, 0)
 	
 	if player_dropped: start_timer(player_dropped)
 	
@@ -57,12 +51,9 @@ func _process(_delta: float) -> void:
 		interaction_text_sv.size = interaction_text_label.size
 	
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if not pickup_tween:
-		if not ground_detect.is_colliding() and ground_detect.enabled:
-			global_position.y -= item_gravity * delta
-		elif not bob_tween and auto_pickup:
-			self.linear_velocity = Vector3.ZERO
+		if auto_pickup:
 			create_drop_animation()
 	
 
@@ -79,11 +70,6 @@ func timer_finished() -> void:
 
 #region -> Item drop animation
 func create_drop_animation() -> void:
-	bob_tween = create_tween()
-	bob_tween.set_loops()
-	bob_tween.tween_property(item_mesh, "global_position:y", global_position.y + bob_height * 3, bob_speed)
-	bob_tween.tween_property(item_mesh, "global_position:y", global_position.y - bob_height, bob_speed)
-	
 	rotation_tween = create_tween()
 	rotation_tween.set_loops()
 	rotation_tween.tween_property(item_mesh, "rotation:y", item_mesh.rotation.y + TAU, rotation_speed).from(item_mesh.rotation.y)
@@ -91,8 +77,6 @@ func create_drop_animation() -> void:
 
 #region -> Item pickup animation and logic
 func create_pickup_animation(body_position: Vector3) -> void:
-	self.gravity_scale = 0.0
-	bob_tween = null
 	interaction_text.visible = false
 	interaction_area.disabled = true
 	

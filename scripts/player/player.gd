@@ -1,4 +1,5 @@
 extends CharacterBody3D
+class_name Player
 
 @export var TILT_LOWER_LIMIT := deg_to_rad(-70.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(70.0)
