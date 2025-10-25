@@ -12,17 +12,21 @@ class_name Item
 @onready var interaction_text_sv: SubViewport = %InteractionTextSV
 @onready var interaction_text_label: Label = %InteractionTextLabel
 
-# Dropped item animation
+## Dropped item animation
 var bob_height: float = 0.005
 var bob_speed: float = 1.0
 var rotation_speed: float = 30.0
-var pickup_tween : Tween
-var animation_tween : Tween
+var bob_tween : Tween
 var rotation_tween : Tween
 var random_rotation : float = randf()
 var item_gravity : float = 12.0
 
-var instance : Node
+## Pickup animation
+var pickup_tween : Tween
+var fraction_tween : Tween
+var pickup_tween_speed : float = 0.1
+
+var item_mesh : Node
 var loaded_scene : PackedScene
 
 func _ready() -> void:
@@ -38,10 +42,10 @@ func _ready() -> void:
 		
 		stack = stack.duplicate()
 		loaded_scene = ItemPool.paths[stack.item_data.item_path]
-		instance = loaded_scene.instantiate()
-		instance.rotation.y = randf() * TAU
+		item_mesh = loaded_scene.instantiate()
+		item_mesh.rotation.y = randf() * TAU
 	
-		call_deferred("add_child", instance)
+		call_deferred("add_child", item_mesh)
 	
 #
 func _process(_delta: float) -> void:
@@ -53,41 +57,52 @@ func _physics_process(delta: float) -> void:
 	if not pickup_tween:
 		if not ground_detect.is_colliding() and ground_detect.enabled:
 			global_position.y -= item_gravity * delta
-		elif not animation_tween and auto_pickup:
+		elif not bob_tween and auto_pickup:
 			self.linear_velocity = Vector3.ZERO
 			create_drop_animation()
 	
 
 #region -> Item drop animation
 func create_drop_animation() -> void:
-	animation_tween = create_tween()
-	animation_tween.set_loops()
-	animation_tween.tween_property(instance, "global_position:y", global_position.y + bob_height * 3, bob_speed)
-	animation_tween.tween_property(instance, "global_position:y", global_position.y - bob_height, bob_speed)
+	bob_tween = create_tween()
+	bob_tween.set_loops()
+	bob_tween.tween_property(item_mesh, "global_position:y", global_position.y + bob_height * 3, bob_speed)
+	bob_tween.tween_property(item_mesh, "global_position:y", global_position.y - bob_height, bob_speed)
 	
 	rotation_tween = create_tween()
 	rotation_tween.set_loops()
-	rotation_tween.tween_property(instance, "rotation:y", instance.rotation.y + TAU, rotation_speed).from(instance.rotation.y)
+	rotation_tween.tween_property(item_mesh, "rotation:y", item_mesh.rotation.y + TAU, rotation_speed).from(item_mesh.rotation.y)
 #endregion
 
 #region -> Item pickup animation and logic
 func create_pickup_animation(body_position: Vector3) -> void:
-	var tween_speed : float = 0.18
-	
 	self.gravity_scale = 0.0
-	animation_tween = null
+	bob_tween = null
 	interaction_text.visible = false
 	interaction_area.disabled = true
 	
 	pickup_tween = create_tween()
 	pickup_tween.set_parallel()
-	pickup_tween.tween_property(self, "global_position", body_position + Vector3(-0, 0.8, -0), tween_speed)
-	pickup_tween.tween_property(self, "scale", Vector3(0.1, 0.1, 0.1), tween_speed)
-	pickup_tween.connect("finished", Callable(self, "_on_pickup_tween_finished"))
+	pickup_tween.tween_property(item_mesh, "global_position", body_position + Vector3(-0, 0.5, -0), pickup_tween_speed)
+	pickup_tween.tween_property(item_mesh, "scale", Vector3(0.1, 0.1, 0.1), pickup_tween_speed)
+	pickup_tween.connect("finished", _on_pickup_tween_finished.bind(self))
 	
 
-func _on_pickup_tween_finished():
-	queue_free()
+## Call this animation when not the whole quantity got picked
+func create_fraction_pickup_animation(body_position: Vector3) -> void:
+	var mesh_copy : Node3D = item_mesh.duplicate()
+	
+	self.add_child(mesh_copy)
+	
+	fraction_tween = create_tween()
+	fraction_tween.set_parallel()
+	fraction_tween.tween_property(mesh_copy, "global_position", body_position + Vector3(-0, 0.8, -0), pickup_tween_speed)
+	fraction_tween.tween_property(mesh_copy, "scale", Vector3(0.1, 0.1, 0.1), pickup_tween_speed)
+	fraction_tween.connect("finished", _on_pickup_tween_finished.bind(mesh_copy))
+	
+
+func _on_pickup_tween_finished(body: Node):
+	body.call_deferred('queue_free')
 #endregion
 
 #region -> Interaction area logic

@@ -70,7 +70,7 @@ func _on_slot_clicked(event: InputEvent, slot_index: int, container_id: String, 
 
 func _on_pickup_area_body_entered(body: Item) -> void:
 	if body.auto_pickup:
-		items_to_add.append(body)
+		items_to_add.push_front(body)
 	
 
 func _on_pickup_area_body_exited(body: Item) -> void:
@@ -161,11 +161,18 @@ func add_new_stack(new_stack: Variant) -> void:
 	
 	if check_inventory_full(new_stack):
 		inventory_busy = false
-		return
+		
+		if not is_inventory_open and swap_slot.stack:
+			Global.spawn_item(new_stack, self.get_owner())
+			items_to_add.erase(items_to_add.front())
+			clear_swap_slot()
+			return
 	
+	var initial_quantity : int = new_stack.quantity
 	var leftover_quantity : int = new_stack.quantity
 	
 	if new_stack.quantity > new_stack.item_data.max_stack:
+		initial_quantity = new_stack.item_data.max_stack
 		leftover_quantity = new_stack.item_data.max_stack
 		new_stack.quantity = new_stack.item_data.max_stack
 	
@@ -176,16 +183,13 @@ func add_new_stack(new_stack: Variant) -> void:
 	
 	inventory_busy = false
 	
-	items_to_add.erase(items_to_add.front())
-	
 	if body:
-		body.create_pickup_animation(get_owner().global_position)
-		return
-	
-	if leftover_quantity != 0 and check_inventory_full(new_stack):
-		new_stack.quantity = leftover_quantity
-		Global.spawn_item(new_stack, self.get_owner())
-	
+		if leftover_quantity != 0 and check_inventory_full(new_stack):
+			if initial_quantity != leftover_quantity:
+				body.create_fraction_pickup_animation(get_owner().global_position)
+		elif leftover_quantity == 0:
+			body.create_pickup_animation(get_owner().global_position)
+			items_to_add.erase(items_to_add.front())
 	
 
 func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, array: Array[ItemStack]) -> int:
