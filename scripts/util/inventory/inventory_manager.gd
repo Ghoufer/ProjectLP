@@ -44,10 +44,14 @@ func _process(_delta: float) -> void:
 	
 	if not is_inventory_busy and items_to_add.size() > 0:
 		is_inventory_busy = true
-		if not items_to_add.front().player_dropped:
+		
+		if items_to_add.front() is Item:
+			if not items_to_add.front().player_dropped == self.get_owner():
+				add_new_stack(items_to_add.front())
+		else:
 			add_new_stack(items_to_add.front())
-		else: 
-			is_inventory_busy = false
+		
+		is_inventory_busy = false
 	
 
 func _input(event: InputEvent) -> void:
@@ -112,23 +116,37 @@ func handle_change_slot(slot_index: int, container_id: String, stack_to_swap: It
 	)
 	var container_to_update : InventoryContainer = inventory_containers[which_container]
 	
-	is_inventory_busy = true
-	
 	if not swap_slot.stack:
+	## Take the item from slot clicked
 		swap_slot.stack = stack_to_swap
 		stack_to_swap = null
 	elif not stack_to_swap and swap_slot.stack:
+	## Put held item into empty clicked slot
 		stack_to_swap = swap_slot.stack
 		clear_swap_slot()
 	else:
-		var temp : ItemStack = stack_to_swap
-		stack_to_swap = swap_slot.stack
-		swap_slot.stack = temp
+		## Check if clicked on equal item
+		if stack_to_swap.item_data == swap_slot.stack.item_data:
+			var quantity_sum : int = stack_to_swap.quantity + swap_slot.stack.quantity
+			if stack_to_swap.item_data.max_stack != 1:
+				## If items can be stacked, add the amount that was held
+				if quantity_sum > stack_to_swap.item_data.max_stack:
+					## If the total sum is higher than max stack, subtract held item quantity
+					stack_to_swap.quantity = stack_to_swap.item_data.max_stack
+					swap_slot.stack.quantity = quantity_sum - stack_to_swap.item_data.max_stack
+				else:
+					## Add the amount that was being held
+					stack_to_swap.quantity = quantity_sum
+					clear_swap_slot()
+		else:
+			## Clicked on a different item that was being held, so swap them
+			var temp : ItemStack = stack_to_swap
+			stack_to_swap = swap_slot.stack
+			swap_slot.stack = temp
 	
 	container_to_update.slots[slot_index] = stack_to_swap
 	container_to_update.update_container.emit(container_to_update)
 	
-	is_inventory_busy = false
 	swap_slot.visible = true
 	
 
@@ -165,7 +183,6 @@ func add_new_stack(new_stack: Variant) -> void:
 		body = new_stack
 		new_stack = new_stack.stack
 	
-	
 	if check_inventory_full(new_stack):
 		is_inventory_busy = false
 		if not is_inventory_open and swap_slot.stack:
@@ -187,6 +204,15 @@ func add_new_stack(new_stack: Variant) -> void:
 			leftover_quantity = try_to_add_to_inventory(leftover_quantity, new_stack, container.slots)
 			container.update_container.emit(container)
 	
+	if leftover_quantity != 0:
+		for container in inventory_containers:
+			var available_slot_index : int = find_first_empty(container.slots)
+			if available_slot_index > -1:
+				leftover_quantity = 0
+				container.slots[available_slot_index] = new_stack
+				container.update_container.emit(container)
+				break
+	
 	is_inventory_busy = false
 	
 	if leftover_quantity == 0:
@@ -199,6 +225,7 @@ func add_new_stack(new_stack: Variant) -> void:
 	
 	## leftover_quantity != 0
 	if not check_inventory_full(new_stack):
+		Global.spawn_item(new_stack, self.get_owner())
 		items_to_add.erase(items_to_add.front())
 		if not body:
 			clear_swap_slot()
@@ -216,38 +243,31 @@ func add_new_stack(new_stack: Variant) -> void:
 			return
 	
 
-func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, array: Array[ItemStack]) -> int:
+func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, container: Array[ItemStack]) -> int:
 	var available_slot_index : int
 	var item_path : String = stack_to_add.item_data.item_path
 	
-	available_slot_index = find_available_slot(array, item_path)
+	available_slot_index = find_available_slot(container, item_path)
 	
 	while(available_slot_index > -1):
-		leftover_quantity = try_to_add_stack(leftover_quantity, available_slot_index, array)
+		leftover_quantity = try_to_add_stack(leftover_quantity, available_slot_index, container)
 		if leftover_quantity != 0:
-			available_slot_index = find_available_slot(array, item_path)
+			available_slot_index = find_available_slot(container, item_path)
 		else: available_slot_index = -1
-	
-	if leftover_quantity != 0:
-		stack_to_add.quantity = leftover_quantity
-		available_slot_index = find_first_empty(array)
-		if available_slot_index > -1:
-			leftover_quantity = 0
-			array[available_slot_index] = stack_to_add
 	
 	return leftover_quantity
 
-func try_to_add_stack(leftover_quantity: int, available_slot_index: int, array: Array[ItemStack]) -> int:
-	var max_stack : int = array[available_slot_index].item_data.max_stack
-	var quantity_sum : int = leftover_quantity + array[available_slot_index].quantity
+func try_to_add_stack(leftover_quantity: int, available_slot_index: int, container: Array[ItemStack]) -> int:
+	var max_stack : int = container[available_slot_index].item_data.max_stack
+	var quantity_sum : int = leftover_quantity + container[available_slot_index].quantity
 	
 	if quantity_sum <= max_stack:
 		leftover_quantity = 0
-		array[available_slot_index].quantity = quantity_sum
+		container[available_slot_index].quantity = quantity_sum
 	else:
 		## Found but not enough space
 		leftover_quantity  = abs(quantity_sum - max_stack)
-		array[available_slot_index].quantity = max_stack
+		container[available_slot_index].quantity = max_stack
 		
 	return leftover_quantity
 #endregion
