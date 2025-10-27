@@ -1,0 +1,45 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0bcn8hlihb05"]
+
+[ext_resource type="Texture2D" uid="uid://c76jmvtmnef1n" path="res://assets/prototyping/Prototype_checkers_01_32x32px.png" id="1_tuhj4"]
+[ext_resource type="Script" uid="uid://ctpjg56xd36je" path="res://scripts/util/inventory/slot.gd" id="2_3xeyi"]
+
+[node name="Slot" type="TextureButton"]
+clip_contents = true
+custom_minimum_size = Vector2(64, 64)
+layout_direction = 1
+offset_right = 64.0
+offset_bottom = 64.0
+size_flags_horizontal = 4
+texture_normal = ExtResource("1_tuhj4")
+stretch_mode = 0
+script = ExtResource("2_3xeyi")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ItemSprite" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
+scale = Vector2(2, 2)
+
+[node name="Quantity" type="Label" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 31.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 16
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

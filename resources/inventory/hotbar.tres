@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="InventoryContainer" load_steps=4 format=3 uid="uid://cd3f1evq5ffk4"]
+
+[ext_resource type="Script" uid="uid://b40pvyn6bgfgf" path="res://scripts/util/inventory/inventory_container.gd" id="1_grvu8"]
+[ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/util/item/item_stack.gd" id="2_yoc7c"]
+[ext_resource type="PackedScene" uid="uid://caym2c0j8weuu" path="res://scenes/UI/hotbar_ui.tscn" id="3_yoc7c"]
+
+[resource]
+script = ExtResource("1_grvu8")
+container_name = "hotbar"
+ui = ExtResource("3_yoc7c")
+metadata/_custom_type_script = "uid://b40pvyn6bgfgf"

@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxaoa012c1jjq"]
+
+[ext_resource type="Script" uid="uid://ngiq5u7kg2ja" path="res://scripts/util/inventory/container_ui.gd" id="1_l6gu7"]
+
+[node name="BackpackUI" type="Control" node_paths=PackedStringArray("ui_node")]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_l6gu7")
+ui_node = NodePath("FullScreenWidth/HFlowContainer")
+
+[node name="FullScreenWidth" type="Control" parent="."]
+z_as_relative = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HFlowContainer" type="HFlowContainer" parent="FullScreenWidth"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 0
+offset_left = 640.0
+offset_top = 460.0
+offset_right = 1280.0
+offset_bottom = 660.00024
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+alignment = 1
+last_wrap_alignment = 2

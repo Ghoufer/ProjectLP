@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=9 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
 [ext_resource type="Script" uid="uid://wsdb5j4mcadf" path="res://scripts/player/reticle.gd" id="2_kfe35"]
+[ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/util/inventory/inventory_manager.gd" id="2_p47bc"]
+[ext_resource type="PackedScene" uid="uid://caym2c0j8weuu" path="res://scenes/UI/inventory_ui.tscn" id="3_lvxji"]
 [ext_resource type="Script" uid="uid://kbj15by32p1x" path="res://scripts/player/interaction_ray.gd" id="3_qhqgy"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_fw261"]
@@ -20,6 +22,9 @@ collision_mask = 6
 script = ExtResource("1_sc3iu")
 CAMERA_CONTROLLER = NodePath("CameraController")
 VISUALS = NodePath("Visuals")
+
+[node name="InventoryManager" type="Node" parent="."]
+script = ExtResource("2_p47bc")
 
 [node name="UserInterface" type="Control" parent="."]
 layout_mode = 3
@@ -40,6 +45,8 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_kfe35")
+
+[node name="InventoryUI" parent="UserInterface" instance=ExtResource("3_lvxji")]
 
 [node name="CameraController" type="SpringArm3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)

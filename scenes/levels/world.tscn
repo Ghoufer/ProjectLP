@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://0gwp60xtdpma"]
 
-[ext_resource type="PackedScene" uid="uid://b2kyqtqv3llg4" path="res://scenes/player.tscn" id="1_3qwd1"]
+[ext_resource type="PackedScene" uid="uid://b2kyqtqv3llg4" path="res://scenes/player/player.tscn" id="1_3qwd1"]
 [ext_resource type="PackedScene" uid="uid://cmqbxyiywh30u" path="res://scenes/marching_cubes.tscn" id="1_o88cy"]
-[ext_resource type="Shader" path="res://scripts/shaders/low_poly_terrain.gdshader" id="2_yqsp5"]
+[ext_resource type="Shader" uid="uid://td7s8aomo66o" path="res://scripts/shaders/low_poly_terrain.gdshader" id="2_yqsp5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ebyfu"]
 
