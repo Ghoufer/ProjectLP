@@ -69,6 +69,22 @@ func _input(event: InputEvent) -> void:
 			if container.can_toggle:
 				container.toggle_ui.emit(is_inventory_open)
 	
+	if event.is_action_pressed("ui_up"):
+		for container in inventory_containers:
+			for index in range(container.slots.size()):
+				var temp_stack : ItemStack = ItemStack.new()
+				if index % 2 == 0:
+					temp_stack.item_data = WOOD_SWORD
+					container.slots[index] = temp_stack
+				elif index % 3 == 0:
+					temp_stack.item_data = NORMAL_ROCK
+					container.slots[index] = temp_stack
+				else:
+					temp_stack.item_data = WOODEN_STICK
+					container.slots[index] = temp_stack
+			container.update_container.emit(container)
+			
+	
 
 func _on_background_panel_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:

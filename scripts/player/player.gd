@@ -41,8 +41,7 @@ func _process(delta):
 	
 
 func _physics_process(delta):
-	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		update_movement(delta)
+	update_movement(delta)
 	
 
 func update_movement(delta):
@@ -79,10 +78,12 @@ func update_movement(delta):
 		velocity.y -= gravity * delta
 	else:
 		velocity.y = 0
+		
 	if Input.is_action_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 	
 	move_and_slide()
+	
 
 func update_camera(delta):
 	mouse_rotation.x += tilt_input * delta
