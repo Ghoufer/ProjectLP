@@ -1,14 +1,15 @@
 extends CharacterBody3D
 class_name Player
 
+@onready var stats_manager: Node = %StatsManager
+
 @export var TILT_LOWER_LIMIT := deg_to_rad(-70.0)
 @export var TILT_UPPER_LIMIT := deg_to_rad(70.0)
 @export var CAMERA_CONTROLLER : SpringArm3D
 @export var MOUSE_SENSITIVITY : float = 0.5
 @export var VISUALS : Node3D
 
-const SPEED = 3.0
-const JUMP_VELOCITY = 8.0
+const JUMP_VELOCITY : int = 8
 
 var mouse_input : bool = false
 var rotation_input : float
@@ -17,23 +18,33 @@ var mouse_rotation : Vector3
 var player_rotation : Vector3
 var camera_rotation : Vector3
 
-var gravity = 24.0
+var gravity : float = 24.0
+var sprint_speed : float
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	sprint_speed = stats_manager.stats.base_move_speed * 2.0
+	
 
 func _input(event):
+	mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
+	
+	if mouse_input:
+		rotation_input = -event.relative.x * MOUSE_SENSITIVITY
+		tilt_input = -event.relative.y * MOUSE_SENSITIVITY
+	
 	if event.is_action_pressed('exit'):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	mouse_input = event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED
+	if event.is_action_pressed("sprint"):
+		stats_manager.stats.current_move_speed = sprint_speed
 	
-	if mouse_input:
-		rotation_input = -event.relative.x * MOUSE_SENSITIVITY
-		tilt_input = -event.relative.y * MOUSE_SENSITIVITY
+	if event.is_action_released("sprint"):
+		stats_manager.stats.current_move_speed = stats_manager.stats.base_move_speed
+	
 
 func _process(delta):
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -64,15 +75,15 @@ func update_movement(delta):
 		direction = (camera_right * input_dir.x + camera_forward * input_dir.y).normalized()
 	
 	if direction:
-		velocity.x = lerp(velocity.x, direction.x * SPEED, 0.1)
-		velocity.z = lerp(velocity.z, direction.z * SPEED, 0.1)
+		velocity.x = lerp(velocity.x, direction.x * stats_manager.stats.current_move_speed, 0.1)
+		velocity.z = lerp(velocity.z, direction.z * stats_manager.stats.current_move_speed, 0.1)
 		
 		if VISUALS:
 			var target_rotation = atan2(-direction.x, -direction.z)
 			VISUALS.rotation.y = lerp_angle(VISUALS.rotation.y, target_rotation, 10.0 * delta)
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, stats_manager.stats.current_move_speed)
+		velocity.z = move_toward(velocity.z, 0, stats_manager.stats.current_move_speed)
 	
 	if not is_on_floor():
 		velocity.y -= gravity * delta

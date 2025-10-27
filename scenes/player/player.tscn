@@ -1,7 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=16 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
+[ext_resource type="Script" uid="uid://dbhd5swyegf31" path="res://scripts/player/stats_manager.gd" id="2_h17s1"]
 [ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/util/inventory/inventory_manager.gd" id="2_p47bc"]
+[ext_resource type="Resource" uid="uid://rcymichmrjtr" path="res://resources/stats/player_stats/player_stats.tres" id="3_je7p5"]
 [ext_resource type="PackedScene" uid="uid://caym2c0j8weuu" path="res://scenes/UI/hotbar_ui.tscn" id="3_lvxji"]
 [ext_resource type="Script" uid="uid://kbj15by32p1x" path="res://scripts/player/interaction_ray.gd" id="3_qhqgy"]
 [ext_resource type="PackedScene" uid="uid://dxaoa012c1jjq" path="res://scenes/UI/backpack_ui.tscn" id="4_0owmy"]
@@ -34,16 +36,24 @@ radius = 1.35
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CAMERA_CONTROLLER", "VISUALS")]
 collision_mask = 6
 script = ExtResource("1_sc3iu")
+TILT_LOWER_LIMIT = null
+TILT_UPPER_LIMIT = null
 CAMERA_CONTROLLER = NodePath("CameraController")
+MOUSE_SENSITIVITY = null
 VISUALS = NodePath("Visuals")
 
-[node name="GuiLayer" type="CanvasLayer" parent="."]
+[node name="StatsManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_h17s1")
+stats = ExtResource("3_je7p5")
 
-[node name="InventoryManager" type="Node" parent="GuiLayer"]
+[node name="Inventory" type="CanvasLayer" parent="."]
+
+[node name="InventoryManager" type="Node" parent="Inventory"]
 script = ExtResource("2_p47bc")
 inventory_containers = Array[ExtResource("6_5gtgg")]([SubResource("Resource_qek5x"), SubResource("Resource_5gtgg")])
 
-[node name="Inventories" type="Control" parent="GuiLayer"]
+[node name="Inventories" type="Control" parent="Inventory"]
 unique_name_in_owner = true
 layout_mode = 3
 anchors_preset = 15
@@ -53,7 +63,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="BackgroundPanel" type="PanelContainer" parent="GuiLayer/Inventories"]
+[node name="BackgroundPanel" type="PanelContainer" parent="Inventory/Inventories"]
 unique_name_in_owner = true
 visible = false
 z_index = -1
@@ -65,7 +75,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SwapSlot" parent="GuiLayer" instance=ExtResource("7_5gtgg")]
+[node name="SwapSlot" parent="Inventory" instance=ExtResource("7_5gtgg")]
 unique_name_in_owner = true
 visible = false
 z_as_relative = false
@@ -103,7 +113,7 @@ collision_mask = 8
 unique_name_in_owner = true
 shape = SubResource("SphereShape3D_0owmy")
 
-[connection signal="gui_input" from="GuiLayer/Inventories/BackgroundPanel" to="GuiLayer/InventoryManager" method="_on_background_panel_gui_input"]
-[connection signal="interacted" from="CameraController/Camera3D/InteractionRay" to="GuiLayer/InventoryManager" method="_on_interaction_ray_interacted"]
-[connection signal="body_entered" from="CollisionShape3D/PickupArea" to="GuiLayer/InventoryManager" method="_on_pickup_area_body_entered"]
-[connection signal="body_exited" from="CollisionShape3D/PickupArea" to="GuiLayer/InventoryManager" method="_on_pickup_area_body_exited"]
+[connection signal="gui_input" from="Inventory/Inventories/BackgroundPanel" to="Inventory/InventoryManager" method="_on_background_panel_gui_input"]
+[connection signal="interacted" from="CameraController/Camera3D/InteractionRay" to="Inventory/InventoryManager" method="_on_interaction_ray_interacted"]
+[connection signal="body_entered" from="CollisionShape3D/PickupArea" to="Inventory/InventoryManager" method="_on_pickup_area_body_entered"]
+[connection signal="body_exited" from="CollisionShape3D/PickupArea" to="Inventory/InventoryManager" method="_on_pickup_area_body_exited"]
