@@ -1,6 +1,6 @@
 extends Node
 
-const ITEM = preload("res://resources/item/item.tscn")
+const ITEM = preload("res://scenes/item/item.tscn")
 
 # Debug panel
 var debug: Variant

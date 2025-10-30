@@ -4,7 +4,7 @@ signal interacted(body: Item)
 
 var collider
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and collider:
 		if collider is InteractionArea:
 			interacted.emit(collider.get_owner())

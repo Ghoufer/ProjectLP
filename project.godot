@@ -125,6 +125,13 @@ toggle_inventory={
 3d_physics/layer_3="Obstacle"
 3d_physics/layer_4="Item"
 3d_physics/layer_5="Interaction"
+3d_physics/layer_6="Enemy"
+3d_physics/layer_7="PlayerHurtbox"
+3d_physics/layer_8="EnemyHurtbox"
+
+[limbo_ai]
+
+behavior_tree/behavior_tree_default_dir="res://resources/behavior_trees"
 
 [physics]
 

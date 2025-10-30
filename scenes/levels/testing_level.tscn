@@ -1,9 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://bi7jadd1ycfob"]
+[gd_scene load_steps=18 format=3 uid="uid://bi7jadd1ycfob"]
 
 [ext_resource type="Script" uid="uid://bryil7rdc23o3" path="res://scripts/fps_counter.gd" id="1_txisq"]
 [ext_resource type="Texture2D" uid="uid://cbchave651alx" path="res://assets/prototyping/Prototype_blue_32x32px.png" id="2_x3jgk"]
 [ext_resource type="Texture2D" uid="uid://dyjqn0p71aahr" path="res://assets/prototyping/Prototype_orange_32x32px.png" id="3_acyt4"]
 [ext_resource type="PackedScene" uid="uid://b2kyqtqv3llg4" path="res://scenes/player/player.tscn" id="4_kxlmk"]
+[ext_resource type="PackedScene" uid="uid://cptevs6qmklst" path="res://scenes/item/item.tscn" id="5_x3jgk"]
+[ext_resource type="Resource" uid="uid://4wqbg2sjpasx" path="res://resources/items/weapons/wood_sword.tres" id="6_acyt4"]
+[ext_resource type="Resource" uid="uid://cx0n2fowyu0ks" path="res://resources/items/supplies/normal_rock.tres" id="6_kxlmk"]
+[ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/util/item/item_stack.gd" id="7_kxlmk"]
+[ext_resource type="PackedScene" uid="uid://cpmqedhgly1il" path="res://scenes/enemy/enemy.tscn" id="9_lfb6y"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dfes8"]
 
@@ -15,6 +20,13 @@ background_mode = 2
 sky = SubResource("Sky_hiyn0")
 tonemap_mode = 1
 
+[sub_resource type="NavigationMesh" id="NavigationMesh_p5tpv"]
+vertices = PackedVector3Array(16.5, 0.5979438, -11, 49.5, 0.5979438, -11, 49.5, 0.5979438, -49.5, 5, 0.5979438, -11, -49.5, 0.5979438, -49.5, -49.5, 0.5979438, -11, -49.5, 0.5979438, -8.75, 5, 0.5979438, -8.75, 17, 0.5979438, -10.5, 49.5, 0.5979438, -8.75, 16.75, 0.5979438, -8.75, 49.5, 0.5979438, -6.5, 16, 0.5979438, -6.5, -49.5, 0.5979438, -6.5, 14.25, 0.5979438, -6.5, -49.5, 0.5979438, -4, 14.25, 0.5979438, -4, 16, 0.5979438, -4, 49.5, 0.5979438, -4, 49.5, 0.5979438, 49.5, -49.5, 0.5979438, 49.5)
+polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(2, 0, 3), PackedInt32Array(5, 4, 3), PackedInt32Array(3, 4, 2), PackedInt32Array(5, 3, 6), PackedInt32Array(6, 3, 7), PackedInt32Array(8, 0, 1), PackedInt32Array(10, 8, 9), PackedInt32Array(9, 8, 1), PackedInt32Array(9, 11, 10), PackedInt32Array(10, 11, 12), PackedInt32Array(6, 7, 13), PackedInt32Array(13, 7, 14), PackedInt32Array(12, 14, 10), PackedInt32Array(10, 14, 7), PackedInt32Array(13, 14, 15), PackedInt32Array(15, 14, 16), PackedInt32Array(12, 11, 17), PackedInt32Array(17, 11, 18), PackedInt32Array(17, 18, 19), PackedInt32Array(16, 17, 19), PackedInt32Array(15, 16, 20), PackedInt32Array(20, 16, 19)]
+sample_partition_type = 1
+cell_height = 0.05
+agent_max_climb = 0.05
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e2mvv"]
 albedo_texture = ExtResource("2_x3jgk")
 uv1_triplanar = true
@@ -22,6 +34,18 @@ uv1_triplanar = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_72vgf"]
 albedo_texture = ExtResource("3_acyt4")
 uv1_triplanar = true
+
+[sub_resource type="Resource" id="Resource_kxlmk"]
+script = ExtResource("7_kxlmk")
+item_data = ExtResource("6_kxlmk")
+quantity = 200
+metadata/_custom_type_script = "uid://ds3i345xkpghw"
+
+[sub_resource type="Resource" id="Resource_p5tpv"]
+script = ExtResource("7_kxlmk")
+item_data = ExtResource("6_acyt4")
+quantity = 200
+metadata/_custom_type_script = "uid://ds3i345xkpghw"
 
 [node name="World" type="Node3D" groups=["World"]]
 
@@ -46,32 +70,62 @@ transform = Transform3D(0.824332, 0.219256, 0.521923, -0.49532, 0.725754, 0.4774
 shadow_enabled = true
 shadow_blur = 0.75
 
-[node name="Ground" type="CSGBox3D" parent="."]
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_p5tpv")
+
+[node name="Ground" type="CSGBox3D" parent="NavigationRegion3D"]
 layers = 2
 use_collision = true
 collision_layer = 2
-collision_mask = 13
+collision_mask = 47
 size = Vector3(100, 1, 100)
 material = SubResource("StandardMaterial3D_e2mvv")
 
-[node name="Obstacle" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6125, 1.76515, -9.78972)
+[node name="Obstacle" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.296216, 1.0454544, -9.78972)
 layers = 4
 use_collision = true
 collision_layer = 4
-collision_mask = 11
-size = Vector3(1, 2.55554, 1)
+collision_mask = 47
+size = Vector3(8.026611, 1.116149, 1)
 material = SubResource("StandardMaterial3D_72vgf")
 
-[node name="Obstacle2" type="CSGBox3D" parent="."]
-transform = Transform3D(0.015694616, 0.90470386, -0.42575133, 0.06566061, 0.4239521, 0.90330106, 0.9977187, -0.04213204, -0.052749693, 15.023362, 0.976638, -9.78972)
+[node name="Obstacle2" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(0.03323747, 0.9866546, -0.1593975, 0.05876145, 0.15728053, 0.9858039, 0.9977187, -0.04213204, -0.052749693, 15.023362, 0.25641388, -9.78972)
 use_collision = true
 collision_layer = 4
-collision_mask = 3
+collision_mask = 47
 size = Vector3(1, 2.55554, 1)
 material = SubResource("StandardMaterial3D_72vgf")
 
-[node name="Player" parent="." groups=["Player"] instance=ExtResource("4_kxlmk")]
-transform = Transform3D(0.99730814, 0, 0.07332516, 0, 1, 0, -0.07332516, 0, 0.99730814, 9.852053, 1.164504, -0.8392229)
+[node name="Obstacle3" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(0.993326, 0.08896975, -0.073404595, -0.10501424, 0.9608174, -0.25651863, 0.047705967, 0.262515, 0.9637477, 15.023362, 0.25641388, -5.416226)
+use_collision = true
+collision_layer = 4
+collision_mask = 47
+size = Vector3(1, 2.55554, 1)
+material = SubResource("StandardMaterial3D_72vgf")
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="Player" parent="Players" instance=ExtResource("4_kxlmk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.800782, 1.1127638, -13.097353)
 
 [node name="Items" type="Node3D" parent="." groups=["Items"]]
+
+[node name="Item" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.9881115, 2.8581586, -9.719714)
+stack = SubResource("Resource_kxlmk")
+
+[node name="Item2" parent="Items" instance=ExtResource("5_x3jgk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.62713, 1.0774693, -4.6722608)
+stack = SubResource("Resource_p5tpv")
+auto_pickup = true
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="Enemy" parent="Enemies" instance=ExtResource("9_lfb6y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.016385, 0.5774038, -8.365815)
+
+[node name="Enemy2" parent="Enemies" instance=ExtResource("9_lfb6y")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0493765, 0.7747067, -8.429535)
