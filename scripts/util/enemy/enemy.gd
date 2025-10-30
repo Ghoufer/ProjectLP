@@ -65,6 +65,7 @@ func generate_vision_rays() -> void:
 		var angle : float = angle_between_rays * (index - ray_count / 2.0)
 		ray.target_position = Vector3.FORWARD.rotated(Vector3.UP, angle) * max_view_distance
 		ray.position.y += 0.5
+		ray.collision_mask = 5
 		vision_rays.add_child(ray)
 		ray.enabled = true
 	

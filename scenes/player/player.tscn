@@ -1,7 +1,6 @@
-[gd_scene load_steps=16 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=19 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
-[ext_resource type="Script" uid="uid://dbhd5swyegf31" path="res://scripts/player/stats_manager.gd" id="2_h17s1"]
 [ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/util/inventory/inventory_manager.gd" id="2_p47bc"]
 [ext_resource type="Resource" uid="uid://rcymichmrjtr" path="res://resources/stats/player_stats/player_stats.tres" id="3_je7p5"]
 [ext_resource type="PackedScene" uid="uid://caym2c0j8weuu" path="res://scenes/UI/hotbar_ui.tscn" id="3_lvxji"]
@@ -11,6 +10,9 @@
 [ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/util/item/item_stack.gd" id="6_qek5x"]
 [ext_resource type="PackedScene" uid="uid://c6bhdunw8vmbb" path="res://scenes/UI/swap_slot.tscn" id="7_5gtgg"]
 [ext_resource type="PackedScene" uid="uid://dwcx1mytwp8q6" path="res://assets/models/player/modelVI.gltf" id="10_h17s1"]
+[ext_resource type="Script" uid="uid://cnib4pub8v6ki" path="res://scripts/player/player_state_machine.gd" id="11_je7p5"]
+[ext_resource type="Script" uid="uid://ddbnm8etoj7ne" path="res://scripts/player/states/player_idle_state.gd" id="12_gx1jg"]
+[ext_resource type="Script" uid="uid://7dlds6idi8j8" path="res://scripts/player/states/player_move_state.gd" id="13_ugbui"]
 
 [sub_resource type="Resource" id="Resource_qek5x"]
 script = ExtResource("6_5gtgg")
@@ -33,25 +35,18 @@ height = 1.2
 [sub_resource type="SphereShape3D" id="SphereShape3D_0owmy"]
 radius = 1.35
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CAMERA_CONTROLLER", "VISUALS")]
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_je7p5"]
+
+[node name="Player" type="CharacterBody3D"]
 collision_mask = 6
 script = ExtResource("1_sc3iu")
-TILT_LOWER_LIMIT = null
-TILT_UPPER_LIMIT = null
-CAMERA_CONTROLLER = NodePath("CameraController")
-MOUSE_SENSITIVITY = null
-VISUALS = NodePath("Visuals")
-
-[node name="StatsManager" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("2_h17s1")
 stats = ExtResource("3_je7p5")
 
-[node name="Inventory" type="CanvasLayer" parent="."]
-
-[node name="InventoryManager" type="Node" parent="Inventory"]
+[node name="InventoryManager" type="Node" parent="."]
 script = ExtResource("2_p47bc")
 inventory_containers = Array[ExtResource("6_5gtgg")]([SubResource("Resource_qek5x"), SubResource("Resource_5gtgg")])
+
+[node name="Inventory" type="CanvasLayer" parent="."]
 
 [node name="Inventories" type="Control" parent="Inventory"]
 unique_name_in_owner = true
@@ -80,17 +75,19 @@ unique_name_in_owner = true
 visible = false
 z_as_relative = false
 
-[node name="CameraController" type="SpringArm3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+[node name="CameraController" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9968451, 0)
+
+[node name="CameraArm" type="SpringArm3D" parent="CameraController"]
 collision_mask = 6
 spring_length = 1.4
 
-[node name="Camera3D" type="Camera3D" parent="CameraController"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.394022)
+[node name="Camera3D" type="Camera3D" parent="CameraController/CameraArm"]
 fov = 90.0
 
-[node name="InteractionRay" type="RayCast3D" parent="CameraController/Camera3D"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, -1.7)
+[node name="InteractionRay" type="RayCast3D" parent="CameraController"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 target_position = Vector3(0, -1.45, 0)
 collision_mask = 16
 collide_with_areas = true
@@ -98,6 +95,7 @@ collide_with_bodies = false
 script = ExtResource("3_qhqgy")
 
 [node name="Visuals" type="Node3D" parent="."]
+unique_name_in_owner = true
 
 [node name="Violet" parent="Visuals" instance=ExtResource("10_h17s1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10306203, 0)
@@ -113,7 +111,20 @@ collision_mask = 8
 unique_name_in_owner = true
 shape = SubResource("SphereShape3D_0owmy")
 
-[connection signal="gui_input" from="Inventory/Inventories/BackgroundPanel" to="Inventory/InventoryManager" method="_on_background_panel_gui_input"]
-[connection signal="interacted" from="CameraController/Camera3D/InteractionRay" to="Inventory/InventoryManager" method="_on_interaction_ray_interacted"]
-[connection signal="body_entered" from="CollisionShape3D/PickupArea" to="Inventory/InventoryManager" method="_on_pickup_area_body_entered"]
-[connection signal="body_exited" from="CollisionShape3D/PickupArea" to="Inventory/InventoryManager" method="_on_pickup_area_body_exited"]
+[node name="StateMachine" type="LimboHSM" parent="."]
+blackboard_plan = SubResource("BlackboardPlan_je7p5")
+unique_name_in_owner = true
+script = ExtResource("11_je7p5")
+
+[node name="IdleState" type="LimboState" parent="StateMachine"]
+unique_name_in_owner = true
+script = ExtResource("12_gx1jg")
+
+[node name="MoveState" type="LimboState" parent="StateMachine"]
+unique_name_in_owner = true
+script = ExtResource("13_ugbui")
+
+[connection signal="gui_input" from="Inventory/Inventories/BackgroundPanel" to="InventoryManager" method="_on_background_panel_gui_input"]
+[connection signal="interacted" from="CameraController/InteractionRay" to="InventoryManager" method="_on_interaction_ray_interacted"]
+[connection signal="body_entered" from="CollisionShape3D/PickupArea" to="InventoryManager" method="_on_pickup_area_body_entered"]
+[connection signal="body_exited" from="CollisionShape3D/PickupArea" to="InventoryManager" method="_on_pickup_area_body_exited"]

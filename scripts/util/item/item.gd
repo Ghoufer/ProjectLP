@@ -32,9 +32,6 @@ func _ready() -> void:
 		interaction_text.visible = false
 		interaction_text_label.text = "[E] Pegar " + stack.item_data.item_name + " (" + str(stack.quantity) + ")"
 		
-		if auto_pickup:
-			interaction_area.disabled = true
-		
 		stack = stack.duplicate()
 		
 		loaded_scene = ItemPool.paths[stack.item_data.item_path]
@@ -42,19 +39,12 @@ func _ready() -> void:
 		item_mesh.rotation.y = randf() * TAU
 	
 		add_child(item_mesh, 0)
+		
+		if auto_pickup:
+			interaction_area.disabled = true
+			create_drop_animation()
 	
 	if player_dropped: start_timer(player_dropped)
-	
-
-func _process(_delta: float) -> void:
-	if interaction_text.visible:
-		interaction_text_sv.size = interaction_text_label.size
-	
-
-func _physics_process(_delta: float) -> void:
-	if not pickup_tween:
-		if auto_pickup:
-			create_drop_animation()
 	
 
 #region Item drop pickup delay
@@ -106,6 +96,7 @@ func _on_pickup_tween_finished(body: Node):
 
 #region -> Interaction area logic
 func _on_interaction_area_collided() -> void:
+	interaction_text_sv.size = interaction_text_label.size
 	interaction_text.visible = true
 	
 

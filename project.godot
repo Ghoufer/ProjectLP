@@ -129,6 +129,10 @@ toggle_inventory={
 3d_physics/layer_7="PlayerHurtbox"
 3d_physics/layer_8="EnemyHurtbox"
 
+[limbo_ai]
+
+behavior_tree/behavior_tree_default_dir="res://resources/behavior_trees"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

@@ -8,7 +8,7 @@ const STATS_CURVES : Dictionary[BuffableStats, Curve] = {
 	BuffableStats.DEFENCE: preload("uid://b2uyuee83fwyc")
 }
 
-enum BuffableStats { MAX_HEALTH, ATTACK, DEFENCE, MOVES_SPEED }
+enum BuffableStats { MAX_HEALTH, ATTACK, DEFENCE, MOVE_SPEED }
 
 @export var base_move_speed : float = 2.0
 @export var base_max_health : int = 50
