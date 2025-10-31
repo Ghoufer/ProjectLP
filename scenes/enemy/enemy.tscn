@@ -1,40 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://cpmqedhgly1il"]
+[gd_scene load_steps=2 format=3 uid="uid://cpmqedhgly1il"]
 
 [ext_resource type="Script" uid="uid://fmqk7hd4cvct" path="res://scripts/util/enemy/enemy.gd" id="1_4a83h"]
-[ext_resource type="Resource" uid="uid://di56l0ggp03uf" path="res://resources/stats/enemy/dumb_enemy.tres" id="2_a3pup"]
-[ext_resource type="BehaviorTree" uid="uid://bvbyyaeb47fdw" path="res://resources/behavior_trees/enemies/dumb_enemy/dumb_enemy_bt.tres" id="3_40wdo"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_883im"]
-albedo_color = Color(0.96927613, 0, 0.2094529, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_4a83h"]
-material = SubResource("StandardMaterial3D_883im")
-radius = 0.25
-height = 0.65
-radial_segments = 32
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_883im"]
-radius = 0.25
-height = 0.65
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_a3pup"]
-radius = 4.0
-
-[sub_resource type="BlackboardPlan" id="BlackboardPlan_tjssy"]
 
 [node name="Enemy" type="CharacterBody3D" groups=["Enemy"]]
 collision_layer = 32
 collision_mask = 39
 script = ExtResource("1_4a83h")
-stats = ExtResource("2_a3pup")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-mesh = SubResource("CapsuleMesh_4a83h")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-shape = SubResource("CapsuleShape3D_883im")
+[node name="Visuals" type="Node3D" parent="."]
+unique_name_in_owner = true
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 unique_name_in_owner = true
@@ -48,8 +22,9 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29776478, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AggroArea"]
-shape = SubResource("SphereShape3D_a3pup")
 
-[node name="BTPlayer" type="BTPlayer" parent="."]
-behavior_tree = ExtResource("3_40wdo")
-blackboard_plan = SubResource("BlackboardPlan_tjssy")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true

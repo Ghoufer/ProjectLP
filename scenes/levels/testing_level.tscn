@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bi7jadd1ycfob"]
+[gd_scene load_steps=19 format=3 uid="uid://bi7jadd1ycfob"]
 
 [ext_resource type="Script" uid="uid://bryil7rdc23o3" path="res://scripts/fps_counter.gd" id="1_txisq"]
 [ext_resource type="Texture2D" uid="uid://cbchave651alx" path="res://assets/prototyping/Prototype_blue_32x32px.png" id="2_x3jgk"]
@@ -9,6 +9,7 @@
 [ext_resource type="Resource" uid="uid://cx0n2fowyu0ks" path="res://resources/items/supplies/normal_rock.tres" id="6_kxlmk"]
 [ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/util/item/item_stack.gd" id="7_kxlmk"]
 [ext_resource type="PackedScene" uid="uid://cpmqedhgly1il" path="res://scenes/enemy/enemy.tscn" id="9_lfb6y"]
+[ext_resource type="Resource" uid="uid://beypwjx667gyu" path="res://resources/data/enemy/dumb_enemy/dumb_enemy_data.tres" id="10_g8sj1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dfes8"]
 
@@ -18,7 +19,7 @@ sky_material = SubResource("ProceduralSkyMaterial_dfes8")
 [sub_resource type="Environment" id="Environment_s28tc"]
 background_mode = 2
 sky = SubResource("Sky_hiyn0")
-tonemap_mode = 1
+tonemap_mode = 3
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_p5tpv"]
 vertices = PackedVector3Array(16.5, 0.5979438, -11, 49.5, 0.5979438, -11, 49.5, 0.5979438, -49.5, 5, 0.5979438, -11, -49.5, 0.5979438, -49.5, -49.5, 0.5979438, -11, -49.5, 0.5979438, -8.75, 5, 0.5979438, -8.75, 17, 0.5979438, -10.5, 49.5, 0.5979438, -8.75, 16.75, 0.5979438, -8.75, 49.5, 0.5979438, -6.5, 16, 0.5979438, -6.5, -49.5, 0.5979438, -6.5, 14.25, 0.5979438, -6.5, -49.5, 0.5979438, -4, 14.25, 0.5979438, -4, 16, 0.5979438, -4, 49.5, 0.5979438, -4, 49.5, 0.5979438, 49.5, -49.5, 0.5979438, 49.5)
@@ -66,7 +67,7 @@ script = ExtResource("1_txisq")
 environment = SubResource("Environment_s28tc")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.824332, 0.219256, 0.521923, -0.49532, 0.725754, 0.47743, -0.274108, -0.65208, 0.706864, 0, 0, 0)
+transform = Transform3D(0.87988377, -0.33875147, 0.33324447, 0.075540766, 0.79208416, 0.60571975, -0.46914595, -0.5077894, 0.7225317, 0, 0, 0)
 shadow_enabled = true
 shadow_blur = 0.75
 
@@ -91,7 +92,7 @@ size = Vector3(8.026611, 1.116149, 1)
 material = SubResource("StandardMaterial3D_72vgf")
 
 [node name="Obstacle2" type="CSGBox3D" parent="NavigationRegion3D"]
-transform = Transform3D(0.03323747, 0.9866546, -0.1593975, 0.05876145, 0.15728053, 0.9858039, 0.9977187, -0.04213204, -0.052749693, 15.023362, 0.25641388, -9.78972)
+transform = Transform3D(0.03323747, 0.9866546, -0.1593975, 0.05876145, 0.15728053, 0.9858039, 0.9977187, -0.04213204, -0.052749693, 15.023362, 0.41894335, -9.78972)
 use_collision = true
 collision_layer = 4
 collision_mask = 47
@@ -109,7 +110,7 @@ material = SubResource("StandardMaterial3D_72vgf")
 [node name="Players" type="Node3D" parent="."]
 
 [node name="Player" parent="Players" instance=ExtResource("4_kxlmk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.800782, 1.1127638, -13.097353)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.317057, 1.1127638, -3.7900438)
 
 [node name="Items" type="Node3D" parent="." groups=["Items"]]
 
@@ -125,7 +126,5 @@ auto_pickup = true
 [node name="Enemies" type="Node3D" parent="."]
 
 [node name="Enemy" parent="Enemies" instance=ExtResource("9_lfb6y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.016385, 0.5774038, -8.365815)
-
-[node name="Enemy2" parent="Enemies" instance=ExtResource("9_lfb6y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.0493765, 0.7747067, -8.429535)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.783371, 1.241272, -7.1779127)
+enemy_data = ExtResource("10_g8sj1")
