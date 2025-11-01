@@ -27,6 +27,7 @@ var current_health : int = 0 : set = _on_health_set
 var level : int:
 	get: return floor(max(1.0, sqrt(experience / BASE_LEVEL_XP) + 0.5))
 var stat_buffs : Array[StatBuff]
+var sprint_speed : float = current_move_speed * 2.0
 
 func _init() -> void:
 	setup_stats.call_deferred()

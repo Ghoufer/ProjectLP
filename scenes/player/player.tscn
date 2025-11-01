@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=20 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
 [ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/util/inventory/inventory_manager.gd" id="2_p47bc"]
@@ -9,7 +9,12 @@
 [ext_resource type="Script" uid="uid://b40pvyn6bgfgf" path="res://scripts/util/inventory/inventory_container.gd" id="6_5gtgg"]
 [ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/util/item/item_stack.gd" id="6_qek5x"]
 [ext_resource type="PackedScene" uid="uid://c6bhdunw8vmbb" path="res://scenes/UI/swap_slot.tscn" id="7_5gtgg"]
+[ext_resource type="Script" uid="uid://byyo1wycilc8v" path="res://scripts/util/state_machine/state_machine.gd" id="8_je7p5"]
+[ext_resource type="Script" uid="uid://boame3kcj7xa1" path="res://scripts/player/states/idle_state.gd" id="9_fm80t"]
+[ext_resource type="Script" uid="uid://pxovek8objtx" path="res://scripts/player/states/falling_state.gd" id="10_gx1jg"]
 [ext_resource type="PackedScene" uid="uid://dwcx1mytwp8q6" path="res://assets/models/player/modelVI.gltf" id="10_h17s1"]
+[ext_resource type="Script" uid="uid://c1q2kmypi5kqr" path="res://scripts/player/states/moving_state.gd" id="10_ugbui"]
+[ext_resource type="Script" uid="uid://1mm43w1qbasy" path="res://scripts/player/states/jumping_state.gd" id="12_fcs02"]
 
 [sub_resource type="Resource" id="Resource_qek5x"]
 script = ExtResource("6_5gtgg")
@@ -40,6 +45,21 @@ stats = ExtResource("3_je7p5")
 [node name="InventoryManager" type="Node" parent="."]
 script = ExtResource("2_p47bc")
 inventory_containers = Array[ExtResource("6_5gtgg")]([SubResource("Resource_qek5x"), SubResource("Resource_5gtgg")])
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("8_je7p5")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("9_fm80t")
+
+[node name="Moving" type="Node" parent="StateMachine"]
+script = ExtResource("10_ugbui")
+
+[node name="Falling" type="Node" parent="StateMachine"]
+script = ExtResource("10_gx1jg")
+
+[node name="Jumping" type="Node" parent="StateMachine"]
+script = ExtResource("12_fcs02")
 
 [node name="Inventory" type="CanvasLayer" parent="."]
 
