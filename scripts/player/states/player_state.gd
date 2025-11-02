@@ -1,11 +1,12 @@
 extends State
 class_name PlayerState
 
-var player: Player
+var player : Player
 
-enum player_states { 
+enum states { 
 	IDLE, MOVING, 
-	JUMPING, FALLING 
+	JUMPING, FALLING,
+	SLIDING
 }
 
 func _ready() -> void:

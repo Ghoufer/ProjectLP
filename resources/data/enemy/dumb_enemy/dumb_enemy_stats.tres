@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="Stats" load_steps=2 format=3 uid="uid://di56l0ggp03uf"]
 
-[ext_resource type="Script" uid="uid://k215bbb6gy4h" path="res://scripts/util/stats/stats.gd" id="1_uk2gw"]
+[ext_resource type="Script" uid="uid://k215bbb6gy4h" path="res://scripts/classes/stats/stats.gd" id="1_uk2gw"]
 
 [resource]
 script = ExtResource("1_uk2gw")
-base_move_speed = 0.2
+base_move_speed = 0.5
 base_max_health = 20
 base_attack = 2
 base_defence = 2

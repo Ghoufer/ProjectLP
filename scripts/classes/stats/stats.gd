@@ -34,8 +34,12 @@ func _init() -> void:
 	
 
 func setup_stats() -> void:
-	recalculate_stats()
+	current_max_health = base_max_health
+	current_move_speed = base_move_speed
+	current_attack = base_attack
+	current_defence = base_defence
 	current_health = current_max_health
+	recalculate_stats()
 	
 
 func add_buff(buff: StatBuff) -> void:

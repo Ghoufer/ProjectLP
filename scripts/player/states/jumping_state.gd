@@ -11,7 +11,7 @@ func _physics_update(_delta: float) -> void:
 		player.velocity.y = player.JUMP_VELOCITY
 	
 	if player.velocity.y >= max_height:
-		finished.emit(player_states.find_key(player_states.FALLING))
+		finished.emit(states.find_key(states.FALLING))
 	
 	player.update_movement(_delta)
 	

@@ -2,7 +2,7 @@ extends PlayerState
 
 func _handle_input(_event: InputEvent) -> void:
 	if Input.is_action_pressed("jump") and player.is_on_floor():
-		finished.emit(player_states.find_key(player_states.JUMPING))
+		finished.emit(states.find_key(states.JUMPING))
 	
 
 func _physics_update(_delta: float) -> void:
@@ -15,10 +15,10 @@ func _physics_update(_delta: float) -> void:
 		
 		player.update_movement(_delta)
 	else:
-		finished.emit(player_states.find_key(player_states.IDLE))
+		finished.emit(states.find_key(states.IDLE))
 	
 	if not player.is_on_floor():
-		finished.emit(player_states.find_key(player_states.FALLING))
+		finished.emit(states.find_key(states.FALLING))
 	
 	player.move_and_slide()
 	

@@ -1,11 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://cpmqedhgly1il"]
+[gd_scene load_steps=5 format=3 uid="uid://cpmqedhgly1il"]
 
-[ext_resource type="Script" uid="uid://fmqk7hd4cvct" path="res://scripts/util/enemy/enemy.gd" id="1_4a83h"]
+[ext_resource type="Script" uid="uid://fmqk7hd4cvct" path="res://scripts/classes/enemy/enemy.gd" id="1_4a83h"]
+[ext_resource type="Script" uid="uid://byyo1wycilc8v" path="res://scripts/classes/state_machine/state_machine.gd" id="2_a3pup"]
+[ext_resource type="Script" uid="uid://mloakivl4utm" path="res://scripts/enemy/enemy_idle_state.gd" id="3_40wdo"]
+[ext_resource type="Script" uid="uid://cvmg1ibikmx8r" path="res://scripts/enemy/enemy_patrol_state.gd" id="4_tjssy"]
 
 [node name="Enemy" type="CharacterBody3D" groups=["Enemy"]]
 collision_layer = 32
 collision_mask = 39
 script = ExtResource("1_4a83h")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("2_a3pup")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("3_40wdo")
+
+[node name="Patrolling" type="Node" parent="StateMachine"]
+script = ExtResource("4_tjssy")
 
 [node name="Visuals" type="Node3D" parent="."]
 unique_name_in_owner = true

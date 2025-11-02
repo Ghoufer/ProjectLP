@@ -1,15 +1,15 @@
 [gd_scene load_steps=20 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
-[ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/util/inventory/inventory_manager.gd" id="2_p47bc"]
+[ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/classes/inventory/inventory_manager.gd" id="2_p47bc"]
 [ext_resource type="Resource" uid="uid://rcymichmrjtr" path="res://resources/data/player/player_stats.tres" id="3_je7p5"]
 [ext_resource type="PackedScene" uid="uid://caym2c0j8weuu" path="res://scenes/UI/hotbar_ui.tscn" id="3_lvxji"]
 [ext_resource type="Script" uid="uid://kbj15by32p1x" path="res://scripts/player/interaction_ray.gd" id="3_qhqgy"]
 [ext_resource type="PackedScene" uid="uid://dxaoa012c1jjq" path="res://scenes/UI/backpack_ui.tscn" id="4_0owmy"]
-[ext_resource type="Script" uid="uid://b40pvyn6bgfgf" path="res://scripts/util/inventory/inventory_container.gd" id="6_5gtgg"]
-[ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/util/item/item_stack.gd" id="6_qek5x"]
+[ext_resource type="Script" uid="uid://b40pvyn6bgfgf" path="res://scripts/classes/inventory/inventory_container.gd" id="6_5gtgg"]
+[ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/classes/item/item_stack.gd" id="6_qek5x"]
 [ext_resource type="PackedScene" uid="uid://c6bhdunw8vmbb" path="res://scenes/UI/swap_slot.tscn" id="7_5gtgg"]
-[ext_resource type="Script" uid="uid://byyo1wycilc8v" path="res://scripts/util/state_machine/state_machine.gd" id="8_je7p5"]
+[ext_resource type="Script" uid="uid://byyo1wycilc8v" path="res://scripts/classes/state_machine/state_machine.gd" id="8_je7p5"]
 [ext_resource type="Script" uid="uid://boame3kcj7xa1" path="res://scripts/player/states/idle_state.gd" id="9_fm80t"]
 [ext_resource type="Script" uid="uid://pxovek8objtx" path="res://scripts/player/states/falling_state.gd" id="10_gx1jg"]
 [ext_resource type="PackedScene" uid="uid://dwcx1mytwp8q6" path="res://assets/models/player/modelVI.gltf" id="10_h17s1"]
@@ -60,6 +60,8 @@ script = ExtResource("10_gx1jg")
 
 [node name="Jumping" type="Node" parent="StateMachine"]
 script = ExtResource("12_fcs02")
+
+[node name="Sliding" type="Node" parent="StateMachine"]
 
 [node name="Inventory" type="CanvasLayer" parent="."]
 

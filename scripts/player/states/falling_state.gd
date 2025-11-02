@@ -7,7 +7,7 @@ func _physics_update(_delta: float) -> void:
 		player.update_movement(_delta)
 		player.velocity.y -= player.gravity * _delta
 	else:
-		finished.emit(player_states.find_key(player_states.IDLE))
+		finished.emit(states.find_key(states.IDLE))
 	
 	player.move_and_slide()
 	

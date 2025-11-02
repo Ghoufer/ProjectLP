@@ -4,6 +4,7 @@ class_name Enemy
 @onready var visuals : Node3D = %Visuals
 @onready var animation_player: AnimationPlayer = %AnimationPlayer
 @onready var collision_shape : CollisionShape3D = %CollisionShape3D
+@onready var nav_agent : NavigationAgent3D = %NavigationAgent3D
 
 @export var enemy_data : EnemyData
 
@@ -19,13 +20,12 @@ func _ready() -> void:
 		animation_player = scene.get_node("AnimationPlayer")
 		
 		visuals.add_child(scene)
-		
 	
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-	else:
+	elif velocity.y != 0:
 		velocity.y = 0
 	
 	move_and_slide()

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dxaoa012c1jjq"]
 
-[ext_resource type="Script" uid="uid://ngiq5u7kg2ja" path="res://scripts/util/inventory/container_ui.gd" id="1_l6gu7"]
+[ext_resource type="Script" uid="uid://ngiq5u7kg2ja" path="res://scripts/classes/inventory/container_ui.gd" id="1_l6gu7"]
 
 [node name="BackpackUI" type="Control" node_paths=PackedStringArray("ui_node")]
 visible = false

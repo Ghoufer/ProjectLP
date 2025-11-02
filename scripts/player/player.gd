@@ -81,3 +81,4 @@ func update_movement(delta: float) -> void:
 	if visuals:
 		var target_rotation = atan2(-direction.x, -direction.z)
 		visuals.rotation.y = lerp_angle(visuals.rotation.y, target_rotation, 5.0 * delta)
+	

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://d0bcn8hlihb05"]
 
 [ext_resource type="Texture2D" uid="uid://c76jmvtmnef1n" path="res://assets/prototyping/Prototype_checkers_01_32x32px.png" id="1_tuhj4"]
-[ext_resource type="Script" uid="uid://ctpjg56xd36je" path="res://scripts/util/inventory/slot.gd" id="2_3xeyi"]
+[ext_resource type="Script" uid="uid://ctpjg56xd36je" path="res://scripts/classes/inventory/slot.gd" id="2_3xeyi"]
 
 [node name="Slot" type="TextureButton"]
 clip_contents = true

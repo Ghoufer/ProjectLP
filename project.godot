@@ -49,6 +49,7 @@ import/fbx/enabled=false
 Player=""
 World=""
 Items=""
+NavRegion=""
 
 [importer_defaults]
 
