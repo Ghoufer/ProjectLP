@@ -1,13 +1,16 @@
 extends CharacterBody3D
 class_name Player
 
-@onready var visuals: Node3D = %Visuals
-@onready var state_machine: StateMachine = $StateMachine
-@onready var camera_controller: Node3D = %CameraController
+@onready var visuals : Node3D = %Visuals
+@onready var state_machine : StateMachine = $StateMachine
+@onready var camera_controller : Node3D = %CameraController
+@onready var normal_col : CollisionShape3D = %NormalCollision
+@onready var roll_col : CollisionShape3D = %RollCollision
 
 @export var stats : Stats
 
 const JUMP_VELOCITY : int = 8
+const ROLL_VELOCITY : float = 3.5
 const TILT_LOWER_LIMIT : float = deg_to_rad(-70.0)
 const TILT_UPPER_LIMIT : float = deg_to_rad(70.0)
 
@@ -26,6 +29,7 @@ var animation_blend : float = 0.25
 
 func _ready() -> void:
 	var player_model : Node3D = visuals.get_children()[0]
+	roll_col.disabled = true
 	animation_player = player_model.get_node('AnimationPlayer')
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
@@ -65,11 +69,12 @@ func _physics_process(_delta: float) -> void:
 
 func update_movement(delta: float) -> void:
 	var direction : Vector3 = Vector3.ZERO
-	var camera_basis = camera_controller.global_transform.basis
-		
+	var camera_basis : Basis = camera_controller.global_transform.basis
+	var is_rolling = state_machine.state.state_name == PlayerState.states.find_key(PlayerState.states.ROLLING).capitalize()
+	
 	# Remover inclinação vertical da câmera para movimento horizontal
-	var camera_forward = -camera_basis.z
-	var camera_right = -camera_basis.x
+	var camera_forward : Vector3 = -camera_basis.z
+	var camera_right : Vector3 = -camera_basis.x
 	
 	camera_forward.y = 0
 	camera_right.y = 0
@@ -77,10 +82,16 @@ func update_movement(delta: float) -> void:
 	camera_forward = -camera_forward.normalized()
 	camera_right = -camera_right.normalized()
 	
-	direction = (camera_right * movement_input.x + camera_forward * movement_input.y).normalized()
+	if is_rolling and not movement_input:
+		direction = -visuals.global_transform.basis.z
+	else:
+		direction = (camera_right * movement_input.x + camera_forward * movement_input.y).normalized()
 	
 	if not is_on_floor():
-		velocity.y -= gravity * delta
+		if not is_rolling:
+			velocity.y -= gravity * delta
+		else:
+			velocity.y -= gravity / ROLL_VELOCITY * delta
 	
 	if direction:
 		velocity.x = lerp(velocity.x, direction.x * stats.current_move_speed, 0.1)

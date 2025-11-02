@@ -10,6 +10,9 @@ func _physics_update(_delta: float) -> void:
 	if Input.is_action_pressed("jump") and player.is_on_floor():
 		finished.emit(states.find_key(states.JUMPING))
 	
+	if Input.is_action_pressed("roll") and player.is_on_floor():
+		finished.emit(states.find_key(states.ROLLING))
+	
 	if not player.is_on_floor():
 		finished.emit(states.find_key(states.FALLING))
 	
