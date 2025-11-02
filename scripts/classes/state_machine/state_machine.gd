@@ -9,6 +9,7 @@ class_name StateMachine
 
 func _ready() -> void:
 	for state_node: State in find_children("*", "State"):
+		state_node.state_name = state_node.to_string().split(":")[0]
 		state_node.finished.connect(_transition_to_next_state)
 	
 	await owner.ready
@@ -32,6 +33,7 @@ func _transition_to_next_state(target_state_path: String, data: Dictionary = {})
 		return
 	
 	var previous_state_path := state.name.capitalize()
+	
 	state._exit()
 	state = get_node(target_state_path.capitalize())
 	state._enter(previous_state_path, data)

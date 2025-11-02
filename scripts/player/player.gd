@@ -2,6 +2,7 @@ extends CharacterBody3D
 class_name Player
 
 @onready var visuals: Node3D = %Visuals
+@onready var state_machine: StateMachine = $StateMachine
 @onready var camera_controller: Node3D = %CameraController
 
 @export var stats : Stats
@@ -10,6 +11,7 @@ const JUMP_VELOCITY : int = 8
 const TILT_LOWER_LIMIT : float = deg_to_rad(-70.0)
 const TILT_UPPER_LIMIT : float = deg_to_rad(70.0)
 
+var animation_player: AnimationPlayer
 var mouse_sensitivity : float = 0.5
 var mouse_input : bool = false
 var rotation_input : float
@@ -20,8 +22,11 @@ var camera_rotation : Vector3
 var movement_input : Vector2
 
 var gravity : float = 24.0
+var animation_blend : float = 0.25
 
 func _ready() -> void:
+	var player_model : Node3D = visuals.get_children()[0]
+	animation_player = player_model.get_node('AnimationPlayer')
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
 
@@ -73,7 +78,10 @@ func update_movement(delta: float) -> void:
 	camera_right = -camera_right.normalized()
 	
 	direction = (camera_right * movement_input.x + camera_forward * movement_input.y).normalized()
-
+	
+	if not is_on_floor():
+		velocity.y -= gravity * delta
+	
 	if direction:
 		velocity.x = lerp(velocity.x, direction.x * stats.current_move_speed, 0.1)
 		velocity.z = lerp(velocity.z, direction.z * stats.current_move_speed, 0.1)

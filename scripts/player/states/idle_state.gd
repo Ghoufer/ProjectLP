@@ -2,12 +2,14 @@ extends PlayerState
 
 var friction : float = 0.2
 
-func _handle_input(_event: InputEvent) -> void:
-	if Input.is_action_pressed("jump") and player.is_on_floor():
-		finished.emit(states.find_key(states.JUMPING))
+func _enter(_previous_state_path: String, _data: Dictionary = {}) -> void:
+	player.animation_player.play('Idle', player.animation_blend)
 	
 
 func _physics_update(_delta: float) -> void:
+	if Input.is_action_pressed("jump") and player.is_on_floor():
+		finished.emit(states.find_key(states.JUMPING))
+	
 	if not player.is_on_floor():
 		finished.emit(states.find_key(states.FALLING))
 	

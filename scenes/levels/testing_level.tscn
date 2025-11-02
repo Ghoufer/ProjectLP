@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bi7jadd1ycfob"]
+[gd_scene load_steps=17 format=3 uid="uid://bi7jadd1ycfob"]
 
 [ext_resource type="Script" uid="uid://bryil7rdc23o3" path="res://scripts/fps_counter.gd" id="1_txisq"]
 [ext_resource type="Texture2D" uid="uid://cbchave651alx" path="res://assets/prototyping/Prototype_blue_32x32px.png" id="2_x3jgk"]
@@ -8,8 +8,6 @@
 [ext_resource type="Resource" uid="uid://4wqbg2sjpasx" path="res://resources/items/weapons/wood_sword.tres" id="6_acyt4"]
 [ext_resource type="Resource" uid="uid://cx0n2fowyu0ks" path="res://resources/items/supplies/normal_rock.tres" id="6_kxlmk"]
 [ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/classes/item/item_stack.gd" id="7_kxlmk"]
-[ext_resource type="PackedScene" uid="uid://cpmqedhgly1il" path="res://scenes/enemy/enemy.tscn" id="9_lfb6y"]
-[ext_resource type="Resource" uid="uid://beypwjx667gyu" path="res://resources/data/enemy/dumb_enemy/dumb_enemy_data.tres" id="10_g8sj1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dfes8"]
 
@@ -110,7 +108,7 @@ material = SubResource("StandardMaterial3D_72vgf")
 [node name="Players" type="Node3D" parent="."]
 
 [node name="Player" parent="Players" instance=ExtResource("4_kxlmk")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.317057, 1.1127638, -3.7900438)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.317057, 0.49426138, -3.7900438)
 
 [node name="Items" type="Node3D" parent="." groups=["Items"]]
 
@@ -124,7 +122,3 @@ stack = SubResource("Resource_p5tpv")
 auto_pickup = true
 
 [node name="Enemies" type="Node3D" parent="."]
-
-[node name="Enemy" parent="Enemies" instance=ExtResource("9_lfb6y")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.783371, 1.241272, -7.1779127)
-enemy_data = ExtResource("10_g8sj1")

@@ -1,6 +1,8 @@
 extends Node
 class_name State
 
+var state_name : String
+
 ## Emitted when the state finishes and wants to transition to another state
 signal finished(next_state_path: String, data: Dictionary)
 

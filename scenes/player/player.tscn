@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=21 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
 [ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/classes/inventory/inventory_manager.gd" id="2_p47bc"]
@@ -12,9 +12,10 @@
 [ext_resource type="Script" uid="uid://byyo1wycilc8v" path="res://scripts/classes/state_machine/state_machine.gd" id="8_je7p5"]
 [ext_resource type="Script" uid="uid://boame3kcj7xa1" path="res://scripts/player/states/idle_state.gd" id="9_fm80t"]
 [ext_resource type="Script" uid="uid://pxovek8objtx" path="res://scripts/player/states/falling_state.gd" id="10_gx1jg"]
-[ext_resource type="PackedScene" uid="uid://dwcx1mytwp8q6" path="res://assets/models/player/modelVI.gltf" id="10_h17s1"]
 [ext_resource type="Script" uid="uid://c1q2kmypi5kqr" path="res://scripts/player/states/moving_state.gd" id="10_ugbui"]
+[ext_resource type="Script" uid="uid://sd1p4p6x6pxg" path="res://scripts/player/states/sprinting_state.gd" id="11_fcs02"]
 [ext_resource type="Script" uid="uid://1mm43w1qbasy" path="res://scripts/player/states/jumping_state.gd" id="12_fcs02"]
+[ext_resource type="PackedScene" uid="uid://beo0ejv4ggs2u" path="res://scenes/player/model.tscn" id="16_myrg7"]
 
 [sub_resource type="Resource" id="Resource_qek5x"]
 script = ExtResource("6_5gtgg")
@@ -31,8 +32,8 @@ ui = ExtResource("4_0owmy")
 metadata/_custom_type_script = "uid://b40pvyn6bgfgf"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ub5ys"]
-radius = 0.3
-height = 1.2
+radius = 0.15478516
+height = 1.1113037
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0owmy"]
 radius = 1.35
@@ -55,13 +56,14 @@ script = ExtResource("9_fm80t")
 [node name="Moving" type="Node" parent="StateMachine"]
 script = ExtResource("10_ugbui")
 
+[node name="Sprinting" type="Node" parent="StateMachine"]
+script = ExtResource("11_fcs02")
+
 [node name="Falling" type="Node" parent="StateMachine"]
 script = ExtResource("10_gx1jg")
 
 [node name="Jumping" type="Node" parent="StateMachine"]
 script = ExtResource("12_fcs02")
-
-[node name="Sliding" type="Node" parent="StateMachine"]
 
 [node name="Inventory" type="CanvasLayer" parent="."]
 
@@ -114,11 +116,10 @@ script = ExtResource("3_qhqgy")
 [node name="Visuals" type="Node3D" parent="."]
 unique_name_in_owner = true
 
-[node name="Violet" parent="Visuals" instance=ExtResource("10_h17s1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.10306203, 0)
+[node name="Model" parent="Visuals" instance=ExtResource("16_myrg7")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5653687, 0)
 shape = SubResource("CapsuleShape3D_ub5ys")
 
 [node name="PickupArea" type="Area3D" parent="CollisionShape3D"]
