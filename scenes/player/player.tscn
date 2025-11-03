@@ -1,8 +1,8 @@
-[gd_scene load_steps=23 format=3 uid="uid://b2kyqtqv3llg4"]
+[gd_scene load_steps=27 format=3 uid="uid://b2kyqtqv3llg4"]
 
 [ext_resource type="Script" uid="uid://cidee1doa216r" path="res://scripts/player/player.gd" id="1_sc3iu"]
 [ext_resource type="Script" uid="uid://d063c2t7xo7vg" path="res://scripts/classes/inventory/inventory_manager.gd" id="2_p47bc"]
-[ext_resource type="Resource" uid="uid://rcymichmrjtr" path="res://resources/data/player/player_stats.tres" id="3_je7p5"]
+[ext_resource type="Resource" uid="uid://rcymichmrjtr" path="res://resources/data/player/stats/player_stats.tres" id="3_je7p5"]
 [ext_resource type="PackedScene" uid="uid://caym2c0j8weuu" path="res://scenes/UI/hotbar_ui.tscn" id="3_lvxji"]
 [ext_resource type="Script" uid="uid://kbj15by32p1x" path="res://scripts/player/interaction_ray.gd" id="3_qhqgy"]
 [ext_resource type="PackedScene" uid="uid://dxaoa012c1jjq" path="res://scenes/UI/backpack_ui.tscn" id="4_0owmy"]
@@ -10,13 +10,18 @@
 [ext_resource type="Script" uid="uid://ds3i345xkpghw" path="res://scripts/classes/item/item_stack.gd" id="6_qek5x"]
 [ext_resource type="PackedScene" uid="uid://c6bhdunw8vmbb" path="res://scenes/UI/swap_slot.tscn" id="7_5gtgg"]
 [ext_resource type="Script" uid="uid://byyo1wycilc8v" path="res://scripts/classes/state_machine/state_machine.gd" id="8_je7p5"]
+[ext_resource type="Script" uid="uid://dmex53ain3exp" path="res://scripts/classes/combat_component/combat_component.gd" id="8_yj68g"]
 [ext_resource type="Script" uid="uid://boame3kcj7xa1" path="res://scripts/player/states/idle_state.gd" id="9_fm80t"]
 [ext_resource type="Script" uid="uid://pxovek8objtx" path="res://scripts/player/states/falling_state.gd" id="10_gx1jg"]
 [ext_resource type="Script" uid="uid://c1q2kmypi5kqr" path="res://scripts/player/states/moving_state.gd" id="10_ugbui"]
 [ext_resource type="Script" uid="uid://sd1p4p6x6pxg" path="res://scripts/player/states/sprinting_state.gd" id="11_fcs02"]
 [ext_resource type="Script" uid="uid://1mm43w1qbasy" path="res://scripts/player/states/jumping_state.gd" id="12_fcs02"]
 [ext_resource type="Script" uid="uid://dssruohbwxr1c" path="res://scripts/player/states/rolling_state.gd" id="14_kvlxm"]
+[ext_resource type="Script" uid="uid://cfweo5hs1p7oy" path="res://scripts/player/states/attacking_state.gd" id="15_uf5tr"]
 [ext_resource type="PackedScene" uid="uid://beo0ejv4ggs2u" path="res://scenes/player/model.tscn" id="16_myrg7"]
+[ext_resource type="PackedScene" uid="uid://dn2x8cue5uwsf" path="res://scenes/weapon/weapon.tscn" id="19_8ydkj"]
+[ext_resource type="Script" uid="uid://cjssrtjw2faib" path="res://scripts/classes/weapon/weapon.gd" id="20_3j4b4"]
+[ext_resource type="Resource" uid="uid://cm1tbgn3mws53" path="res://resources/data/player/attacks/fist_weapon_data.tres" id="21_3j4b4"]
 
 [sub_resource type="Resource" id="Resource_qek5x"]
 script = ExtResource("6_5gtgg")
@@ -34,14 +39,10 @@ metadata/_custom_type_script = "uid://b40pvyn6bgfgf"
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kvlxm"]
 radius = 0.15478516
-height = 1.1179805
+height = 1.118
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0owmy"]
 radius = 1.35
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uf5tr"]
-radius = 0.15478516
-height = 0.7059629
 
 [node name="Player" type="CharacterBody3D"]
 collision_mask = 6
@@ -52,7 +53,13 @@ stats = ExtResource("3_je7p5")
 script = ExtResource("2_p47bc")
 inventory_containers = Array[ExtResource("6_5gtgg")]([SubResource("Resource_qek5x"), SubResource("Resource_5gtgg")])
 
+[node name="CombatComponent" type="Node" parent="." node_paths=PackedStringArray("current_weapon")]
+unique_name_in_owner = true
+script = ExtResource("8_yj68g")
+current_weapon = NodePath("../Weapon")
+
 [node name="StateMachine" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("8_je7p5")
 
 [node name="Idle" type="Node" parent="StateMachine"]
@@ -72,6 +79,9 @@ script = ExtResource("12_fcs02")
 
 [node name="Rolling" type="Node" parent="StateMachine"]
 script = ExtResource("14_kvlxm")
+
+[node name="Attacking" type="Node" parent="StateMachine"]
+script = ExtResource("15_uf5tr")
 
 [node name="Inventory" type="CanvasLayer" parent="."]
 
@@ -127,25 +137,82 @@ unique_name_in_owner = true
 
 [node name="Model" parent="Visuals" instance=ExtResource("16_myrg7")]
 
-[node name="NormalCollision" type="CollisionShape3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54885894, 0)
+[node name="GeneralSkeleton" parent="Visuals/Model/Rig" index="0"]
+bones/1/position = Vector3(0, 0.9167, -0.050100047)
+bones/1/rotation = Quaternion(2.682209e-07, 0, 0, 1)
+bones/3/rotation = Quaternion(-1.4528631e-07, 0, 0, 1)
+bones/4/rotation = Quaternion(-4.4703484e-08, 0, 0, 1)
+bones/5/rotation = Quaternion(0.09487403, 0, 0, 0.9954893)
+bones/6/rotation = Quaternion(-0.078673996, 0, 0, 0.9969005)
+bones/7/rotation = Quaternion(1.2665987e-07, 1.487507e-07, -1.731281e-08, 1)
+bones/8/rotation = Quaternion(-2.2351742e-08, -1.4901161e-07, 2.9802322e-08, 1)
+bones/9/rotation = Quaternion(-1.0849908e-07, 8.8941306e-08, 3.0737283e-08, 1)
+bones/10/rotation = Quaternion(4.1723257e-07, 5.54137e-08, 2.4203476e-07, 1)
+bones/11/rotation = Quaternion(0.50000006, 0.49999958, -0.5000003, 0.50000006)
+bones/12/rotation = Quaternion(0, -1.1920929e-07, 5.9604645e-08, 1)
+bones/13/rotation = Quaternion(0, 0, 5.9604645e-08, 1)
+bones/14/rotation = Quaternion(0.5000001, 0.49999964, -0.5000003, 0.50000006)
+bones/15/rotation = Quaternion(-2.9802322e-08, -1.1920929e-07, 2.9802322e-08, 1)
+bones/16/rotation = Quaternion(0, -5.960466e-08, -2.980233e-08, 1)
+bones/17/rotation = Quaternion(0.50000006, 0.49999973, -0.50000024, 0.5000001)
+bones/18/rotation = Quaternion(0, -1.0430813e-07, 5.9604645e-08, 1)
+bones/19/rotation = Quaternion(0, 0, 0, 1)
+bones/20/rotation = Quaternion(0.5, 0.49999958, -0.5000003, 0.50000006)
+bones/21/rotation = Quaternion(2.9802322e-08, -8.940697e-08, 8.940697e-08, 1)
+bones/22/rotation = Quaternion(0, 0, -5.9604645e-08, 1)
+bones/23/rotation = Quaternion(0.67388743, 0.6738871, 0.21418647, 0.21418704)
+bones/24/rotation = Quaternion(-1.3411045e-07, -5.9604645e-08, -5.9604645e-08, 1)
+bones/25/rotation = Quaternion(1.4901161e-08, 7.4505806e-08, 2.9802322e-08, 1)
+bones/26/rotation = Quaternion(1.2665987e-07, -1.487507e-07, 1.731281e-08, 1)
+bones/27/rotation = Quaternion(-2.9802319e-08, 8.940695e-08, -1.3411044e-07, 1)
+bones/28/rotation = Quaternion(-1.6950071e-07, -4.5634806e-08, -1.2066812e-07, 1)
+bones/29/rotation = Quaternion(5.359762e-07, -5.494804e-08, -2.4306067e-07, 1)
+bones/30/rotation = Quaternion(0.5, -0.49999964, 0.5000004, 0.50000006)
+bones/31/rotation = Quaternion(-2.9802322e-08, 1.1920929e-07, -2.9802322e-08, 1)
+bones/32/rotation = Quaternion(0, -1.4901161e-08, -1.4901161e-08, 1)
+bones/33/rotation = Quaternion(0.50000006, -0.49999958, 0.5000003, 0.50000006)
+bones/34/rotation = Quaternion(-2.9802322e-08, 1.1920929e-07, -2.9802322e-08, 1)
+bones/35/rotation = Quaternion(1.4901165e-08, 1.4901165e-08, 4.4703494e-08, 1)
+bones/36/rotation = Quaternion(0.5, -0.49999958, 0.5000005, 0.50000006)
+bones/37/rotation = Quaternion(-1.4901161e-08, 1.3411045e-07, -7.4505806e-08, 1)
+bones/38/rotation = Quaternion(1.4901161e-08, 1.4901161e-08, 0, 1)
+bones/39/rotation = Quaternion(0.50000006, -0.49999964, 0.50000036, 0.5)
+bones/40/rotation = Quaternion(-1.4901161e-08, 1.0430813e-07, -2.9802322e-08, 1)
+bones/41/rotation = Quaternion(0, 5.9604645e-08, 0, 1)
+bones/42/rotation = Quaternion(0.67388725, -0.67388725, -0.21418643, 0.21418715)
+bones/43/rotation = Quaternion(1.4901163e-08, 8.940698e-08, -5.960465e-08, 1)
+bones/44/rotation = Quaternion(5.9604638e-08, -2.9802319e-08, -2.9802319e-08, 1)
+bones/45/rotation = Quaternion(0.9999939, 0, 0, -0.0034950597)
+bones/46/rotation = Quaternion(0.03658973, -0.00013117357, -4.797836e-06, 0.9993304)
+bones/47/rotation = Quaternion(-0.5290733, -0.00032809045, 0.0003434502, 0.848576)
+bones/48/rotation = Quaternion(-0.00013717549, 0.9643068, -0.2647871, -0.0004994271)
+bones/49/rotation = Quaternion(0.9999939, 9.305963e-09, 3.2564975e-11, -0.0034950597)
+bones/50/rotation = Quaternion(0.03658973, -0.0001311732, -4.797519e-06, 0.9993304)
+bones/51/rotation = Quaternion(-0.5290733, -0.00032809487, 0.000343458, 0.848576)
+bones/52/rotation = Quaternion(-0.00013717549, 0.9643068, -0.2647871, -0.0004994271)
+
+[node name="BoneAttachment3D" parent="Visuals/Model/Rig/GeneralSkeleton" index="0"]
+transform = Transform3D(1, 9.610526e-07, -3.1985383e-07, -9.610529e-07, 1, -1.0831283e-06, 3.1985277e-07, 1.0831285e-06, 1, -0.7388999, 1.4408002, -0.06540008)
+
+[node name="CollisionShape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54, 0)
 shape = SubResource("CapsuleShape3D_kvlxm")
 
-[node name="PickupArea" type="Area3D" parent="NormalCollision"]
+[node name="PickupArea" type="Area3D" parent="CollisionShape"]
 collision_mask = 8
 
-[node name="PickupAreaCol" type="CollisionShape3D" parent="NormalCollision/PickupArea"]
+[node name="PickupAreaCol" type="CollisionShape3D" parent="CollisionShape/PickupArea"]
 unique_name_in_owner = true
 shape = SubResource("SphereShape3D_0owmy")
 
-[node name="RollCollision" type="CollisionShape3D" parent="."]
+[node name="Weapon" parent="." instance=ExtResource("19_8ydkj")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35935992, 0)
-shape = SubResource("CapsuleShape3D_uf5tr")
-debug_color = Color(0.62268704, 0.5331243, 0.0457206, 0.41960785)
+script = ExtResource("20_3j4b4")
+weapon_data = ExtResource("21_3j4b4")
 
 [connection signal="gui_input" from="Inventory/Inventories/BackgroundPanel" to="InventoryManager" method="_on_background_panel_gui_input"]
 [connection signal="interacted" from="CameraController/InteractionRay" to="InventoryManager" method="_on_interaction_ray_interacted"]
-[connection signal="body_entered" from="NormalCollision/PickupArea" to="InventoryManager" method="_on_pickup_area_body_entered"]
-[connection signal="body_exited" from="NormalCollision/PickupArea" to="InventoryManager" method="_on_pickup_area_body_exited"]
+[connection signal="body_entered" from="CollisionShape/PickupArea" to="InventoryManager" method="_on_pickup_area_body_entered"]
+[connection signal="body_exited" from="CollisionShape/PickupArea" to="InventoryManager" method="_on_pickup_area_body_exited"]
+
+[editable path="Visuals/Model"]

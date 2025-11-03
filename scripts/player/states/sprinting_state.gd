@@ -14,14 +14,17 @@ func _physics_update(_delta: float) -> void:
 	if player.movement_input != Vector2.ZERO:
 		player.update_movement(_delta)
 	
+	if not player.is_on_floor():
+		finished.emit(states.find_key(states.FALLING))
+	
 	if not Input.is_action_pressed("sprint"):
 		finished.emit(states.find_key(states.MOVING))
 	
-	if Input.is_action_pressed("roll") and player.is_on_floor():
+	if Input.is_action_pressed("roll"):
 		finished.emit(states.find_key(states.ROLLING))
 	
-	if not player.is_on_floor():
-		finished.emit(states.find_key(states.FALLING))
+	if Input.is_action_pressed("light_attack"):
+		finished.emit(states.find_key(states.ATTACKING))
 	
 	player.move_and_slide()
 	

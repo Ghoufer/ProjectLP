@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Combo" load_steps=5 format=3 uid="uid://10dmxora6hj0"]
+
+[ext_resource type="Script" uid="uid://bgk1sksg2dqdq" path="res://scripts/classes/attack_data/attack_data.gd" id="1_q6s7i"]
+[ext_resource type="Resource" uid="uid://dgilcxpd5d5vc" path="res://resources/data/player/attacks/attacks/fist_punch_jab.tres" id="2_htwso"]
+[ext_resource type="Resource" uid="uid://ti1nky3mbkms" path="res://resources/data/player/attacks/attacks/fist_punch_heavy.tres" id="3_fe7uw"]
+[ext_resource type="Script" uid="uid://e8rrn27putt4" path="res://scripts/classes/combo/combo.gd" id="4_c46om"]
+
+[resource]
+script = ExtResource("4_c46om")
+combo_name = "FistLightHeavy"
+attacks = Array[ExtResource("1_q6s7i")]([ExtResource("2_htwso"), ExtResource("3_fe7uw")])
+combo_window = 0.5
+damage_multiplier = Array[float]([1.0, 1.2])
+forward_push = Array[float]([0.2, 0.3])
+metadata/_custom_type_script = "uid://e8rrn27putt4"

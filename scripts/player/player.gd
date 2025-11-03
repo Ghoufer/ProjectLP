@@ -2,10 +2,10 @@ extends CharacterBody3D
 class_name Player
 
 @onready var visuals : Node3D = %Visuals
-@onready var state_machine : StateMachine = $StateMachine
+@onready var state_machine : StateMachine = %StateMachine
 @onready var camera_controller : Node3D = %CameraController
-@onready var normal_col : CollisionShape3D = %NormalCollision
-@onready var roll_col : CollisionShape3D = %RollCollision
+@onready var weapon : Weapon = %Weapon
+@onready var combat_component : CombatComponent = %CombatComponent
 
 @export var stats : Stats
 
@@ -29,9 +29,9 @@ var animation_blend : float = 0.25
 
 func _ready() -> void:
 	var player_model : Node3D = visuals.get_children()[0]
-	roll_col.disabled = true
 	animation_player = player_model.get_node('AnimationPlayer')
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	combat_component.equip_weapon(weapon)
 	
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -46,6 +46,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
+	if event.is_action_pressed("light_attack"):
+		combat_component.attack(AttackData.AttackType.LIGHT)
+	elif event.is_action_pressed("heavy_attack"):
+		combat_component.attack(AttackData.AttackType.HEAVY)
 	
 
 func _process(delta: float) -> void:
@@ -71,6 +76,7 @@ func update_movement(delta: float) -> void:
 	var direction : Vector3 = Vector3.ZERO
 	var camera_basis : Basis = camera_controller.global_transform.basis
 	var is_rolling = state_machine.state.state_name == PlayerState.states.find_key(PlayerState.states.ROLLING).capitalize()
+	var is_attacking = state_machine.state.state_name == PlayerState.states.find_key(PlayerState.states.ATTACKING).capitalize()
 	
 	# Remover inclinação vertical da câmera para movimento horizontal
 	var camera_forward : Vector3 = -camera_basis.z
@@ -82,18 +88,18 @@ func update_movement(delta: float) -> void:
 	camera_forward = -camera_forward.normalized()
 	camera_right = -camera_right.normalized()
 	
-	if is_rolling and not movement_input:
+	if (is_rolling or is_attacking) and not movement_input:
 		direction = -visuals.global_transform.basis.z
 	else:
 		direction = (camera_right * movement_input.x + camera_forward * movement_input.y).normalized()
 	
 	if not is_on_floor():
-		if not is_rolling:
+		if not is_rolling and not is_attacking:
 			velocity.y -= gravity * delta
 		else:
 			velocity.y -= gravity / ROLL_VELOCITY * delta
 	
-	if direction:
+	if direction and not is_attacking:
 		velocity.x = lerp(velocity.x, direction.x * stats.current_move_speed, 0.1)
 		velocity.z = lerp(velocity.z, direction.z * stats.current_move_speed, 0.1)
 	

@@ -6,7 +6,8 @@ var player : Player
 enum states { 
 	IDLE, MOVING, 
 	JUMPING, FALLING,
-	SPRINTING, ROLLING
+	SPRINTING, ROLLING,
+	ATTACKING
 }
 
 func _ready() -> void:

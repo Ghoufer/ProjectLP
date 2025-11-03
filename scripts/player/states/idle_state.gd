@@ -7,14 +7,14 @@ func _enter(_previous_state_path: String, _data: Dictionary = {}) -> void:
 	
 
 func _physics_update(_delta: float) -> void:
-	if Input.is_action_pressed("jump") and player.is_on_floor():
-		finished.emit(states.find_key(states.JUMPING))
-	
-	if Input.is_action_pressed("roll") and player.is_on_floor():
-		finished.emit(states.find_key(states.ROLLING))
-	
 	if not player.is_on_floor():
 		finished.emit(states.find_key(states.FALLING))
+	
+	if Input.is_action_pressed("jump"):
+		finished.emit(states.find_key(states.JUMPING))
+	
+	if Input.is_action_pressed("roll"):
+		finished.emit(states.find_key(states.ROLLING))
 	
 	if player.movement_input != Vector2.ZERO:
 		finished.emit(states.find_key(states.MOVING))

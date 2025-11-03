@@ -1,9 +1,9 @@
 extends Node
 class_name InventoryManager
 
-@onready var inventory_uis: Control = %Inventories
-@onready var swap_slot: ItemSlot = %SwapSlot
-@onready var background_panel: PanelContainer = %BackgroundPanel
+@onready var inventory_uis : Control = %Inventories
+@onready var swap_slot : ItemSlot = %SwapSlot
+@onready var background_panel : PanelContainer = %BackgroundPanel
 
 @export var inventory_containers : Array[InventoryContainer]
 
