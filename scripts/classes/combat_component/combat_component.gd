@@ -54,7 +54,7 @@ func attack(attack_type: AttackData.AttackType) -> void:
 	
 
 func can_attack() -> bool:
-	return state_machine.state.name != "Attacking" and stats.current_health > 0
+	return stats.current_health > 0
 
 func get_current_combo_sequence(attack_type: AttackData.AttackType) -> Combo:
 	# If we're already in a combo, try to continue it]

@@ -8,7 +8,7 @@ var current_combo_index : int = 0
 var current_weapon : Weapon
 var attack_timer : float = 0.0
 var can_queue_next_attack : bool = false
-var friction : float = 0.2
+var friction : float = 0.1
 
 func _enter(_previous_state_path: String, data: Dictionary = {}) -> void:
 	current_combo = data.get("combo_sequence", null)
@@ -56,11 +56,12 @@ func _update(delta: float) -> void:
 			_end_attack()
 
 func _physics_update(_delta: float) -> void:
-	if owner.velocity != Vector3.ZERO:
+	if owner.velocity != Vector3.ZERO and owner.is_on_floor():
 		owner.velocity.x = lerp(owner.velocity.x, 0.0, friction)
 		owner.velocity.z = lerp(owner.velocity.z, 0.0, friction)
 	
-	owner.move_and_slide()
+	if not owner.is_on_floor():
+		owner.velocity.y -= owner.gravity * _delta
 	
 
 func _exit() -> void:

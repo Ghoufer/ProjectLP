@@ -12,8 +12,8 @@ func _physics_update(_delta: float) -> void:
 	player.velocity.x = forward_direction.x * player.ROLL_VELOCITY
 	player.velocity.z = forward_direction.z * player.ROLL_VELOCITY
 	
-	player.update_movement(_delta)
-	player.move_and_slide()
+	if not player.is_on_floor():
+		player.velocity.y -= player.gravity / player.ROLL_VELOCITY * _delta
 	
 	await player.animation_player.animation_finished
 	

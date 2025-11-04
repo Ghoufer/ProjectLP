@@ -6,6 +6,14 @@ func _enter(_previous_state_path: String, _data: Dictionary = {}) -> void:
 	player.animation_player.play('Idle', player.animation_blend)
 	
 
+func _handle_input(_event: InputEvent) -> void:
+	if _event.is_action_pressed("light_attack"):
+		player.combat_component.attack(AttackData.AttackType.LIGHT)
+	
+	if _event.is_action_pressed("heavy_attack"):
+		player.combat_component.attack(AttackData.AttackType.HEAVY)
+	
+
 func _physics_update(_delta: float) -> void:
 	if not player.is_on_floor():
 		finished.emit(states.find_key(states.FALLING))
@@ -24,5 +32,5 @@ func _physics_update(_delta: float) -> void:
 		player.velocity.z = lerp(player.velocity.z, 0.0, friction)
 	
 	player.velocity.y = 0
-	player.move_and_slide()
+
 	

@@ -47,11 +47,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	
-	if event.is_action_pressed("light_attack"):
-		combat_component.attack(AttackData.AttackType.LIGHT)
-	elif event.is_action_pressed("heavy_attack"):
-		combat_component.attack(AttackData.AttackType.HEAVY)
-	
 
 func _process(delta: float) -> void:
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -70,40 +65,5 @@ func _process(delta: float) -> void:
 
 func _physics_process(_delta: float) -> void:
 	movement_input = Input.get_vector("move_left", "move_right", "move_forward", "move_backwards")
-	
-
-func update_movement(delta: float) -> void:
-	var direction : Vector3 = Vector3.ZERO
-	var camera_basis : Basis = camera_controller.global_transform.basis
-	var is_rolling = state_machine.state.state_name == PlayerState.states.find_key(PlayerState.states.ROLLING).capitalize()
-	var is_attacking = state_machine.state.state_name == PlayerState.states.find_key(PlayerState.states.ATTACKING).capitalize()
-	
-	# Remover inclinação vertical da câmera para movimento horizontal
-	var camera_forward : Vector3 = -camera_basis.z
-	var camera_right : Vector3 = -camera_basis.x
-	
-	camera_forward.y = 0
-	camera_right.y = 0
-	
-	camera_forward = -camera_forward.normalized()
-	camera_right = -camera_right.normalized()
-	
-	if (is_rolling or is_attacking) and not movement_input:
-		direction = -visuals.global_transform.basis.z
-	else:
-		direction = (camera_right * movement_input.x + camera_forward * movement_input.y).normalized()
-	
-	if not is_on_floor():
-		if not is_rolling and not is_attacking:
-			velocity.y -= gravity * delta
-		else:
-			velocity.y -= gravity / ROLL_VELOCITY * delta
-	
-	if direction and not is_attacking:
-		velocity.x = lerp(velocity.x, direction.x * stats.current_move_speed, 0.1)
-		velocity.z = lerp(velocity.z, direction.z * stats.current_move_speed, 0.1)
-	
-	if visuals:
-		var target_rotation = atan2(-direction.x, -direction.z)
-		visuals.rotation.y = lerp_angle(visuals.rotation.y, target_rotation, 5.0 * delta)
+	move_and_slide()
 	
