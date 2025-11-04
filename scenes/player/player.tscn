@@ -71,11 +71,11 @@ script = ExtResource("10_ugbui")
 [node name="Sprinting" type="Node" parent="StateMachine"]
 script = ExtResource("11_fcs02")
 
-[node name="Falling" type="Node" parent="StateMachine"]
-script = ExtResource("10_gx1jg")
-
 [node name="Jumping" type="Node" parent="StateMachine"]
 script = ExtResource("12_fcs02")
+
+[node name="Falling" type="Node" parent="StateMachine"]
+script = ExtResource("10_gx1jg")
 
 [node name="Rolling" type="Node" parent="StateMachine"]
 script = ExtResource("14_kvlxm")

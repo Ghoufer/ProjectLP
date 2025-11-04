@@ -18,6 +18,9 @@ func _physics_update(_delta: float) -> void:
 	if not player.is_on_floor():
 		player.velocity.y -= player.gravity * _delta
 	
+	if player.movement_input:
+		player.update_movement(player.stats.sprint_speed, _delta)
+	
 	if Input.is_action_pressed("jump") and player.is_on_floor():
 		player.velocity.y = player.JUMP_VELOCITY
 	

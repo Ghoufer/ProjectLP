@@ -10,7 +10,6 @@ class_name Player
 @export var stats : Stats
 
 const JUMP_VELOCITY : int = 8
-const ROLL_VELOCITY : float = 3.5
 const TILT_LOWER_LIMIT : float = deg_to_rad(-70.0)
 const TILT_UPPER_LIMIT : float = deg_to_rad(70.0)
 
@@ -66,4 +65,29 @@ func _process(delta: float) -> void:
 func _physics_process(_delta: float) -> void:
 	movement_input = Input.get_vector("move_left", "move_right", "move_forward", "move_backwards")
 	move_and_slide()
+	
+
+func update_movement(state_speed: float, delta: float) -> void:
+	var direction : Vector3 = Vector3.ZERO
+	var camera_basis : Basis = camera_controller.global_transform.basis
+	
+	## Remover inclinação vertical da câmera para movimento horizontal
+	var camera_forward : Vector3 = -camera_basis.z
+	var camera_right : Vector3 = -camera_basis.x
+	
+	camera_forward.y = 0
+	camera_right.y = 0
+	
+	camera_forward = -camera_forward.normalized()
+	camera_right = -camera_right.normalized()
+	
+	direction = (camera_right * movement_input.x + camera_forward * movement_input.y).normalized()
+	
+	if direction:
+		velocity.x = lerp(velocity.x, direction.x * state_speed, 0.1)
+		velocity.z = lerp(velocity.z, direction.z * state_speed, 0.1)
+
+	if visuals:
+		var target_rotation = atan2(-direction.x, -direction.z)
+		visuals.rotation.y = lerp_angle(visuals.rotation.y, target_rotation, 5.0 * delta)
 	

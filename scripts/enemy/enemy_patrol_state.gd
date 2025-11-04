@@ -38,7 +38,7 @@ func _physics_update(_delta: float) -> void:
 	if direction.length() > 0.01:
 		if abs(direction.dot(Vector3.UP)) < 0.99:
 			var target_basis = Basis.looking_at(-direction, Vector3.UP)
-			enemy.basis = enemy.basis.slerp(target_basis, _delta * 5.0)
+			enemy.basis = enemy.basis.slerp(target_basis, 1 - exp(-5 * get_physics_process_delta_time()))
 	
 	enemy.move_and_slide()
 	

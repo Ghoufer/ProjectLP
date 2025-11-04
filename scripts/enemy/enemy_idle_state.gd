@@ -24,5 +24,5 @@ func _update(_delta: float) -> void:
 
 func _physics_update(_delta: float) -> void:
 	if enemy.velocity != Vector3.ZERO:
-		enemy.velocity.x = lerp(enemy.velocity.x, 0.0, friction)
-		enemy.velocity.z = lerp(enemy.velocity.z, 0.0, friction)
+		enemy.velocity.x = lerp(enemy.velocity.x, 0.0, 1 - exp(-friction * get_physics_process_delta_time()))
+		enemy.velocity.z = lerp(enemy.velocity.z, 0.0, 1 - exp(-friction * get_physics_process_delta_time()))
