@@ -15,6 +15,5 @@ item_name = "Barra de ouro"
 description = "Uuuh brilha"
 max_stack = 99
 icon = SubResource("AtlasTexture_qs1du")
-item_path = "gold_bar"
-item_path = "gold_bar"
+item_path = 3
 metadata/_custom_type_script = "uid://b6earu220xr8r"

@@ -2,7 +2,7 @@ extends Node
 
 @onready var h_flow_container: HFlowContainer = %HFlowContainer
 
-const SLOT : PackedScene = preload("res://scenes/UI/slot.tscn")
+const SLOT : PackedScene = preload("uid://d0bcn8hlihb05")
 
 var inventory : InventoryContainer = InventoryContainer.new()
 

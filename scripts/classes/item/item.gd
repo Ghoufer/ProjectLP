@@ -6,7 +6,6 @@ class_name Item
 
 @onready var interaction_area: CollisionShape3D = %InteractionAreaCol
 @onready var ground_collider: CollisionShape3D = %GroundCollider
-@onready var outline_shader := preload('res://scripts/shaders/item_outline.tres')
 @onready var interaction_text: Sprite3D = %InteractionText
 @onready var interaction_text_sv: SubViewport = %InteractionTextSV
 @onready var interaction_text_label: Label = %InteractionTextLabel
@@ -33,10 +32,12 @@ func _ready() -> void:
 		interaction_text_label.text = "[E] Pegar " + stack.item_data.item_name + " (" + str(stack.quantity) + ")"
 		
 		stack = stack.duplicate()
+
+		loaded_scene = ItemPool.get_item_scene(stack.item_data.item_path)
 		
-		loaded_scene = ItemPool.paths[stack.item_data.item_path]
-		item_mesh = loaded_scene.instantiate().duplicate()
-		item_mesh.rotation.y = randf() * TAU
+		if loaded_scene:
+			item_mesh = loaded_scene.instantiate().duplicate()
+			item_mesh.rotation.y = randf() * TAU
 	
 		add_child(item_mesh, 0)
 		

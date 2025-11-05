@@ -183,7 +183,7 @@ func check_inventory_full(stack_to_check: ItemStack) -> bool:
 func find_first_empty(array: Array[ItemStack]) -> int:
 	return array.find(null)
 
-func find_available_slot(array: Array[ItemStack], item_path: String) -> int:
+func find_available_slot(array: Array[ItemStack], item_path: ItemPool.ITEMS) -> int:
 	for index in range(array.size()):
 		if array[index]:
 			var quantity : int = array[index].quantity
@@ -261,7 +261,7 @@ func add_new_stack(new_stack: Variant) -> void:
 
 func try_to_add_to_inventory(leftover_quantity: int, stack_to_add: ItemStack, container: Array[ItemStack]) -> int:
 	var available_slot_index : int
-	var item_path : String = stack_to_add.item_data.item_path
+	var item_path : ItemPool.ITEMS = stack_to_add.item_data.item_path
 	
 	available_slot_index = find_available_slot(container, item_path)
 	

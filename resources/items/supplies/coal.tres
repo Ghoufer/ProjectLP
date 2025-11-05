@@ -14,6 +14,5 @@ script = ExtResource("2_8d6bk")
 item_name = "Carvão"
 description = "Feito para esquentar"
 icon = SubResource("AtlasTexture_rjms7")
-item_path = "coal"
-item_path = "coal"
+item_path = 2
 metadata/_custom_type_script = "uid://b6earu220xr8r"

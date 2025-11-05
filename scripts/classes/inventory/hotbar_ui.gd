@@ -2,7 +2,7 @@ extends CanvasLayer
 
 @onready var hotbar_container : HBoxContainer = %HotbarContainer
 
-const SLOT : PackedScene = preload("res://scenes/UI/slot.tscn")
+const SLOT : PackedScene = preload("uid://d0bcn8hlihb05")
 
 func update_container(inventory : InventoryContainer, hotbar: Array[ItemStack]) -> void:
 	var ui_slots : Array[Node] = hotbar_container.get_children()

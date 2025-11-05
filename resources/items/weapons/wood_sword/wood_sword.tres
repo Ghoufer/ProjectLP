@@ -8,6 +8,5 @@ script = ExtResource("2_e4jx7")
 item_name = "Espada de madeira"
 description = "É fraca, mas dá pro gasto"
 max_stack = 1
-item_path = "wood_sword"
-item_path = "wood_sword"
+item_path = 4
 metadata/_custom_type_script = "uid://b6earu220xr8r"

@@ -1,16 +1,15 @@
+@tool
 extends Node
-
-const ITEM = preload("res://scenes/item/item.tscn")
 
 # Debug panel
 var debug: Variant
 
 func spawn_item(new_stack: ItemStack, body: Node3D, player_dropped: bool = false) -> void:
-	var items_node = get_tree().get_first_node_in_group("Items")
+	var items_node : Node = get_tree().get_first_node_in_group("Items")
 	if items_node:
 		var throw_direction : Vector3
 		var throw_strength : float = 8.0
-		var instance : Node = ITEM.instantiate()
+		var instance : Node = ItemPool.ITEM.instantiate()
 		var height_offset : float = body.global_position.y + 0.7
 		
 		if player_dropped and body is Player:

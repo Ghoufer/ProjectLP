@@ -14,6 +14,5 @@ script = ExtResource("2_keytp")
 item_name = "Graveto de madeira"
 description = "Deve ter caído de uma árvore"
 icon = SubResource("AtlasTexture_cven0")
-item_path = "wooden_stick"
-item_path = "wooden_stick"
+item_path = 1
 metadata/_custom_type_script = "uid://b6earu220xr8r"
