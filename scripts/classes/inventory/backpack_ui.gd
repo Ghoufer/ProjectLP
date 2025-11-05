@@ -21,7 +21,7 @@ func _on_container_updated(backpack: Array[ItemStack]) -> void:
 	
 	if backpack.size() > 0:
 		inventory.slots = backpack
-		print(backpack.size())
+		
 		for index in inventory.container_size:
 			if inventory.slots[index]:
 				slots[index].stack = inventory.slots[index]

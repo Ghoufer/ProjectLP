@@ -3,7 +3,6 @@ extends PlayerState
 var roll_speed : float = 1.0
 
 func _enter(_previous_state_path: String, _data: Dictionary = {}) -> void:
-	print(_previous_state_path)
 	if _previous_state_path == states.find_key(states.SPRINTING).capitalize():
 		roll_speed = player.stats.sprint_speed * 1.35
 	else:
