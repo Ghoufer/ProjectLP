@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackData" load_steps=2 format=3 uid="uid://ti1nky3mbkms"]
+
+[ext_resource type="Script" uid="uid://bgk1sksg2dqdq" path="res://scripts/classes/attack_data/attack_data.gd" id="1_6bogq"]
+
+[resource]
+script = ExtResource("1_6bogq")
+attack_name = "FistHeavy"
+windup_time = 0.3
+attack_time = 0.5
+recovery_time = 0.2
+stamina_cost = 8
+attack_range = 1.5
+attack_damage = 4.0
+animation_name = "Punch_Heavy"
+forward_push = 10.0
+metadata/_custom_type_script = "uid://bgk1sksg2dqdq"

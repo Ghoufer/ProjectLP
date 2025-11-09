@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://dbe0vqfl5nlti"]
 
-[ext_resource type="Script" uid="uid://b6earu220xr8r" path="res://scripts/util/item/item_data.gd" id="2_8d6bk"]
+[ext_resource type="Script" uid="uid://b6earu220xr8r" path="res://scripts/classes/item/item_data.gd" id="2_8d6bk"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_36wxg"]
 load_path = "res://.godot/imported/item_icons.png-ea47edd8c331a87040ab94ff36f2f3c1.ctex"
@@ -14,6 +14,5 @@ script = ExtResource("2_8d6bk")
 item_name = "Carvão"
 description = "Feito para esquentar"
 icon = SubResource("AtlasTexture_rjms7")
-item_path = "coal"
-item_path = "coal"
+item_path = 2
 metadata/_custom_type_script = "uid://b6earu220xr8r"

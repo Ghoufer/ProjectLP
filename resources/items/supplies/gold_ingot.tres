@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://c27hs6d8npkpr"]
 
-[ext_resource type="Script" uid="uid://b6earu220xr8r" path="res://scripts/util/item/item_data.gd" id="2_13lpm"]
+[ext_resource type="Script" uid="uid://b6earu220xr8r" path="res://scripts/classes/item/item_data.gd" id="2_13lpm"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_36wxg"]
 load_path = "res://.godot/imported/item_icons.png-ea47edd8c331a87040ab94ff36f2f3c1.ctex"
@@ -15,6 +15,5 @@ item_name = "Barra de ouro"
 description = "Uuuh brilha"
 max_stack = 99
 icon = SubResource("AtlasTexture_qs1du")
-item_path = "gold_bar"
-item_path = "gold_bar"
+item_path = 3
 metadata/_custom_type_script = "uid://b6earu220xr8r"

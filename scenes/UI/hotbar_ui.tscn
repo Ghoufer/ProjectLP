@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://caym2c0j8weuu"]
 
-[ext_resource type="Script" uid="uid://ngiq5u7kg2ja" path="res://scripts/util/inventory/container_ui.gd" id="1_jiuns"]
+[ext_resource type="Script" uid="uid://ngiq5u7kg2ja" path="res://scripts/classes/inventory/container_ui.gd" id="1_jiuns"]
 
 [node name="HotbarUI" type="Control" node_paths=PackedStringArray("ui_node")]
 layout_mode = 3

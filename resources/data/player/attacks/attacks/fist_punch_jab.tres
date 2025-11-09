@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="AttackData" load_steps=2 format=3 uid="uid://dgilcxpd5d5vc"]
+
+[ext_resource type="Script" uid="uid://bgk1sksg2dqdq" path="res://scripts/classes/attack_data/attack_data.gd" id="1_dj4p7"]
+
+[resource]
+script = ExtResource("1_dj4p7")
+attack_name = "FistPunchJab"
+windup_time = 0.3
+attack_time = 0.3
+recovery_time = 0.1
+stamina_cost = 5
+attack_range = 1.0
+attack_damage = 2.0
+animation_name = "Punch_Jab"
+forward_push = 0.5
+metadata/_custom_type_script = "uid://bgk1sksg2dqdq"

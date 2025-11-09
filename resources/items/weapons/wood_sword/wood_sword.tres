@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://4wqbg2sjpasx"]
+
+[ext_resource type="Texture2D" uid="uid://di54m5clr2010" path="res://assets/icons/item_icons.tres" id="1_e4jx7"]
+[ext_resource type="Script" uid="uid://b6earu220xr8r" path="res://scripts/classes/item/item_data.gd" id="2_e4jx7"]
+
+[resource]
+script = ExtResource("2_e4jx7")
+item_name = "Espada de madeira"
+description = "É fraca, mas dá pro gasto"
+max_stack = 1
+item_path = 4
+metadata/_custom_type_script = "uid://b6earu220xr8r"

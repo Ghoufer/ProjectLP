@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cptevs6qmklst"]
 
-[ext_resource type="Script" uid="uid://blda8fn7e5pkm" path="res://scripts/util/item/item.gd" id="1_7n1ax"]
-[ext_resource type="Script" uid="uid://c3bt3r7pe56hp" path="res://scripts/util/interaction/interaction_area.gd" id="2_i52cm"]
+[ext_resource type="Script" uid="uid://blda8fn7e5pkm" path="res://scripts/classes/item/item.gd" id="1_7n1ax"]
+[ext_resource type="Script" uid="uid://c3bt3r7pe56hp" path="res://scripts/classes/interaction/interaction_area.gd" id="2_i52cm"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_cgn1b"]
 

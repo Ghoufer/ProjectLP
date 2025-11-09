@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=7 format=3 uid="uid://cm1tbgn3mws53"]
+
+[ext_resource type="Script" uid="uid://e8rrn27putt4" path="res://scripts/classes/combo/combo.gd" id="1_tqvut"]
+[ext_resource type="Resource" uid="uid://dysbmwlldk8ed" path="res://resources/data/player/attacks/combos/fist_light_combo.tres" id="2_76v5f"]
+[ext_resource type="Script" uid="uid://bhbvta3ar2mkg" path="res://scripts/classes/weapon/weapon_data.gd" id="3_a7m8l"]
+[ext_resource type="Resource" uid="uid://10dmxora6hj0" path="res://resources/data/player/attacks/combos/fist_light_heavy_combo.tres" id="3_gatk1"]
+[ext_resource type="Resource" uid="uid://ti1nky3mbkms" path="res://resources/data/player/attacks/attacks/fist_punch_heavy.tres" id="4_awwjp"]
+[ext_resource type="Resource" uid="uid://dgilcxpd5d5vc" path="res://resources/data/player/attacks/attacks/fist_punch_jab.tres" id="5_e11ct"]
+
+[resource]
+script = ExtResource("3_a7m8l")
+weapon_name = "Fist"
+base_damage = 5
+combos = Array[ExtResource("1_tqvut")]([ExtResource("2_76v5f"), ExtResource("3_gatk1")])
+light_attack_data = ExtResource("5_e11ct")
+heavy_attack_data = ExtResource("4_awwjp")
+metadata/_custom_type_script = "uid://bhbvta3ar2mkg"

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c6bhdunw8vmbb"]
 
-[ext_resource type="Script" uid="uid://ctpjg56xd36je" path="res://scripts/util/inventory/slot.gd" id="2_867f3"]
+[ext_resource type="Script" uid="uid://ctpjg56xd36je" path="res://scripts/classes/inventory/slot.gd" id="2_867f3"]
 
 [node name="SwapSlot" type="TextureButton"]
 z_index = 1

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://bp1gedcb3e0fb"]
 
-[ext_resource type="Script" uid="uid://b6earu220xr8r" path="res://scripts/util/item/item_data.gd" id="2_keytp"]
+[ext_resource type="Script" uid="uid://b6earu220xr8r" path="res://scripts/classes/item/item_data.gd" id="2_keytp"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_36wxg"]
 load_path = "res://.godot/imported/item_icons.png-ea47edd8c331a87040ab94ff36f2f3c1.ctex"
@@ -14,6 +14,5 @@ script = ExtResource("2_keytp")
 item_name = "Graveto de madeira"
 description = "Deve ter caído de uma árvore"
 icon = SubResource("AtlasTexture_cven0")
-item_path = "wooden_stick"
-item_path = "wooden_stick"
+item_path = 1
 metadata/_custom_type_script = "uid://b6earu220xr8r"
