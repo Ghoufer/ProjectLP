@@ -1,7 +1,6 @@
 extends Node
 class_name CombatComponent
 
-@export var can_combo : bool = true
 @export var current_weapon : Weapon
 
 @onready var stats : Stats = get_parent().stats
@@ -25,6 +24,7 @@ func equip_weapon(weapon: Weapon) -> void:
 		current_weapon.unequip()
 	current_weapon = weapon
 	current_weapon.equip(get_parent())
+	
 
 func attack(attack_type: AttackData.AttackType) -> void:
 	if not can_attack():
@@ -59,7 +59,7 @@ func can_attack() -> bool:
 func get_current_combo_sequence(attack_type: AttackData.AttackType) -> Combo:
 	# If we're already in a combo, try to continue it]
 	if current_combo_sequence != null and current_combo_index < current_combo_sequence.attacks.size() - 1:
-		var next_index = current_combo_index + 1
+		var next_index : int = current_combo_index + 1
 		if current_combo_sequence.attacks[next_index].attack_type == attack_type:
 			return current_combo_sequence
 	
